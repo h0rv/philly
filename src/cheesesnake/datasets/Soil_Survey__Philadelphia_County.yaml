@@ -1,0 +1,40 @@
+area_of_interest: Philadelphia County (City of Philadelphia)
+category:
+- Environment
+created: '2022'
+license: License Not Specified
+maintainer: U.S. Department of Agriculture, Natural Resources Conservation Service,
+  National Soil Survey Center
+maintainer_email: SoilsHotline@usda.gov
+maintainer_link: https://www.nrcs.usda.gov/
+maintainer_phone: 800-672-5559
+notes: A digital soil survey and generally is the most detailed level of soil geographic
+  data developed by the National Cooperative Soil Survey. The dataset consists of
+  geo-referenced digital maps and attribute data, and it includes an optional special
+  soil features map layer for features too small to delineate at the mapping scale
+  but large and contrasting enough to significantly influence land use and management.
+  The soil map units are linked to attributes in the National Soil Information System
+  relational database, which gives the proportionate extent of the component soils
+  and their properties.
+opendataphilly_rating: null
+organization: Natural Resources Conservation Service
+resources:
+- format: html
+  name: Philadelphia County Soils Text Metadata
+  url: http://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=361
+- format: xml
+  name: Philadelphia County Soils XML Metadata
+  url: http://www.pasda.psu.edu/uci/FullMetadataDisplay.aspx?file=PA_Soils2022.xml
+- format: shp
+  name: Philadelphia County Soils Shapefile
+  url: https://www.pasda.psu.edu/download/soils/wss_SSA_PA101_soildb_Philadelphia_PA_2003_[2022-09-06].zip
+- format: geojson
+  name: Philadelphia County Soils GeoJSON
+  url: https://www.pasda.psu.edu/json/PA_Soils2022.geojson
+- format: api
+  name: Philadelphia County Soils ArcGIS REST API
+  url: https://mapservices.pasda.psu.edu/server/rest/services/pasda/Soils_PA/MapServer
+source: null
+time_period: 2022
+title: Soil Survey, Philadelphia County
+usage: Public Use; Free

@@ -1,0 +1,41 @@
+area_of_interest: null
+category:
+- Economy
+- Food
+- Health / Human Services
+created: '2019-08-26T14:11:24.194581'
+license: City of Philadelphia License
+maintainer: ''
+maintainer_email: ''
+maintainer_link: null
+maintainer_phone: null
+notes: "This dataset is derived from the Neighborhood Food Retail in Philadelphia\
+  \ report. The [report, and accompanying online resource gallery](http://foodfitphilly.org/NeighborhoodFoodRetail/),\
+  \ looks at neighborhood availability of \"high-produce supply stores\u201D (e.g.,\
+  \ supermarkets, produce stores, farmers\u2019 markets) in relation to \u201Clow-produce\
+  \ supply stores\u201D (like dollar stores, pharmacies, and convenience stores)."
+opendataphilly_rating: null
+organization: City of Philadelphia
+resources:
+- format: html
+  name: Neighborhood Food Retail (Visualizations)
+  url: http://phl.maps.arcgis.com/apps/MinimalGallery/index.html?appid=da50064ab2ab49b096307a8e32f2f208
+- format: csv
+  name: Neighborhood Food Retail (CSV)
+  url: https://opendata.arcgis.com/datasets/53b8a1c653a74c92b2de23a5d7bf04a0_0.csv
+- format: shp
+  name: Neighborhood Food Retail (SHP)
+  url: https://opendata.arcgis.com/datasets/53b8a1c653a74c92b2de23a5d7bf04a0_0.zip
+- format: geojson
+  name: Neighborhood Food Retail (GeoJSON)
+  url: https://opendata.arcgis.com/datasets/53b8a1c653a74c92b2de23a5d7bf04a0_0.geojson
+- format: api
+  name: Neighborhood Food Retail (API)
+  url: https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/NeighborhoodFoodRetail/FeatureServer/0/query?outFields=*&where=1%3D1
+- format: html
+  name: Neighborhood Food Retail (Metadata)
+  url: http://metadata.phila.gov/#home/datasetdetails/568d4b3c13d1bebc0c2a2b0f/representationdetails/5d4c6e160f63a20011c21727/
+source: ''
+time_period: null
+title: Neighborhood Food Retail
+usage: null

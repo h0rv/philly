@@ -1,0 +1,22 @@
+area_of_interest: null
+category:
+- Health / Human Services
+- Food
+created: '2016-05-16T17:24:13.649977'
+license: License Not Specified
+maintainer: Brad Steinberg
+maintainer_email: steinbergbrad@gmail.com
+maintainer_link: null
+maintainer_phone: null
+notes: A list of humanitarian resources within Philadelphia. Includes homeless shelters,
+  health clinics, food pantries, soup kitchens, women and children shelters, etc.
+opendataphilly_rating: null
+organization: Code for Philly
+resources:
+- format: csv
+  name: Community Services Dataset
+  url: https://github.com/CodeForPhilly/RAPper/blob/master/resources.csv
+source: ''
+time_period: null
+title: Community Services
+usage: null

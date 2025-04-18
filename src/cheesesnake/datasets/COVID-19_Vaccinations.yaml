@@ -1,0 +1,116 @@
+area_of_interest: null
+category:
+- Economy
+- Health / Human Services
+created: '2021-02-03T14:44:35.061685'
+license: City of Philadelphia License
+maintainer: PublicHealthInfo@phila.gov
+maintainer_email: PublicHealthInfo@phila.gov
+maintainer_link: null
+maintainer_phone: null
+notes: "***As of May 2022, these datasets moved from daily updates to weekly updates\
+  \ every Monday.***\r\n\r\nShows distribution counts of first and second dose, as\
+  \ well as total dose information for all vaccinations performed by the health department.\
+  \ Also provides vaccinations by census tract, ZIP code, date, age, race, and sex.\
+  \ Vaccinations include residents and non-residents of Philadelphia. Updates daily."
+opendataphilly_rating: null
+organization: City of Philadelphia
+resources:
+- format: csv
+  name: Total COVID Vaccinations (CSV)
+  url: https://phl.carto.com/api/v2/sql?filename=covid_vaccine_totals&format=csv&skipfields=cartodb_id,the_geom,the_geom_webmercator&q=SELECT
+    * FROM covid_vaccine_totals
+- format: api
+  name: Total COVID Vaccinations (API)
+  url: https://cityofphiladelphia.github.io/carto-api-explorer/#covid_vaccine_totals
+- format: html
+  name: Total COVID Vaccinations (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/601abeb9f910a2001ce794e2/representationdetails/601abebaf910a2001ce794e6/
+- format: csv
+  name: 'COVID Vaccinations by Census Tract (CSV) '
+  url: https://phl.carto.com/api/v2/sql?filename=covid_vaccines_by_census_tract&format=csv&skipfields=cartodb_id,the_geom,the_geom_webmercator&q=SELECT
+    * FROM covid_vaccines_by_census_tract
+- format: shp
+  name: 'COVID Vaccinations by Census Tract (SHP) '
+  url: https://phl.carto.com/api/v2/sql?filename=covid_vaccines_by_census_tract&format=shp&skipfields=cartodb_id&q=SELECT
+    * FROM covid_vaccines_by_census_tract
+- format: geojson
+  name: 'COVID Vaccinations by Census Tract (GeoJSON) '
+  url: https://phl.carto.com/api/v2/sql?filename=covid_vaccines_by_census_tract&format=geojson&skipfields=cartodb_id&q=SELECT+*+FROM+covid_vaccines_by_census_tract
+- format: api
+  name: 'COVID Vaccinations by Census Tract (API) '
+  url: https://cityofphiladelphia.github.io/carto-api-explorer/#covid_vaccines_by_census_tract
+- format: html
+  name: COVID Vaccinations by Census Tract (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/601abeb9f910a2001ce794e2/representationdetails/60b93022a59bf60021d2a63a/
+- format: csv
+  name: COVID Vaccinations by ZIP (CSV)
+  url: https://phl.carto.com/api/v2/sql?filename=covid_vaccines_by_zip&format=csv&skipfields=cartodb_id,the_geom,the_geom_webmercator&q=SELECT
+    * FROM covid_vaccines_by_zip
+- format: shp
+  name: COVID Vaccinations by ZIP (SHP)
+  url: https://phl.carto.com/api/v2/sql?filename=covid_vaccines_by_zip&format=shp&skipfields=cartodb_id&q=SELECT
+    * FROM covid_vaccines_by_zip
+- format: geojson
+  name: COVID Vaccinations by ZIP (GeoJSON)
+  url: https://phl.carto.com/api/v2/sql?filename=covid_vaccines_by_zip&format=geojson&skipfields=cartodb_id&q=SELECT+*+FROM+covid_vaccines_by_zip
+- format: api
+  name: COVID Vaccinations by ZIP (API)
+  url: https://cityofphiladelphia.github.io/carto-api-explorer/#covid_vaccines_by_zip
+- format: html
+  name: COVID Vaccinations by ZIP (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/601abeb9f910a2001ce794e2/representationdetails/604bc9df25f75f001bf4c03d/
+- format: csv
+  name: COVID Vaccinations by Date (CSV)
+  url: https://phl.carto.com/api/v2/sql?filename=covid_vaccines_by_date&format=csv&skipfields=cartodb_id,the_geom,the_geom_webmercator&q=SELECT
+    * FROM covid_vaccines_by_date
+- format: api
+  name: COVID Vaccinations by Date (API)
+  url: https://cityofphiladelphia.github.io/carto-api-explorer/#covid_vaccines_by_date
+- format: html
+  name: COVID Vaccinations by Date (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/601abeb9f910a2001ce794e2/representationdetails/620e6ec35a07ee001ede79b2/
+- format: csv
+  name: COVID Vaccinations by ZIP and Date (CSV)
+  url: https://phl.carto.com/api/v2/sql?filename=covid_vaccines_by_date&format=csv&skipfields=cartodb_id,the_geom,the_geom_webmercator&q=SELECT
+    * FROM covid_vaccines_by_zip_date
+- format: api
+  name: COVID Vaccinations by ZIP and Date (API)
+  url: https://cityofphiladelphia.github.io/carto-api-explorer/#covid_vaccines_by_zip_date
+- format: html
+  name: COVID Vaccinations by ZIP and Date (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/601abeb9f910a2001ce794e2/representationdetails/620e6bfdcfada4001e5cce43/
+- format: csv
+  name: COVID Vaccinations by Race (CSV)
+  url: https://phl.carto.com/api/v2/sql?filename=covid_vaccines_by_race&format=csv&skipfields=cartodb_id,the_geom,the_geom_webmercator&q=SELECT
+    * FROM covid_vaccines_by_race
+- format: api
+  name: COVID Vaccinations by Race (API)
+  url: https://cityofphiladelphia.github.io/carto-api-explorer/#covid_vaccines_by_race
+- format: html
+  name: COVID Vaccinations by Race (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/601abeb9f910a2001ce794e2/representationdetails/604bcba25b321d001b5a6a6b/
+- format: csv
+  name: COVID Vaccinations by Age (CSV)
+  url: https://phl.carto.com/api/v2/sql?filename=covid_vaccines_by_age&format=csv&skipfields=cartodb_id,the_geom,the_geom_webmercator&q=SELECT
+    * FROM covid_vaccines_by_age
+- format: api
+  name: COVID Vaccinations by Age (API)
+  url: https://cityofphiladelphia.github.io/carto-api-explorer/#covid_vaccines_by_age
+- format: html
+  name: COVID Vaccinations by Age (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/601abeb9f910a2001ce794e2/representationdetails/604bca9194d0cd001e9b8676/
+- format: csv
+  name: COVID Vaccinations by Sex (CSV)
+  url: https://phl.carto.com/api/v2/sql?filename=covid_vaccines_by_sex&format=csv&skipfields=cartodb_id,the_geom,the_geom_webmercator&q=SELECT
+    * FROM covid_vaccines_by_sex
+- format: api
+  name: COVID Vaccinations by Sex (API)
+  url: https://cityofphiladelphia.github.io/carto-api-explorer/#covid_vaccines_by_sex
+- format: html
+  name: COVID Vaccinations by Sex (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/601abeb9f910a2001ce794e2/representationdetails/604fb6ffc2a893001c2ca8c9/
+source: ''
+time_period: null
+title: COVID-19 Vaccinations
+usage: null

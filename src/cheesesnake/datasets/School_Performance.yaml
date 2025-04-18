@@ -1,0 +1,59 @@
+area_of_interest: null
+category:
+- Education
+created: '2018-05-17T18:46:55.373120'
+license: License Not Specified
+maintainer: ''
+maintainer_email: opendata@philasd.org
+maintainer_link: null
+maintainer_phone: null
+notes: School progress report, district scorecard, PSSA & Keystone, district graduation
+  rate, school graduation rate, aimsweb-star, attendance, out-of-school suspensions,
+  serious incidents, NSC student tracker reports, college matriculation, end-of-year
+  report
+opendataphilly_rating: null
+organization: School District of Philadelphia
+resources:
+- format: xlsx
+  name: School Progress Reports
+  url: https://www.philasd.org/performance/programsservices/open-data/school-performance/#school_progress_report
+- format: html
+  name: District Scorecard
+  url: https://www.philasd.org/performance/programsservices/school-progress-reports/district-scorecard/
+- format: xlsx
+  name: Alternative Education Progress Report
+  url: https://www.philasd.org/performance/programsservices/open-data/school-performance/#AEPR
+- format: zip
+  name: PSSA and Keystone Exam Data
+  url: https://www.philasd.org/performance/programsservices/open-data/pssakeystone/
+- format: csv
+  name: District Graduation Rate
+  url: https://www.philasd.org/performance/programsservices/open-data/school-performance/#district_graduation_rate
+- format: csv
+  name: School Graduation Rates
+  url: https://www.philasd.org/performance/programsservices/open-data/school-performance/#school_graduation_rates
+- format: csv
+  name: Aimsweb Star
+  url: https://www.philasd.org/performance/programsservices/open-data/school-performance/#aimsweb_star
+- format: csv
+  name: Attendance
+  url: https://www.philasd.org/performance/programsservices/open-data/school-performance/#attendance
+- format: csv
+  name: Out-of-school Suspensions
+  url: https://www.philasd.org/performance/programsservices/open-data/school-performance/#suspensions
+- format: xslx
+  name: Serious Incidents
+  url: https://www.philasd.org/performance/programsservices/open-data/school-performance/#serious_incidents
+- format: zip
+  name: NSC Student Tracker Reports
+  url: https://www.philasd.org/performance/programsservices/open-data/school-performance/#NSC_student_tracker
+- format: csv
+  name: College Matriculation
+  url: https://www.philasd.org/performance/programsservices/open-data/school-performance/#college_matriculation
+- format: xlsx
+  name: End-of-year Report
+  url: https://www.philasd.org/performance/programsservices/open-data/school-performance/#end_of_year_report
+source: ''
+time_period: null
+title: School Performance
+usage: null

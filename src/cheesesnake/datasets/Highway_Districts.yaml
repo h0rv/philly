@@ -1,0 +1,49 @@
+area_of_interest: null
+category:
+- Transportation
+created: '2014-12-08T22:42:15.275162'
+license: City of Philadelphia License
+maintainer: Michael Matela
+maintainer_email: michael.matela@phila.gov
+maintainer_link: http://www.phila.gov/streets
+maintainer_phone: null
+notes: "Please note that the dataset below is a snapshot of data captured at one time\
+  \ and does not receive regular updates.\r\n\r\nThe Highway Districts dataset shows\
+  \ the boundaries of highway districts used for managing maintenance of roads. "
+opendataphilly_rating: null
+organization: City of Philadelphia
+resources:
+- format: csv
+  name: Highway Districts (CSV)
+  url: https://opendata.arcgis.com/datasets/0a0d06a0c78e47c5bb73cde26630db07_0.csv
+- format: shp
+  name: Highway Districts (SHP)
+  url: https://opendata.arcgis.com/datasets/0a0d06a0c78e47c5bb73cde26630db07_0.zip
+- format: geojson
+  name: Highway Districts (GeoJSON)
+  url: https://opendata.arcgis.com/datasets/0a0d06a0c78e47c5bb73cde26630db07_0.geojson
+- format: api
+  name: Highway Districts (API)
+  url: https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Highway_Districts/FeatureServer/0/query?outFields=*&where=1%3D1
+- format: html
+  name: Highway Districts (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/555f8128f15fcb6c6ed440ff/representationdetails/55438a7e9b989a05172d0cef
+- format: csv
+  name: Highway Districts - Line (CSV)
+  url: https://opendata.arcgis.com/datasets/68587b08a7d3491f99f83e380d85403c_0.csv
+- format: zip
+  name: Highway Districts - Line (SHP)
+  url: https://opendata.arcgis.com/datasets/68587b08a7d3491f99f83e380d85403c_0.zip
+- format: json
+  name: Highway Districts - Line (GeoJSON)
+  url: https://opendata.arcgis.com/datasets/68587b08a7d3491f99f83e380d85403c_0.geojson
+- format: api
+  name: Highway Districts - Line (API)
+  url: https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Highway_Districts_arc/FeatureServer/0/query?outFields=*&where=1%3D1
+- format: html
+  name: Highway Districts - Line (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/555f8128f15fcb6c6ed440ff/representationdetails/5571b1b2e4fb1d91393c2134/
+source: ''
+time_period: null
+title: Highway Districts
+usage: Public use; Free

@@ -1,0 +1,48 @@
+area_of_interest: null
+category:
+- Public Safety
+created: '2018-03-25T22:50:41.004949'
+license: License Not Specified
+maintainer: ''
+maintainer_email: ''
+maintainer_link: null
+maintainer_phone: null
+notes: "Late last year, the City of Philadelphia began posting online certain data\
+  \ about civilian complaints against the Philadelphia Police Department. The City\
+  \ will only make these data available on a five-year rolling basis, however. The\
+  \ Declaration's Philadelphia Police Accountability Project will be hosting a publicly\
+  \ available archive of the same data to provide Philadelphia residents with a fuller\
+  \ picture of police discipline without five year limits.\r\n\r\nThe Complaints Against\
+  \ Police archived data include the allegations in each separate complaint. The CAP\
+  \ Complainants archived data include details about individuals filing complaints.\
+  \ The CAP Findings archived data include the final disposition of complaints.\r\n\
+  \r\nThe City updates the CAP data once per month. The months on the resources below\
+  \ indicate the month that the files in question were uploaded by the City. In other\
+  \ words, the file labeled \"Complaints Against Police March 2018 Data\" was uploaded\
+  \ by the City in March 2018 before being replaced the next month.\r\n\r\nThe original\
+  \ data are available here: https://www.opendataphilly.org/datasets/police-complaints"
+opendataphilly_rating: null
+organization: Philly Declaration
+resources:
+- format: csv
+  name: Complaints Against Police March 2018 Data
+  url: https://github.com/PhillyDeclaration/Philadelphia-Police-Accountability-Project/blob/master/ppd_complaints_3-18.csv
+- format: csv
+  name: CAP Findings March 2018 Data
+  url: https://github.com/PhillyDeclaration/Philadelphia-Police-Accountability-Project/blob/master/ppd_complaint_disciplines_3-18.csv
+- format: csv
+  name: Corrected CAP Complainants March 2018 Data
+  url: https://github.com/PhillyDeclaration/Philadelphia-Police-Accountability-Project/blob/master/ppd_complaint_complainants_3-18_corrected.csv
+- format: csv
+  name: Complaints Against Police July 2018 Data
+  url: https://github.com/PhillyDeclaration/Philadelphia-Police-Accountability-Project/blob/master/ppd_complaints_7-18.csv
+- format: csv
+  name: CAP Findings July 2018 Data
+  url: https://github.com/PhillyDeclaration/Philadelphia-Police-Accountability-Project/blob/master/ppd_complaint_disciplines_7-18.csv
+- format: csv
+  name: Corrected CAP Complainants July 2018 Data
+  url: https://github.com/PhillyDeclaration/Philadelphia-Police-Accountability-Project/blob/master/ppd_complaint_complainants_7-18_corrected.csv
+source: ''
+time_period: null
+title: Philadelphia Police Complaint Archive
+usage: null

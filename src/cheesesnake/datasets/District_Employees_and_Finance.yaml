@@ -1,0 +1,36 @@
+area_of_interest: null
+category:
+- Education
+created: '2018-05-18T19:45:33.567212'
+license: License Not Specified
+maintainer: ''
+maintainer_email: opendata@philasd.org
+maintainer_link: null
+maintainer_phone: null
+notes: Expenditures, employee information, teacher attendance, teacher demographics,
+  budgets, and full-time employees
+opendataphilly_rating: null
+organization: School District of Philadelphia
+resources:
+- format: csv
+  name: District and School Budget
+  url: https://www.philasd.org/performance/programsservices/open-data/district-information/#budget
+- format: csv
+  name: Expenditure Information
+  url: https://www.philasd.org/performance/programsservices/open-data/district-information/#expenditure_information
+- format: zip
+  name: Employee Information
+  url: https://www.philasd.org/performance/programsservices/open-data/district-information/#employee_data
+- format: csv
+  name: Teacher Attendance
+  url: https://www.philasd.org/performance/programsservices/open-data/district-information/#teacher_attendance
+- format: csv
+  name: Teacher Demographics
+  url: https://www.philasd.org/performance/programsservices/open-data/district-information/#teacher_demographics
+- format: csv
+  name: Full-time Employees
+  url: https://www.philasd.org/performance/programsservices/open-data/district-information/#fte
+source: ''
+time_period: null
+title: District Employees and Finance
+usage: null

@@ -1,0 +1,36 @@
+area_of_interest: null
+category:
+- Environment
+- Health / Human Services
+created: null
+license: City of Philadelphia License
+maintainer: null
+maintainer_email: null
+maintainer_link: null
+maintainer_phone: null
+notes: A dataset of the places to donate or recycle items in Philadelphia.
+opendataphilly_rating: null
+organization: City of Philadelphia
+resources:
+- format: html
+  name: Recycling and Donations Resources Finder App (Application)
+  url: null
+- format: csv
+  name: Recycling and Donations Resources (CSV)
+  url: https://phl.carto.com/api/v2/sql?q=SELECT+*+FROM+recycling_and_donations&filename=recycling_and_donations&format=csv&skipfields=cartodb_id
+- format: shp
+  name: Recycling and Donations Resources (SHP)
+  url: https://phl.carto.com/api/v2/sql?q=SELECT+*+FROM+recycling_and_donations&filename=recycling_and_donations&format=shp&skipfields=cartodb_id
+- format: geojson
+  name: Recycling and Donations Resources (GeoJSON)
+  url: https://phl.carto.com/api/v2/sql?q=SELECT+*+FROM+recycling_and_donations+WHERE+=&filename=recycling_and_donations&format=geojson&skipfields=cartodb_id
+- format: api
+  name: Recycling and Donations Resources (API)
+  url: https://cityofphiladelphia.github.io/carto-api-explorer/#recycling_and_donations&_ga=2.189601774.417408942.1728562904-137199205.1728051629
+- format: html
+  name: Recycling and Donations Resources (Metadata)
+  url: https://metadata.phila.gov/index.html#home/datasetdetails/66d89fdafc703302ea7104ec/
+source: ''
+time_period: null
+title: Recycling and Donations Resources
+usage: null

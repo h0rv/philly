@@ -1,0 +1,53 @@
+area_of_interest: null
+category:
+- Education
+created: '2018-05-16T20:57:19.387125'
+license: License Not Specified
+maintainer: ''
+maintainer_email: opendata@philasd.org
+maintainer_link: null
+maintainer_phone: null
+notes: School lists, enrollment, demographics, pre-school, catchments; surveys, reopening
+opendataphilly_rating: null
+organization: School District of Philadelphia
+resources:
+- format: xlsx
+  name: 'School Lists '
+  url: https://www.philasd.org/performance/programsservices/open-data/school-information/#school_lists
+- format: xlsx
+  name: School Enrollment and Demographics
+  url: https://www.philasd.org/performance/programsservices/open-data/school-information/#school_enrollment
+- format: csv
+  name: District Enrollment and Demographics
+  url: https://www.philasd.org/performance/programsservices/open-data/school-information/#district_enrollment
+- format: csv
+  name: Pre-School Information
+  url: https://www.philasd.org/performance/programsservices/open-data/school-information/#preschool_information
+- format: csv
+  name: Catchment Feeder Schools
+  url: https://www.philasd.org/performance/programsservices/open-data/school-information/#catchment_feeder_schools
+- format: shp
+  name: School Catchment Areas
+  url: https://www.philasd.org/performance/programsservices/open-data/school-information/#school_catchment_areas
+- format: csv
+  name: School Catchment Retention Details
+  url: https://www.philasd.org/performance/programsservices/open-data/school-information/#school_catchment_retention_details
+- format: csv
+  name: School Catchment Retention Counts
+  url: https://www.philasd.org/performance/programsservices/open-data/school-information/#school_catchment_retention_counts
+- format: zip
+  name: District Wide Surveys
+  url: https://www.philasd.org/performance/programsservices/open-data/school-information/#district_wide_surveys
+- format: xslx
+  name: Youth Risk Behavior Survey
+  url: https://www.philasd.org/performance/programsservices/open-data/school-information/#youth_risk_behavior_survey
+- format: xlsx
+  name: Pandemic School Reopening Information
+  url: https://www.philasd.org/performance/programsservices/open-data/school-information/#school_reopening_information
+- format: csv
+  name: School Selection
+  url: https://www.philasd.org/performance/programsservices/open-data/school-information/#school_selection
+source: ''
+time_period: null
+title: School Information
+usage: null

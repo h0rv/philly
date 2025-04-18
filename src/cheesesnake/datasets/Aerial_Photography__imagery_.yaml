@@ -1,0 +1,373 @@
+area_of_interest: City of Philadelphia
+category:
+- Environment
+- Planning / Zoning
+- Real Estate / Land Records
+created: null
+license: City of Philadelphia License
+maintainer: Office of Innovation & Technology
+maintainer_email: brian.ivey@phila.gov
+maintainer_link: null
+maintainer_phone: 215-686-8287
+notes: Data includes aerial photography of the City of Philadelphia.
+opendataphilly_rating: null
+organization: City of Philadelphia
+resources:
+- format: tiff
+  name: 2022 Aerial Photography (TIFF images)
+  url: https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=2052
+- format: shp
+  name: 2022 Imagery Tile Index (SHP)
+  url: https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=2053
+- format: api
+  name: 2022 Imagery Tile Index (API)
+  url: https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2022_2in/MapServer
+- format: jpeg
+  name: 2022 AGO Aerial Imagery (JPEG)
+  url: https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2022_2in/MapServer?cacheKey=a1db5313bb7cf328
+- format: tiff
+  name: 2020 Aerial Photography (TIFF images)
+  url: https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=2050
+- format: jpeg
+  name: 2020 AGO Aerial Imagery (JPEG)
+  url: https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2020_3in/MapServer
+- format: html
+  name: 2020 Imagery (Metadata)
+  url: https://metadata.phila.gov/index.html#home/datasetdetails/569684f4c99154d56b426105/representationdetails/60a5277185fb37001beb8895/
+- format: shp
+  name: 2020 Imagery Tile Index (SHP)
+  url: https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=2051
+- format: api
+  name: 2020 Imagery Tile Index (API)
+  url: https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Tile_Index_2020/FeatureServer
+- format: html
+  name: 2020 Imagery Tile Index (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/5543864c20583086178c4e94/representationdetails/60ad5c3793f71d001ef76915/
+- format: tiff
+  name: 2019 Aerial Photography (TIFF images)
+  url: https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=2048
+- format: jpeg
+  name: 2019 AGO Aerial Imagery (JPEG)
+  url: https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2019_3in/MapServer
+- format: html
+  name: 2019 Imagery (Metadata)
+  url: https://metadata.phila.gov/index.html#home/datasetdetails/569684f4c99154d56b426105/representationdetails/60a52648038caf001b1eee60/
+- format: shp
+  name: 2019 Imagery Tile Index (SHP)
+  url: https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=2049
+- format: api
+  name: 2019 Imagery Tile Index (API)
+  url: https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Tile_Index_2019/FeatureServer
+- format: html
+  name: 2019 Imagery Tile Index (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/5543864c20583086178c4e94/representationdetails/60ad5bc50bb04f002067173c/
+- format: tif
+  name: 2018 Aerial Photography (Imagery)
+  url: https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=2019
+- format: shp
+  name: 2018 Imagery Tile Index (SHP)
+  url: https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=2020
+- format: jpeg
+  name: 2018 AGO Aerial Imagery (JPEG)
+  url: https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2018_3in/MapServer?cacheKey=a4a3023cc0427fd3
+- format: html
+  name: 2018 Imagery (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/569684f4c99154d56b426105/representationdetails/5bc103137ac72f312e9cfc43/
+- format: api
+  name: 2018 Imagery Tile Index (API)
+  url: https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Tile_Index_2018/FeatureServer
+- format: html
+  name: 2018 Imagery Tile Index (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/5543864c20583086178c4e94/representationdetails/60ad5b6754752b0020046f31/
+- format: ecw
+  name: 2017 Aerial Photography Mosaics (ECW and MrSID image)
+  url: http://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=2015
+- format: tiff
+  name: 2017 Aerial Photography (TIFF images)
+  url: https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=2013
+- format: jpeg
+  name: 2017 AGO Aerial Imagery (JPEG)
+  url: https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2017_3in/MapServer
+- format: html
+  name: 2017 Imagery (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/569684f4c99154d56b426105/representationdetails/597221f95fc6dc535c60f94e/
+- format: shp
+  name: 2017 Aerial Photography Tile Index (SHP)
+  url: http://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=2016
+- format: api
+  name: 2017 Aerial Photography Tile Index (API)
+  url: https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Tile_Index_2017_3in/FeatureServer
+- format: html
+  name: 2017 Aerial Photography Tile Index (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/5543864c20583086178c4e94/representationdetails/5b92dbe3a412c70a59599b7c/
+- format: tiff
+  name: 2016 Aerial Photography (TIFF images)
+  url: https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=1020
+- format: jpeg
+  name: 2016 AGO Aerial Imagery (JPEG)
+  url: http://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2016_3in/MapServer
+- format: shp
+  name: 2016 Aerial Photography Tile Index (SHP)
+  url: http://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=2017
+- format: html
+  name: 2016 Imagery (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/569684f4c99154d56b426105/representationdetails/57d7003f1fb4d9e916ef6789/
+- format: api
+  name: 2016 Aerial Photography Tile Index (API)
+  url: https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Tile_Index_2016_3in/FeatureServer
+- format: html
+  name: 2016 Aerial Photography Tile Index (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/5543864c20583086178c4e94/representationdetails/5b92db5aa7ba452d034c776e/
+- format: tiff
+  name: 2015 Aerial Photography (TIFF images)
+  url: https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=1132
+- format: jpeg
+  name: 2015 AGO Aerial Imagery (JPEG)
+  url: http://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2015_3in/MapServer
+- format: html
+  name: 2015 Imagery (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/569684f4c99154d56b426105/representationdetails/569687449d6b14a10d2ee881/
+- format: shp
+  name: 2015 Aerial Imagery Tile Index (SHP)
+  url: http://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=2012
+- format: api
+  name: 2015 Aerial Imagery Tile Index (API)
+  url: https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Tile_Index_2015/FeatureServer
+- format: html
+  name: 2015 Aerial Imagery Tile Index (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/5543864c20583086178c4e94/representationdetails/5b92d9911f2a622cd17d4851/
+- format: tiff
+  name: 2014 Aerial Photography (TIFF images)
+  url: https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=1128
+- format: jpeg
+  name: 2014 AGO Aerial Imagery (JPEG)
+  url: http://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2014_6in/MapServer/
+- format: html
+  name: 2014 Imagery (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/569684f4c99154d56b426105/representationdetails/56968728a2ece9aa0d966170/
+- format: shp
+  name: 2014 Aerial Photography Tile Index (SHP)
+  url: http://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=2011
+- format: api
+  name: 2014 Aerial Photography Tile Index (API)
+  url: https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Tile_Index_2014/FeatureServer
+- format: html
+  name: 2014 Aerial Photography Tile Index (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/5543864c20583086178c4e94/representationdetails/5b92d93ccad229285ac9d2a0/
+- format: tiff
+  name: 2012 Aerial Photography (TIFF images)
+  url: https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=1127
+- format: shp
+  name: 2012 Aerial Photography Tile Index (SHP)
+  url: http://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=2010
+- format: jpeg
+  name: 2012 AGO Aerial Imagery (JPEG)
+  url: https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2012_3in/MapServer
+- format: html
+  name: 2012 Imagery (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/569684f4c99154d56b426105/representationdetails/56968706acaf09086dc536bc/
+- format: api
+  name: 2012 Aerial Photography Tile Index (API)
+  url: https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Tile_Index_2012/FeatureServer
+- format: html
+  name: 2012 Aerial Photography Tile Index (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/5543864c20583086178c4e94/representationdetails/5b92d8cb3030962c11ef21ad/
+- format: jpeg
+  name: 2011 Aerial Photography (JPEG images)
+  url: https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=1040
+- format: jpeg
+  name: 2011 AGO Aerial Imagery Leaf Off 6in (JPEG)
+  url: http://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=1127
+- format: html
+  name: 2011 Imagery Leaf-Off (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/569684f4c99154d56b426105/representationdetails/5696af6ef7a92c8d71e43f85/
+- format: shp
+  name: 2011 Aerial Photography Tile Index (SHP)
+  url: http://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=2008
+- format: api
+  name: 2011 Aerial Photography Tile Index (API)
+  url: https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Tile_Index_2011/FeatureServer
+- format: html
+  name: 2011 Aerial Photography Tile Index (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/5543864c20583086178c4e94/representationdetails/5b92d85b707a6f2dda99261a/
+- format: jpeg
+  name: 2011 Aerial Imagery LeafOn (JPEG images)
+  url: https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=1129
+- format: jpeg
+  name: 2011 AGO Aerial Imagery LeafOn  12in (JPEG)
+  url: https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2011_12in_LEAFON/MapServer
+- format: shp
+  name: 2011 Aerial Photography LeafOn Tile Index (SHP)
+  url: http://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=2009
+- format: html
+  name: 2011 Imagery Leaf-On (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/569684f4c99154d56b426105/representationdetails/569686ba3ef2f2a80de713b6/
+- format: tiff
+  name: 2010 Aerial Photography (TIFF images)
+  url: https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=1037
+- format: jpeg
+  name: 2010 AGO Aerial Imagery (JPEG)
+  url: https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2010_3in/MapServer
+- format: html
+  name: 2010 Imagery (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/569684f4c99154d56b426105/representationdetails/569686962dd49e006db58e18/
+- format: shp
+  name: 2010 Aerial Photography Tile Index (SHP)
+  url: http://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=2007
+- format: api
+  name: 2010 Aerial Photography Tile Index (API)
+  url: https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Tile_Index_2010/FeatureServer
+- format: html
+  name: 2010 Aerial Photography Tile Index (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/5543864c20583086178c4e94/representationdetails/5b92d82ba418a229e006f40b/
+- format: tiff
+  name: 2009 Aerial Photography (TIFF images)
+  url: https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=1036
+- format: jpeg
+  name: 2009 AGO Aerial Imagery (JPEG)
+  url: http://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2009_6in/MapServer
+- format: html
+  name: 2009 Imagery (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/569684f4c99154d56b426105/representationdetails/5696867ab23ce1e86b4650d4/
+- format: shp
+  name: 2009 Aerial Photography Tile Index (SHP)
+  url: http://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=2006
+- format: api
+  name: 2009 Aerial Photography Tile Index (API)
+  url: https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Tile_index_2009/FeatureServer
+- format: html
+  name: 2009 Aerial Photography Tile Index (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/5543864c20583086178c4e94/representationdetails/5b92d7fca7ba452d034c6a69/
+- format: tiff
+  name: 2008 Aerial Photography (TIFF images)
+  url: https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=1035
+- format: jpeg
+  name: 2008 AGO Aerial Imagery (JPEG)
+  url: https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2008_3in/MapServer
+- format: html
+  name: 2008 Imagery (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/569684f4c99154d56b426105/representationdetails/5696865af842185017465f8b/
+- format: shp
+  name: 2008 Aerial Photography Tile Index (SHP)
+  url: http://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=2005
+- format: api
+  name: 2008 Aerial Photography Tile Index (API)
+  url: https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Tile_Index_2008/FeatureServer
+- format: html
+  name: 2008 Aerial Photography Tile Index (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/5543864c20583086178c4e94/representationdetails/5b92d7c14bad6b0a66279246/
+- format: tiff
+  name: 2005 Aerial Photography (TIFF images)
+  url: https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=1033
+- format: jpeg
+  name: 2005 AGO Aerial Imagery (JPEG)
+  url: https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2005_16in/MapServer
+- format: html
+  name: 2005 Imagery (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/569684f4c99154d56b426105/representationdetails/56968637aba24ba4682d5b4a/
+- format: shp
+  name: 2005 Aerial Photography Tile Index (SHP)
+  url: http://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=2003
+- format: api
+  name: 2005 Aerial Photography Tile Index (API)
+  url: https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Tile_Index_2005/FeatureServer
+- format: html
+  name: 2005 Aerial Photography Tile Index (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/5543864c20583086178c4e94/representationdetails/5b92d65a4bad6b0a66278dd5/
+- format: tiff
+  name: 2004 Aerial Photography (TIFF images)
+  url: https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=1032
+- format: jpeg
+  name: 2004 AGO Aerial Imagery (JPEG)
+  url: https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2004_6in/MapServer
+- format: html
+  name: 2004 Imagery (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/569684f4c99154d56b426105/representationdetails/5696860a9d6b14a10d2ee7d9/
+- format: shp
+  name: 2004 Aerial Photography Tile Index (SHP)
+  url: http://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=2002
+- format: api
+  name: 2004 Aerial Photography Tile Index (API)
+  url: https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Tile_Index_2004/FeatureServer
+- format: html
+  name: 2004 Aerial Photography Tile Index (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/5543864c20583086178c4e94/representationdetails/5b92d4bb1f2a622cd17d37c8/
+- format: tiff
+  name: 2000 Aerial Photography (TIFF images)
+  url: https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=1031
+- format: shp
+  name: 2000 Aerial Photography Tile Index (SHP)
+  url: http://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=2001
+- format: jpeg
+  name: 2000 AGO Aerial Imagery (JPEG)
+  url: https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_2000_18in/MapServer
+- format: html
+  name: 2000 Imagery (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/569684f4c99154d56b426105/representationdetails/5696855ce931f99f0de3c150/
+- format: api
+  name: 2000 Aerial Photography Tile Index (API)
+  url: https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Tile_Index_2000/FeatureServer
+- format: html
+  name: 2000 Aerial Photography Tile Index (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/5543864c20583086178c4e94/representationdetails/5b92d24d9557a34616edd2ba/
+- format: tiff
+  name: 1996 Aerial Photography (TIFF images)
+  url: https://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=1030
+- format: html
+  name: 1996 Aerial Photography (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/569684f4c99154d56b426105/representationdetails/60da08bafaf828001e079a6c/
+- format: jpeg
+  name: 1996 AGO Aerial Imagery (JPEG)
+  url: https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityImagery_1996_6in/MapServer
+- format: shp
+  name: 1996 Aerial Photography Tile Index (SHP)
+  url: http://www.pasda.psu.edu/uci/DataSummary.aspx?dataset=2000
+- format: api
+  name: 1996 Aerial Photography Tile Index (API)
+  url: https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Tile_Index_1996/FeatureServer
+- format: html
+  name: 1996 Aerial Photography Tile Index (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/5543864c20583086178c4e94/representationdetails/5b92cfac1f2a622cd17d2376/
+- format: jpeg
+  name: 1962 Historic Land Use AGO Imagery (JPEG)
+  url: http://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/HistoricLandUse_1962/MapServer
+- format: html
+  name: 1962 Historic WPA Land Use Imagery (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/60a57b69c3ada6001ea4d7db/representationdetails/60a58300799cfb001e4a29cb/
+- format: jpeg
+  name: 1942 Historic Land Use AGO Imagery (JPEG)
+  url: http://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/HistoricLandUse_1942/MapServer
+- format: html
+  name: 1942 Historic WPA Land Use Imagery (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/60a57b69c3ada6001ea4d7db/representationdetails/60a5836da6ffb4001efbc065/
+- format: jpeg
+  name: 1910 Historic Bromley Atlas AGO Imagery (JPEG )
+  url: http://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/HistoricBromleyAtlas_1910/MapServer
+- format: html
+  name: 1910 Historic Bromley Atlas Imagery (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/60a57b69c3ada6001ea4d7db/representationdetails/60a5860d8182ae001eabf47f/
+- format: jpeg
+  name: 1895 Historic Bromley Atlas AGO Imagery (JPEG)
+  url: http://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/HistoricBromleyAtlas_1895/MapServer
+- format: html
+  name: 1895 Historic Bromley Atlas Imagery (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/60a57b69c3ada6001ea4d7db/representationdetails/60a5851198f07c001e736140/
+- format: jpeg
+  name: 1875 Historic GM Hopkins Atlas AGO Imagery (JPEG)
+  url: http://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/HistoricGMHopkinsAtlas_1875/MapServer
+- format: html
+  name: 1875 Historic GM Hopkins Atlas Imagery (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/60a57b69c3ada6001ea4d7db/representationdetails/60a57da1c9cbf6001eab427e/
+- format: jpeg
+  name: 1860 Historic Hexamer Locher Atlas AGO Imagery (JPEG)
+  url: http://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/HistoricHexamerLocherAtlas_1860/MapServer
+- format: html
+  name: 1860 Historic Hexamer Locher Atlas Imagery (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/60a57b69c3ada6001ea4d7db/representationdetails/60a5807a799cfb001e4a24bb/
+- format: html
+  name: Aerial Photography (Metadata)
+  url: http://metadata.phila.gov/#home/datasetdetails/5543864c20583086178c4e94/
+source: ''
+time_period: null
+title: Aerial Photography (imagery)
+usage: Public Use

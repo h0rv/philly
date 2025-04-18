@@ -1,0 +1,48 @@
+area_of_interest: City of Philadelphia
+category:
+- Basemaps
+- Boundaries
+created: '2014-12-08T21:58:43.438282'
+license: City of Philadelphia License
+maintainer: maps@phila.gov
+maintainer_email: maps@phila.gov
+maintainer_link: null
+maintainer_phone: null
+notes: Basemaps of the Philadelphia area, including from the Department of Records.
+opendataphilly_rating: null
+organization: City of Philadelphia
+resources:
+- format: jpeg
+  name: City Basemap (JPEG)
+  url: https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap/MapServer
+- format: png_24
+  name: City Basemap Labels (PNG 24)
+  url: https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_Labels/MapServer
+- format: jpeg
+  name: City Basemap World (JPEG)
+  url: https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_World/MapServer
+- format: png_24
+  name: City Basemap Labels World (PNG 24)
+  url: https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_Labels_World/MapServer
+- format: html
+  name: City Basemap (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/5543864e20583086178c4ea0/representationdetails/60a7bb54ba5d6f001ed176bc/
+- format: jpeg
+  name: City Basemap Slate (JPEG)
+  url: https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/CityBasemap_Slate/MapServer
+- format: html
+  name: City Basemap Slate (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/5543864e20583086178c4ea0/representationdetails/60a7bbe7762bc20024036547/
+- format: jpeg
+  name: DOR Basemap (JPEG)
+  url: https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/DORBasemap/MapServer
+- format: png
+  name: DOR Basemap Labels (PNG 24)
+  url: https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services/DORBasemap_Labels/MapServer
+- format: html
+  name: DOR Basemap (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/5543864e20583086178c4ea0/representationdetails/60a7bb7cab3e8a001e4f8df5/
+source: ''
+time_period: null
+title: Philadelphia Basemaps
+usage: Public Use; Free

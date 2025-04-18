@@ -1,0 +1,28 @@
+area_of_interest: Southeastern Pennsylvania (Bucks, Chester, Delaware, Montgomery,
+  Philadelphia counties)
+category:
+- Transportation
+created: '2015-05-08'
+license: License Not Specified
+maintainer: SEPTA
+maintainer_email: septoid@gmail.com
+maintainer_link: https://wwww.septa.org/open-data/
+maintainer_phone: null
+notes: SEPTA schedule and location information in GTFS format.  Additional informatoion
+  can be found on GitHub (https://github.com/septadev/GTFS/) or Google group (https://groups.google.com/forum/#!forum/septadev)
+opendataphilly_rating: null
+organization: SEPTA
+resources:
+- format: gtfs
+  name: Versioned GTFS files
+  url: https://github.com/septadev/GTFS/releases
+- format: gtfs
+  name: Current GTFS file
+  url: https://www3.septa.org/developer/gtfs_public.zip
+- format: rss
+  name: RSS feed of GTFS data releases
+  url: https://github.com/septadev/GTFS/releases.atom
+source: null
+time_period: Current
+title: SEPTA GTFS
+usage: null
