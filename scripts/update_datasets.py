@@ -4,8 +4,8 @@ import asyncio
 
 import yaml
 
-from src.cheesesnake.services.github import get_all_files_contents
-from src.cheesesnake.models.dataset import Dataset
+from cheesesnake.services.github import get_all_files_contents
+from cheesesnake.models.dataset import Dataset
 
 
 async def get_all_datasets():
@@ -38,6 +38,7 @@ async def main():
             "w",
             encoding="utf-8",
         ) as f:
+            print(f"Writing {dataset.title} to {f.name}")
             yaml.dump(dataset.model_dump(), f)
 
 

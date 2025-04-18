@@ -42,22 +42,22 @@ class Cheesesnake:
 
     def filter(self, field: str, filter_fn: Callable) -> list[Dataset]:
         """Filter datasets using a functional approach with path resolution."""
-        path_parts = field.split('.')
-        
+        path_parts = field.split(".")
+
         def apply_filter(dataset):
             values = self._extract_values(dataset, path_parts)
             return any(filter_fn(v) for v in values if v is not None)
-            
+
         return list(filter(apply_filter, self.datasets))
-    
+
     def _extract_values(self, obj: Any, path_parts: list[str]) -> list[Any]:
         """Extract all values matching a path pattern."""
         if not path_parts:
             return [obj]
-            
+
         part, *rest = path_parts
-        
-        if part == '*':
+
+        if part == "*":
             if not isinstance(obj, list):
                 return []
             values = []
