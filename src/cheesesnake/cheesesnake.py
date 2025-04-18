@@ -1,9 +1,8 @@
 from os import listdir
 from os.path import abspath, dirname, join
-from typing import Any, Callable
+from typing import Callable
 
-from cheesesnake.models.dataset import Dataset
-from cheesesnake.models.search import MatchType, SearchResult
+from cheesesnake.models import Dataset, Format, Resource
 
 
 class Cheesesnake:
@@ -15,30 +14,13 @@ class Cheesesnake:
         self.titles = sorted([dataset.title for dataset in self.datasets])
         self.title_dataset_map = {dataset.title: dataset for dataset in self.datasets}
 
-        # Precompute search indexes
-        self.search_indexes = {
-            MatchType.TITLE: {},
-            MatchType.NOTES: {},
-            MatchType.ORGANIZATION: {},
-            MatchType.CATEGORY: {},
-        }
-
-        for dataset in self.datasets:
-            # Index title
-            self._index_field(MatchType.TITLE, dataset.title, dataset)
-
-            # Index notes
-            if dataset.notes:
-                self._index_field(MatchType.NOTES, dataset.notes, dataset)
-
-            # Index organization
-            if dataset.organization:
-                self._index_field(MatchType.ORGANIZATION, dataset.organization, dataset)
-
-            # Index categories
-            if dataset.category:
-                for category in dataset.category:
-                    self._index_field(MatchType.CATEGORY, category, dataset)
+    def get_resources(self, formats: list[Format]) -> list[Resource]:
+        return [
+            resource
+            for dataset in self.datasets
+            for resource in dataset.resources
+            if resource.format in formats
+        ]
 
     def filter(self, field: str, filter_fn: Callable) -> list[Dataset]:
         """Filter datasets using a functional approach with path resolution."""
@@ -50,7 +32,7 @@ class Cheesesnake:
 
         return list(filter(apply_filter, self.datasets))
 
-    def _extract_values(self, obj: Any, path_parts: list[str]) -> list[Any]:
+    def _extract_values(self, obj: object, path_parts: list[str]) -> list[object]:
         """Extract all values matching a path pattern."""
         if not path_parts:
             return [obj]
@@ -70,34 +52,25 @@ class Cheesesnake:
                 return []
             return self._extract_values(value, rest)
 
-    def search(self, query: str) -> list[SearchResult]:
+    def search_by_title(self, query: str) -> list[Resource]:
         query = query.lower()
-        results: dict[int, SearchResult] = {}
+        results: list[Resource] = []
 
-        # Score weights for different match types
-        match_scores = {
-            MatchType.TITLE: 5.0,
-            MatchType.NOTES: 1.0,
-            MatchType.ORGANIZATION: 2.0,
-            MatchType.CATEGORY: 2.0,
-        }
+        for dataset in self.datasets:
+            if query in dataset.title.lower():
+                results.extend(dataset.resources)
 
-        # Search in all indexed fields
-        for match_type, index in self.search_indexes.items():
-            for indexed_value, datasets in index.items():
-                if query in indexed_value:
-                    # Exact match gets higher score
-                    score_multiplier = 1.5 if indexed_value == query else 1.0
-                    score = match_scores[match_type] * score_multiplier
+        return results
 
-                    for dataset in datasets:
-                        dataset_id = id(dataset)
-                        if dataset_id not in results:
-                            results[dataset_id] = SearchResult(dataset=dataset)
-                        results[dataset_id].add_match(match_type, score)
+    def search_by_notes(self, query: str) -> list[Resource]:
+        query = query.lower()
+        results: list[Resource] = []
 
-        # Sort by score (descending) then by title
-        return sorted(results.values(), key=lambda x: (-x.score, x.dataset.title))
+        for dataset in self.datasets:
+            if query in dataset.notes.lower():
+                results.extend(dataset.resources)
+
+        return results
 
     @property
     def _datasets_dir(self):
@@ -109,10 +82,3 @@ class Cheesesnake:
             for file in listdir(self._datasets_dir)
             if file.endswith(".yaml")
         ]
-
-    def _index_field(self, match_type: MatchType, value: str, dataset: Dataset) -> None:
-        """Index a field value for searching."""
-        value_lower = value.lower()
-        if value_lower not in self.search_indexes[match_type]:
-            self.search_indexes[match_type][value_lower] = []
-        self.search_indexes[match_type][value_lower].append(dataset)

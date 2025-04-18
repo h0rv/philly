@@ -5,7 +5,7 @@ import asyncio
 import yaml
 
 from cheesesnake.services.github import get_all_files_contents
-from cheesesnake.models.dataset import Dataset
+from cheesesnake.models import Dataset
 
 
 async def get_all_datasets():

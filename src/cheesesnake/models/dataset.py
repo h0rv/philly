@@ -1,6 +1,5 @@
 import json
 from enum import Enum
-from typing import Any
 
 import yaml
 
@@ -59,7 +58,7 @@ class Resource(BaseModel):
 
     @field_validator("format", mode="before")
     @classmethod
-    def lowercase_format(cls, value: Any) -> Any:
+    def lowercase_format(cls, value: any) -> any:
         if not isinstance(value, str):
             raise ValueError("format must be a string")
 
