@@ -2,6 +2,9 @@ from os import listdir
 from os.path import abspath, dirname, join
 from typing import Callable
 
+import duckdb
+import pandas as pd
+
 from cheesesnake.models import Dataset, Resource, ResourceFormat
 
 
@@ -15,6 +18,17 @@ class Cheesesnake:
         # Basic dataset lookups
         self.titles = sorted([dataset.title for dataset in self.datasets])
         self.title_dataset_map = {dataset.title: dataset for dataset in self.datasets}
+
+        self.datasets_df = pd.DataFrame(
+            [dataset.model_dump() for dataset in self.datasets]
+        )
+
+    def query_datasets(self, query: str) -> pd.DataFrame:
+        duckdb.register("datasets", self.datasets_df)
+        try:
+            return duckdb.query(query).to_df()
+        finally:
+            duckdb.unregister("datasets")
 
     def get_resources(self, formats: list[ResourceFormat]) -> list[Resource]:
         return [

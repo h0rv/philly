@@ -5,6 +5,8 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "duckdb>=1.2.2",
+    "geojson>=3.2.0",
     "geopandas>=1.0.1",
     "geoparquet>=0.0.3",
     "gtfs-realtime-bindings>=1.0.0",

@@ -4,6 +4,7 @@ import xml.etree.ElementTree as ET
 import zipfile
 from io import BytesIO, StringIO
 
+import geojson
 import geopandas as gpd
 import httpx
 import pandas as pd
@@ -77,7 +78,8 @@ class ResourceLoader:
         return json.loads(content)
 
     def load_geojson(self) -> dict[str, any]:
-        return self.load_json()
+        content = self._get_content()
+        return geojson.loads(content)
 
     def load_xml(self) -> ET.Element:
         content = self._get_content()
