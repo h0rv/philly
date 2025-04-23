@@ -4,16 +4,21 @@ import xml.etree.ElementTree as ET
 import zipfile
 from io import BytesIO, StringIO
 
+import geopandas as gpd
 import httpx
 import pandas as pd
 from google.transit import gtfs_realtime_pb2 as gtfs_rt
 
 from cheesesnake.models import Resource, ResourceFormat
+from cheesesnake.services import github
 
 
 class ResourceLoader:
     def __init__(self, resource: Resource):
         self.resource = resource
+
+        if self.resource.url is None:
+            raise ValueError("Resource URL is not set")
 
     def load(self) -> any:
         match self.resource.format:
@@ -46,14 +51,17 @@ class ResourceLoader:
                 return self.load_gtfs()
             case ResourceFormat.GTFS_RT:
                 return self.load_gtfs_rt()
+            case ResourceFormat.GEOPARQUET:
+                return self.load_geoparquet()
             case _:
                 raise ValueError(f"Unsupported format: {self.resource.format}")
 
-    def _get_content(self) -> bytes | str:
-        if not self.resource.url:
+    def _get_content(self, url: str | None = None) -> bytes:
+        url = url or self.resource.url
+        if not url:
             raise ValueError("Resource URL is not set")
 
-        with httpx.stream("GET", self.resource.url) as response:
+        with httpx.stream("GET", url) as response:
             response.raise_for_status()
             content = response.read()
             return content
@@ -84,7 +92,7 @@ class ResourceLoader:
     def load_pdf(self) -> bytes:
         # Basic loader that just returns the PDF content
         # For more advanced PDF processing, PyPDF2 or similar would be needed
-        return self._get_content()
+        return bytes(self._get_content())
 
     def load_zip(self) -> dict[str, bytes]:
         content = self._get_content()
@@ -115,3 +123,13 @@ class ResourceLoader:
         content = self._get_content()
         feed.ParseFromString(content)
         return feed
+
+    def load_geoparquet(self) -> gpd.GeoDataFrame:
+        url = self.resource.url
+        if url.startswith("https://github.com/"):
+            url = github.convert_app_url_to_content_url(url)
+
+        content = self._get_content(url=url)
+        with BytesIO(content) as f:
+            gdf = gpd.read_parquet(f)
+        return gdf

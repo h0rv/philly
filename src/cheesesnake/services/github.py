@@ -54,3 +54,7 @@ async def get_all_files(
         # Return list of file content
         files = response.json()
         return files
+
+
+def convert_app_url_to_content_url(url: str) -> str:
+    return url.replace("github.com", "raw.githubusercontent.com").replace("/blob", "")
