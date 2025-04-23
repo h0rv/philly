@@ -1,11 +1,11 @@
-import re
-import os
 import asyncio
+import os
+import re
 
 import yaml
 
-from cheesesnake.services.github import get_all_files_contents
 from cheesesnake.models import Dataset
+from cheesesnake.services.github import get_all_files_contents
 
 
 async def get_all_datasets():

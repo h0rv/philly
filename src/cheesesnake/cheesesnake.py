@@ -6,9 +6,11 @@ from cheesesnake.models import Dataset, Format, Resource
 
 
 class Cheesesnake:
-    def __init__(self):
-        self._module_dir = dirname(abspath(__file__))
-        self.datasets = sorted(self._load_datasets(), key=lambda x: x.title)
+    def __init__(self) -> None:
+        self._module_dir: str = dirname(abspath(__file__))
+        self.datasets: list[Dataset] = sorted(
+            self._load_datasets(), key=lambda x: x.title
+        )
 
         # Basic dataset lookups
         self.titles = sorted([dataset.title for dataset in self.datasets])
@@ -18,7 +20,7 @@ class Cheesesnake:
         return [
             resource
             for dataset in self.datasets
-            for resource in dataset.resources
+            for resource in dataset.resources or []
             if resource.format in formats
         ]
 
