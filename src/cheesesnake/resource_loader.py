@@ -6,8 +6,9 @@ from io import BytesIO, StringIO
 
 import httpx
 import pandas as pd
+from google.transit import gtfs_realtime_pb2 as gtfs_rt
 
-from cheesesnake.models.resource import Resource, ResourceFormat
+from cheesesnake.models import Resource, ResourceFormat
 
 
 class ResourceLoader:
@@ -41,8 +42,10 @@ class ResourceLoader:
                 return self.load_image()
             case ResourceFormat.TEXT:
                 return self.load_text()
-            case ResourceFormat.GTFS | ResourceFormat.GTFS_RT:
+            case ResourceFormat.GTFS:
                 return self.load_gtfs()
+            case ResourceFormat.GTFS_RT:
+                return self.load_gtfs_rt()
             case _:
                 raise ValueError(f"Unsupported format: {self.resource.format}")
 
@@ -52,7 +55,8 @@ class ResourceLoader:
 
         with httpx.stream("GET", self.resource.url) as response:
             response.raise_for_status()
-            return response.content
+            content = response.read()
+            return content
 
     def load_csv(self) -> list[dict[str, str]]:
         content = self._get_content()
@@ -105,3 +109,9 @@ class ResourceLoader:
     def load_gtfs(self) -> str:
         content = self._get_content()
         return str(content)
+
+    def load_gtfs_rt(self) -> gtfs_rt.FeedMessage:
+        feed = gtfs_rt.FeedMessage()
+        content = self._get_content()
+        feed.ParseFromString(content)
+        return feed

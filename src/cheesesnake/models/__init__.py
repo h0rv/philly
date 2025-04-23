@@ -1,10 +1,8 @@
-from cheesesnake.models.dataset import Dataset, Format, Resource
-from cheesesnake.models.search import MatchType, SearchResult
+from cheesesnake.models.dataset import Dataset
+from cheesesnake.models.resource import Resource, ResourceFormat
 
 __all__ = [
     "Dataset",
-    "Format",
     "Resource",
-    "MatchType",
-    "SearchResult",
+    "ResourceFormat",
 ]

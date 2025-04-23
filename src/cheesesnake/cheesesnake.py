@@ -2,7 +2,7 @@ from os import listdir
 from os.path import abspath, dirname, join
 from typing import Callable
 
-from cheesesnake.models import Dataset, Format, Resource
+from cheesesnake.models import Dataset, Resource, ResourceFormat
 
 
 class Cheesesnake:
@@ -16,7 +16,7 @@ class Cheesesnake:
         self.titles = sorted([dataset.title for dataset in self.datasets])
         self.title_dataset_map = {dataset.title: dataset for dataset in self.datasets}
 
-    def get_resources(self, formats: list[Format]) -> list[Resource]:
+    def get_resources(self, formats: list[ResourceFormat]) -> list[Resource]:
         return [
             resource
             for dataset in self.datasets

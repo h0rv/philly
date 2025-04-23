@@ -1,7 +1,7 @@
 import json
 
 import yaml
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from cheesesnake.models.resource import Resource
 
@@ -21,8 +21,8 @@ class Dataset(BaseModel):
     source: str | None = None
     time_period: str | int | None = None
     usage: str | None = None
-    category: list[str] = Field(default_factory=list)
-    resources: list[Resource] = Field(default_factory=list)
+    category: list[str] | None = None
+    resources: list[Resource] | None = None
 
     @classmethod
     def from_dict(cls, data: dict) -> "Dataset":
