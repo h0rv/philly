@@ -20,7 +20,7 @@ resources:
 - format: geojson
   name: Philadelphia Neighborhoods GeoJSON
   url: https://github.com/opendataphilly/open-geo-data/blob/master/philadelphia-neighborhoods/philadelphia-neighborhoods.geojson
-- format: geojson
+- format: geopackage
   name: Philadelphia Neighborhoods GeoPackage
   url: https://github.com/opendataphilly/open-geo-data/blob/master/philadelphia-neighborhoods/philadelphia-neighborhoods.gpkg
 - format: geoparquet

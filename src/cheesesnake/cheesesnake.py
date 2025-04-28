@@ -1,4 +1,5 @@
 import asyncio
+import json
 import logging
 import zipfile
 from pathlib import Path
@@ -119,6 +120,11 @@ class Cheesesnake:
         except zipfile.BadZipFile as e:
             self.logger.debug(
                 f"[WARNING] Resource {resource.name} is not a valid zip file (error: {e}). Skipping."
+            )
+            return None
+        except json.JSONDecodeError as e:
+            self.logger.debug(
+                f"[WARNING] Resource {resource.name} is not a valid JSON file (error: {e}). Skipping."
             )
             return None
 

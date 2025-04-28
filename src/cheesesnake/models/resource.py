@@ -11,6 +11,7 @@ class ResourceFormat(YamlEnum):
     ECW = "ecw"
     GDB = "gdb"
     GEOJSON = "geojson"
+    GEOPACKAGE = "geopackage"
     GEOPARQUET = "geoparquet"
     GEOSERVICE = "geoservice"
     GTFS = "gtfs"

@@ -27,7 +27,8 @@ class ResourceLoader:
 
 
 class ResourcesLoader:
-    def __init__(self):
+
+    def __init__(self) -> None:
         self.loaders: dict[ResourceFormat, ResourceLoader] = {
             ResourceFormat.API: ResourceLoader(
                 format=ResourceFormat.API,
@@ -72,6 +73,11 @@ class ResourcesLoader:
             ResourceFormat.GEOSERVICE: ResourceLoader(
                 format=ResourceFormat.GEOSERVICE,
                 load_func=self.load_geoservice,
+                dataframable=True,
+            ),
+            ResourceFormat.GEOPACKAGE: ResourceLoader(
+                format=ResourceFormat.GEOPACKAGE,
+                load_func=self.load_geopackage,
                 dataframable=True,
             ),
             ResourceFormat.GTFS: ResourceLoader(
@@ -221,22 +227,33 @@ class ResourcesLoader:
 
     async def load_csv(self, resource: Resource) -> list[dict[str, object]]:
         content = await self._get_content(resource.url)
+        csv_data = StringIO(content.decode("utf-8", errors="replace"))
         try:
-            decoded_content = content.decode("utf-8")
-        except UnicodeDecodeError:
-            # Fallback to latin-1 which can decode any byte sequence
-            decoded_content = content.decode("latin-1")
-        csv_data = StringIO(decoded_content)
-        reader = csv.DictReader(csv_data)
-        return list(reader)
+            reader = csv.DictReader(csv_data)
+            return list(reader)
+        except csv.Error as e:
+            if "new-line character seen in unquoted field" in str(e):
+                # Try with universal newline mode
+                csv_data = StringIO(
+                    content.decode("utf-8", errors="replace"), newline=None
+                )
+                reader = csv.DictReader(csv_data)
+                return list(reader)
+            raise
 
-    async def load_json(self, resource: Resource) -> dict[str, any]:
+    async def load_json(self, resource: Resource) -> dict[str, object]:
         content = await self._get_content(resource.url)
-        return json.loads(content)
+        return json.loads(content.decode("utf-8", errors="replace"))
 
-    async def load_geojson(self, resource: Resource) -> dict[str, any]:
+    async def load_geojson(self, resource: Resource) -> dict[str, object]:
         content = await self._get_content(resource.url)
-        return geojson.loads(content)
+        return geojson.loads(content.decode("utf-8", errors="replace"))
+
+    async def load_geopackage(self, resource: Resource) -> gpd.GeoDataFrame:
+        content = await self._get_content(resource.url)
+        with BytesIO(content) as f:
+            gdf = gpd.read_file(f)
+        return gdf
 
     async def load_xml(self, resource: Resource) -> ET.Element:
         content = await self._get_content(resource.url)
@@ -267,7 +284,7 @@ class ResourcesLoader:
 
     async def load_text(self, resource: Resource) -> str:
         content = await self._get_content(resource.url)
-        return content.decode("utf-8")
+        return content.decode("utf-8", errors="replace")
 
     async def load_gtfs(self, resource: Resource) -> str:
         content = await self._get_content(resource.url)
@@ -318,7 +335,7 @@ class ResourcesLoader:
     async def load_html(self, resource: Resource) -> str:
         """Load HTML content as text asynchronously"""
         content = await self._get_content(resource.url)
-        return content.decode("utf-8")
+        return content.decode("utf-8", errors="replace")
 
     async def load_kml(self, resource: Resource) -> ET.Element:
         """Load KML (Keyhole Markup Language) file asynchronously"""
