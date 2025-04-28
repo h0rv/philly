@@ -19,6 +19,11 @@ async def get_all_datasets():
 
         for file in files:
             file = file.strip()
+
+            # fix typo
+            if "hhttps://" in file:
+                file = file.replace("hhttps://", "https://")
+
             if file:
                 try:
                     yield Dataset.from_yaml(file)

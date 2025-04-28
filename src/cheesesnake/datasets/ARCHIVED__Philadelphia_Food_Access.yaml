@@ -46,7 +46,7 @@ resources:
   url: https://opendata.arcgis.com/datasets/4748c96b9db444a48de1ae38ca93f554_0.geojson
 - format: api
   name: Walkable Access to Healthy Food (API)
-  url: hhttps://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Walkable_Access_Healthy_Food/FeatureServer/0/query?outFields=*&where=1%3D1
+  url: https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Walkable_Access_Healthy_Food/FeatureServer/0/query?outFields=*&where=1%3D1
 - format: html
   name: Walkable Access to Healthy Food (Metadata)
   url: https://metadata.phila.gov/#home/datasetdetails/568d4b3c13d1bebc0c2a2b0f/representationdetails/568d4b3c13d1bebc0c2a2b10/

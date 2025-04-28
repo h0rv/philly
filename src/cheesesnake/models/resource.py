@@ -1,49 +1,39 @@
-from enum import Enum
-
-import yaml
 from pydantic import BaseModel, field_validator
 
-
-class YamlEnum(str, Enum):
-    def __init_subclass__(cls, **kwargs):
-        super().__init_subclass__(**kwargs)
-        for dumper in (yaml.SafeDumper, yaml.Dumper):
-            dumper.add_multi_representer(
-                cls, lambda d, v: d.represent_scalar("tag:yaml.org,2002:str", v.value)
-            )
+from cheesesnake.models.yaml_enum import YamlEnum
 
 
 class ResourceFormat(YamlEnum):
     API = "api"
-    CSV = "csv"
-    JSON = "json"
-    GEOJSON = "geojson"
-    HTML = "html"
-    KML = "kml"
-    KMZ = "kmz"
-    SHP = "shp"
-    XML = "xml"
-    JPEG = "jpeg"
-    TIFF = "tiff"
-    TIF = "tif"
-    ECW = "ecw"
-    XLSX = "xlsx"
-    XSLX = "xslx"
-    TEXT = "txt"
     APP = "app"
     APPLICATION = "application"
-    RSS = "rss"
+    CSV = "csv"
+    ECW = "ecw"
     GDB = "gdb"
+    GEOJSON = "geojson"
+    GEOPARQUET = "geoparquet"
     GEOSERVICE = "geoservice"
-    PDF = "pdf"
-    LAS = "las"
-    ZIP = "zip"
+    GTFS = "gtfs"
+    GTFS_RT = "gtfs_rt"
+    HTML = "html"
     IMG = "img"
+    JPEG = "jpeg"
+    JSON = "json"
+    KML = "kml"
+    KMZ = "kmz"
+    LAS = "las"
+    PDF = "pdf"
     PNG = "png"
     PNG_24 = "png_24"
-    GTFS = "gtfs"
-    GEOPARQUET = "geoparquet"
-    GTFS_RT = "gtfs_rt"
+    RSS = "rss"
+    SHP = "shp"
+    TEXT = "txt"
+    TIF = "tif"
+    TIFF = "tiff"
+    XLSX = "xlsx"
+    XML = "xml"
+    XSLX = "xslx"
+    ZIP = "zip"
 
     def __str__(self) -> str:
         return self.value
@@ -54,8 +44,8 @@ class Resource(BaseModel):
     format: ResourceFormat
     url: str | None = None
 
-    @field_validator("format", mode="before")
     @classmethod
+    @field_validator("format", mode="before")
     def lowercase_format(cls, value: any) -> any:
         if not isinstance(value, str):
             raise ValueError("format must be a string")
@@ -79,3 +69,7 @@ class Resource(BaseModel):
             raise ValueError(
                 f"'{value}' is not a valid format. Valid formats are: {', '.join(valid_formats)}"
             ) from e
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "Resource":
+        return cls(**data)
