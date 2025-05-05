@@ -1,5 +1,7 @@
 import csv
 import json
+import logging
+import re
 import xml.etree.ElementTree as ET
 import zipfile
 from dataclasses import dataclass
@@ -19,15 +21,14 @@ from cheesesnake.services import github
 @dataclass
 class ResourceLoader:
     format: ResourceFormat
-    load_func: Callable[[], any]
+    load_func: Callable[[Resource], object | None]
     dataframable: bool = False
 
-    def __call__(self, resource: Resource) -> any:
+    def __call__(self, resource: Resource) -> object | None:
         return self.load_func(resource)
 
 
 class ResourcesLoader:
-
     def __init__(self) -> None:
         self.loaders: dict[ResourceFormat, ResourceLoader] = {
             ResourceFormat.API: ResourceLoader(
@@ -187,11 +188,17 @@ class ResourcesLoader:
             ),
         }
 
-    def is_dataframable(self, resource: Resource) -> bool:
-        return self.loaders.get(resource.format).dataframable
-
-    async def load(self, resource: Resource) -> object:
+    async def load(
+        self,
+        resource: Resource,
+        ignore_errors: bool = True,
+    ) -> object | None:
         if resource.url is None:
+            if ignore_errors:
+                logging.warning(
+                    f"Resource {resource.name} could not be loaded: resource URL is not set"
+                )
+                return None
             raise ValueError("Cannot load resource: resource URL is not set")
 
         loader = self.loaders.get(resource.format)
@@ -199,10 +206,19 @@ class ResourcesLoader:
             raise ValueError(f"Unsupported format: {resource.format}")
 
         try:
-            return await loader(resource)
-        except Exception as e:
-            e.args = (f"Error loading resource {resource.name}: {e}",) + e.args[1:]
-            raise
+            data = await loader(resource)
+        except (Exception, NotADirectoryError) as e:
+            if ignore_errors:
+                logging.warning(
+                    f"Error loading resource {resource.name}: {e}. Skipping..."
+                )
+                return None
+            raise e
+
+        return data
+
+    def is_dataframable(self, resource: Resource) -> bool:
+        return self.loaders.get(resource.format).dataframable
 
     async def _get_content(self, url: str) -> bytes:
         if not url:
@@ -214,16 +230,18 @@ class ResourcesLoader:
         if url.startswith("https://github.com/"):
             url = github.convert_app_url_to_content_url(url)
 
-        async with httpx.AsyncClient() as client:
-            async with client.stream(
+        async with (
+            httpx.AsyncClient() as client,
+            client.stream(
                 "GET",
                 url,
                 follow_redirects=True,
                 timeout=60,
-            ) as response:
-                response.raise_for_status()
-                content = await response.aread()
-                return content
+            ) as response,
+        ):
+            response.raise_for_status()
+            content = await response.aread()
+            return content
 
     async def load_csv(self, resource: Resource) -> list[dict[str, object]]:
         content = await self._get_content(resource.url)
@@ -255,9 +273,30 @@ class ResourcesLoader:
             gdf = gpd.read_file(f)
         return gdf
 
-    async def load_xml(self, resource: Resource) -> ET.Element:
+    async def load_xml(self, resource: Resource) -> ET.Element | None:
         content = await self._get_content(resource.url)
-        return ET.fromstring(content)
+        content_str = content.decode("utf-8", errors="replace")
+
+        # Try to pre-process XML content to fix common issues
+        if content_str.lstrip().startswith("<?xml"):
+            xml_decl_end = content_str.find("?>")
+            if xml_decl_end > 0:
+                # Check for issues in XML declaration
+                xml_decl = content_str[: xml_decl_end + 2]
+                if "encoding=" in xml_decl and not (
+                    'encoding="utf-8"' in xml_decl or "encoding='utf-8'" in xml_decl
+                ):
+                    # Standardize encoding to utf-8
+                    content_str = (
+                        content_str[: xml_decl_end + 2]
+                        .replace('encoding="ISO-8859-1"', 'encoding="utf-8"')
+                        .replace("encoding='ISO-8859-1'", "encoding='utf-8'")
+                        + content_str[xml_decl_end + 2 :]
+                    )
+
+        content_str = re.sub(r"[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]", "", content_str)
+
+        return ET.fromstring(content_str.encode("utf-8"))
 
     async def load_excel(self, resource: Resource) -> dict[str, pd.DataFrame]:
         content = await self._get_content(resource.url)

@@ -1,7 +1,6 @@
 [project]
 name = "cheesesnake"
 version = "0.1.0"
-description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
@@ -19,16 +18,17 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = ["ruff"]
-notebook = ["ipykernel", "jupyterlab"]
-test = ["pytest"]
+dev = ["ruff>0", "basedpyright>0"]
+test = ["pytest>0"]
+notebook = ["ipykernel>0", "jupyterlab>0"]
 
-[tool.hatch.build]
-package = "src"
-include = ["src"]
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
 
-[tool.hatch.build.targets.wheel]
-packages = ["src/cheesesnake"]
+[tool.setuptools]
+package-dir = {"" = "src"}
+packages = ["cheesesnake"]
 
 [tool.setuptools.package-data]
 "cheesesnake" = ["datasets/*.yaml"]

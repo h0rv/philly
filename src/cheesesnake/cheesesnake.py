@@ -1,12 +1,9 @@
 import asyncio
-import json
 import logging
-import zipfile
 from pathlib import Path
 
 import duckdb
 import geopandas as gpd
-import httpx
 import pandas as pd
 from tqdm.asyncio import tqdm_asyncio
 
@@ -26,7 +23,7 @@ class Cheesesnake:
         df = cs.query("SELECT * FROM datasets")
     """
 
-    extensions = ["spatial"]
+    duckdb_extensions = ["spatial"]
 
     def __init__(
         self,
@@ -58,15 +55,19 @@ class Cheesesnake:
 
         self.duckdb: duckdb.DuckDBPyConnection = duckdb.connect(str(self.duckdb_path))
 
-        for extension in self.extensions:
+        for extension in self.duckdb_extensions:
             self.duckdb.install_extension(extension)
             self.duckdb.load_extension(extension)
 
         self.query = self.duckdb.query
 
-        self.add_table(datasets_table_name, self.datasets_df, overwrite=True)
+        self.add_table(
+            datasets_table_name,
+            self.datasets_df,
+            overwrite=True,
+        )
 
-    def _to_df_safe(self, resource: object) -> pd.DataFrame | None:
+    def to_dataframe_safe(self, resource: object) -> pd.DataFrame | None:
         # workaround for https://github.com/duckdb/duckdb-spatial/issues/311
         if isinstance(resource, gpd.GeoDataFrame) and isinstance(
             resource.geometry, gpd.GeoSeries
@@ -88,13 +89,24 @@ class Cheesesnake:
 
     def add_table(self, name: str, data: object, overwrite: bool = False) -> None:
         if overwrite:
-            self.duckdb.execute(f'DROP TABLE IF EXISTS "{name}"')
+            result = self.duckdb.execute(f'DROP TABLE IF EXISTS "{name}"')
+            result.fetchall()  # Process the result
+            self.duckdb.commit()
 
-        df = self._to_df_safe(data) if not isinstance(data, pd.DataFrame) else data
+        df = (
+            self.to_dataframe_safe(data) if not isinstance(data, pd.DataFrame) else data
+        )
+
+        if df is None or df.empty or len(df.columns) == 0:
+            return
 
         self.duckdb.from_df(df).create(name)
 
-    async def load(self, resource: Resource) -> object | None:
+    async def load(
+        self,
+        resource: Resource,
+        ignore_load_errors: bool = True,
+    ) -> object | None:
         if not self.resources_loader.is_dataframable(resource):
             return None
 
@@ -102,50 +114,36 @@ class Cheesesnake:
             return None
 
         try:
-            resource_data = await self.resources_loader.load(resource)
-        except NotImplementedError:
-            return None
-        except httpx.ConnectError as e:
-            self.logger.debug(
-                f"[WARNING] Resource {resource.name} could not be loaded (error: {e}). Skipping."
+            data = await self.resources_loader.load(resource, ignore_load_errors)
+        except Exception as e:
+            if ignore_load_errors:
+                raise e
+            self.logger.warning(
+                f"Resource {resource.name} could not be loaded (error: {e}). Skipping."
             )
-            return None
-        except httpx.HTTPStatusError as e:
-            if e.response.status_code >= 400:
-                self.logger.debug(
-                    f"[WARNING] Resource {resource.name} returned {e.response.status_code}. Error: {str(e)}. Skipping."
-                )
-                return None
-            raise
-        except zipfile.BadZipFile as e:
-            self.logger.debug(
-                f"[WARNING] Resource {resource.name} is not a valid zip file (error: {e}). Skipping."
-            )
-            return None
-        except json.JSONDecodeError as e:
-            self.logger.debug(
-                f"[WARNING] Resource {resource.name} is not a valid JSON file (error: {e}). Skipping."
-            )
+
+        if data is None:
             return None
 
-        if not isinstance(resource_data, pd.DataFrame):
+        if not isinstance(data, pd.DataFrame):
             # Run dataframe conversion in a thread to avoid blocking
-            resource_data = await asyncio.to_thread(self._to_df_safe, resource_data)
-            if resource_data is None:
+            data = self.to_dataframe_safe(data)
+            if data is None:
                 return None
 
-        return resource_data
+        return data
 
     async def load_into_table(
         self,
         resource: Resource,
         table_name: str,
+        ignore_load_errors: bool = True,
     ) -> object | None:
-        data = await self.load(resource)
+        data = await self.load(resource, ignore_load_errors)
         if data is None:
             return None
 
-        await asyncio.to_thread(self.add_table, table_name, data, overwrite=True)
+        self.add_table(table_name, data, overwrite=True)
 
         return data
 
@@ -153,7 +151,7 @@ class Cheesesnake:
         tasks = []
         for dataset in self.datasets:
             for resource in dataset.resources or []:
-                tasks.append(self.load(resource))
+                tasks.append(self.load(resource, ignore_load_errors=False))
 
         gather_fn = tqdm_asyncio.gather if show_progress else asyncio.gather
 
@@ -164,6 +162,7 @@ class Cheesesnake:
             self.load_into_table(
                 resource=resource,
                 table_name=f"{dataset.title}_{resource.name}_{resource.format}",
+                ignore_load_errors=False,
             )
             for dataset in self.datasets
             for resource in dataset.resources or []

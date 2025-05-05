@@ -40,8 +40,25 @@ cs.query("SELECT title FROM datasets WHERE LOWER(title) LIKE '%septa%'")
 """
 ```
 
+Query all resources:
+
+```sql
+SELECT
+  unnest.name,
+  unnest.format,
+  unnest.url
+FROM datasets,
+UNNEST(resources) AS unnest;
+```
+
 ## Update Datasets
 
 ```bash
 uv run scripts/update_datasets.py
 ```
+
+## Resources
+
+* OpenDataPhilly
+    * https://opendataphilly.org/
+    * https://github.com/opendataphilly/
