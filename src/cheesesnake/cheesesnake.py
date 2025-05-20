@@ -8,7 +8,7 @@ import pandas as pd
 from tqdm.asyncio import tqdm_asyncio
 
 from cheesesnake.models import Dataset, Resource
-from cheesesnake.resources_loader import ResourcesLoader
+from cheesesnake.services import ResourcesLoader
 
 
 class Cheesesnake:

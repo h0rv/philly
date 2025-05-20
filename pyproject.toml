@@ -20,7 +20,11 @@ dependencies = [
 [dependency-groups]
 dev = ["ruff>0", "basedpyright>0"]
 test = ["pytest>0"]
-notebook = ["ipykernel>0", "jupyterlab>0"]
+notebook = [
+    "ipykernel>0",
+ "jupyterlab>0",
+ "jupyterlab-vim>=4.1.4",
+]
 
 [build-system]
 requires = ["setuptools>=75"]

@@ -1,5 +1,8 @@
-from cheesesnake.services import github
+from .github import GitHub
+from .resources_loader import ResourceLoader, ResourcesLoader
 
 __all__ = [
-    "github",
+    "GitHub",
+    "ResourceLoader",
+    "ResourcesLoader",
 ]

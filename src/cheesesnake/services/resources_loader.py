@@ -15,7 +15,7 @@ import pandas as pd
 from google.transit import gtfs_realtime_pb2 as gtfs_rt
 
 from cheesesnake.models import Resource, ResourceFormat
-from cheesesnake.services import github
+from cheesesnake.services.github import GitHub
 
 
 @dataclass
@@ -228,7 +228,7 @@ class ResourcesLoader:
             url = url.replace("http://", "https://")
 
         if url.startswith("https://github.com/"):
-            url = github.convert_app_url_to_content_url(url)
+            url = GitHub.convert_app_url_to_content_url(url)
 
         async with (
             httpx.AsyncClient() as client,
