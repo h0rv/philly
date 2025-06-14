@@ -4,12 +4,12 @@ import re
 
 import yaml
 
-from cheesesnake.models import Dataset
-from cheesesnake.services.github import get_all_files_contents
+from philly_cheesesnake.models import Dataset
+from philly_cheesesnake.services import GitHub
 
 
 async def get_all_datasets():
-    async for file in get_all_files_contents(
+    async for file in GitHub.get_all_files_contents(
         repo="opendataphilly/opendataphilly-jkan",
         path="_datasets",
     ):
@@ -39,7 +39,7 @@ async def main():
         # Replace any character that is not alphanumeric, dash, or underscore with underscore
         clean_title = re.sub(r"[^\w\-]", "_", dataset.title)
         with open(
-            f"src/cheesesnake/datasets/{clean_title}.yaml",
+            f"src/philly_cheesesnake/datasets/{clean_title}.yaml",
             "w",
             encoding="utf-8",
         ) as f:

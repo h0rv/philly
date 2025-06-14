@@ -168,6 +168,15 @@ css = [
 ]
 
 [[package]]
+name = "catppuccin-jupyterlab"
+version = "0.2.4"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/d9/be/6d273956a87b542ad3e3e7def265ff564308059c4d15917808c9526ba341/catppuccin_jupyterlab-0.2.4.tar.gz", hash = "sha256:6bdb0129c220296b81b8ef82e29c61b8213c13a82a86849d8ded2b41f9a29024", size = 1185233, upload-time = "2024-08-15T12:46:03.591Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/0e/da/a844d1c2962342ba0743aa699b67bbe373511cafae5269a3d907ad73418b/catppuccin_jupyterlab-0.2.4-py3-none-any.whl", hash = "sha256:643839b1c46e93e497beb95e741d40dd585fc4e489a44c2c6ce89a869a9cef67", size = 21720, upload-time = "2024-08-15T12:45:57.362Z" },
+]
+
+[[package]]
 name = "certifi"
 version = "2025.1.31"
 source = { registry = "https://pypi.org/simple" }
@@ -293,65 +302,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/27/f2/4f9a69cc7712b9b5ad8fdb87039fd89abba997ad5cbe690d1835d40405b0/charset_normalizer-3.4.1-cp313-cp313-win_amd64.whl", hash = "sha256:b1ac5992a838106edb89654e0aebfc24f5848ae2547d22c2c3f66454daa11971", size = 102702, upload-time = "2024-12-24T18:11:26.535Z" },
     { url = "https://files.pythonhosted.org/packages/0e/f6/65ecc6878a89bb1c23a086ea335ad4bf21a588990c3f535a227b9eea9108/charset_normalizer-3.4.1-py3-none-any.whl", hash = "sha256:d98b1668f06378c6dbefec3b92299716b931cd4e6061f3c875a71ced1780ab85", size = 49767, upload-time = "2024-12-24T18:12:32.852Z" },
 ]
-
-[[package]]
-name = "cheesesnake"
-version = "0.1.0"
-source = { editable = "." }
-dependencies = [
-    { name = "duckdb" },
-    { name = "geojson" },
-    { name = "geopandas" },
-    { name = "geoparquet" },
-    { name = "gtfs-realtime-bindings" },
-    { name = "httpx" },
-    { name = "pandas" },
-    { name = "pyarrow" },
-    { name = "pydantic" },
-    { name = "pyyaml" },
-    { name = "tqdm" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "basedpyright" },
-    { name = "ruff" },
-]
-notebook = [
-    { name = "ipykernel" },
-    { name = "jupyterlab" },
-    { name = "jupyterlab-vim" },
-]
-test = [
-    { name = "pytest" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "duckdb", specifier = ">=1.2.2" },
-    { name = "geojson", specifier = ">=3.2.0" },
-    { name = "geopandas", specifier = ">=1.0.1" },
-    { name = "geoparquet", specifier = ">=0.0.3" },
-    { name = "gtfs-realtime-bindings", specifier = ">=1.0.0" },
-    { name = "httpx", specifier = ">=0.28.1" },
-    { name = "pandas", specifier = ">=2.2.3" },
-    { name = "pyarrow", specifier = ">=19.0.1" },
-    { name = "pydantic", specifier = ">=2.11.3" },
-    { name = "pyyaml", specifier = ">=6.0.2" },
-    { name = "tqdm", specifier = ">=4.67.1" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "basedpyright", specifier = ">0" },
-    { name = "ruff", specifier = ">0" },
-]
-notebook = [
-    { name = "ipykernel", specifier = ">0" },
-    { name = "jupyterlab", specifier = ">0" },
-    { name = "jupyterlab-vim", specifier = ">=4.1.4" },
-]
-test = [{ name = "pytest", specifier = ">0" }]
 
 [[package]]
 name = "colorama"
@@ -1273,6 +1223,67 @@ sdist = { url = "https://files.pythonhosted.org/packages/42/92/cc564bf6381ff43ce
 wheels = [
     { url = "https://files.pythonhosted.org/packages/9e/c3/059298687310d527a58bb01f3b1965787ee3b40dce76752eda8b44e9a2c5/pexpect-4.9.0-py2.py3-none-any.whl", hash = "sha256:7236d1e080e4936be2dc3e326cec0af72acf9212a7e1d060210e70a47e253523", size = 63772, upload-time = "2023-11-25T06:56:14.81Z" },
 ]
+
+[[package]]
+name = "philly-cheesesnake"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "duckdb" },
+    { name = "geojson" },
+    { name = "geopandas" },
+    { name = "geoparquet" },
+    { name = "gtfs-realtime-bindings" },
+    { name = "httpx" },
+    { name = "pandas" },
+    { name = "pyarrow" },
+    { name = "pydantic" },
+    { name = "pyyaml" },
+    { name = "tqdm" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "basedpyright" },
+    { name = "ruff" },
+]
+notebook = [
+    { name = "catppuccin-jupyterlab" },
+    { name = "ipykernel" },
+    { name = "jupyterlab" },
+    { name = "jupyterlab-vim" },
+]
+test = [
+    { name = "pytest" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "duckdb", specifier = ">=1.2.2" },
+    { name = "geojson", specifier = ">=3.2.0" },
+    { name = "geopandas", specifier = ">=1.0.1" },
+    { name = "geoparquet", specifier = ">=0.0.3" },
+    { name = "gtfs-realtime-bindings", specifier = ">=1.0.0" },
+    { name = "httpx", specifier = ">=0.28.1" },
+    { name = "pandas", specifier = ">=2.2.3" },
+    { name = "pyarrow", specifier = ">=19.0.1" },
+    { name = "pydantic", specifier = ">=2.11.3" },
+    { name = "pyyaml", specifier = ">=6.0.2" },
+    { name = "tqdm", specifier = ">=4.67.1" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "basedpyright", specifier = ">0" },
+    { name = "ruff", specifier = ">0" },
+]
+notebook = [
+    { name = "catppuccin-jupyterlab", specifier = ">=0.2.4" },
+    { name = "ipykernel", specifier = ">0" },
+    { name = "jupyterlab", specifier = ">0" },
+    { name = "jupyterlab-vim", specifier = ">=4.1.4" },
+]
+test = [{ name = "pytest", specifier = ">0" }]
 
 [[package]]
 name = "platformdirs"

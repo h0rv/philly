@@ -1,0 +1,64 @@
+area_of_interest: null
+category:
+- Health / Human Services
+- Public Safety
+created: null
+license: City of Philadelphia License
+maintainer: ''
+maintainer_email: ''
+maintainer_link: null
+maintainer_phone: null
+notes: 'As part of the Philadelphia Police Department''s (PPD) accountability processes,
+  PPD publishes four datasets: The Complaints Against Police (CAP) dataset documents
+  the civilian complaints alleging police misconduct; the CAP Findings dataset provides
+  demographic details of the police officer involved, the allegations, and the status
+  of the PPD''s Internal Affairs Division''s investigation of and findings (if available)
+  about the allegation; the Complainant Demographics dataset shows the race, sex,
+  and age of each person who filed a complaint against a police officer by complaint
+  number, and CAP History dataset details the timeline by which PPD released the complaint,
+  concluded the investigation, and determined any resulting discipline. See metadata
+  links below for dataset and field descriptions. Includes data from the past five
+  years. Updated monthly.'
+opendataphilly_rating: null
+organization: City of Philadelphia
+resources:
+- format: csv
+  name: Complaints Against Police (CSV)
+  url: https://phl.carto.com/api/v2/sql?q=SELECT+*+FROM+ppd_complaints&filename=ppd_complaints&format=csv&skipfields=cartodb_id,the_geom,the_geom_webmercator
+- format: api
+  name: Complaints Against Police (API)
+  url: https://cityofphiladelphia.github.io/carto-api-explorer/#ppd_complaints
+- format: html
+  name: Complaints Against Police (Metadata)
+  url: http://metadata.phila.gov/#home/datasetdetails/5a3827b4b9464c55711a0816/representationdetails/5a3827dbb954635579423e0f/
+- format: csv
+  name: CAP Findings (CSV)
+  url: https://phl.carto.com/api/v2/sql?q=SELECT+*+FROM+ppd_complaint_disciplines&filename=ppd_complaint_disciplines&format=csv&skipfields=cartodb_id,the_geom,the_geom_webmercator
+- format: api
+  name: CAP Findings (API)
+  url: https://cityofphiladelphia.github.io/carto-api-explorer/#ppd_complaint_disciplines
+- format: html
+  name: CAP Findings (Metadata)
+  url: http://metadata.phila.gov/#home/datasetdetails/5a3827b4b9464c55711a0816/representationdetails/5a3827b6b9464c55711a081a/
+- format: csv
+  name: Complainant Demographics (CSV)
+  url: https://phl.carto.com/api/v2/sql?q=SELECT+*+FROM+ppd_complainant_demographics&filename=ppd_complainant_demographics&format=csv&skipfields=cartodb_id,the_geom,the_geom_webmercator
+- format: api
+  name: Complainant Demographics (API)
+  url: https://cityofphiladelphia.github.io/carto-api-explorer/#ppd_complainant_demographics
+- format: html
+  name: Complainant Demographics (Metadata)
+  url: http://metadata.phila.gov/#home/datasetdetails/5a3827b4b9464c55711a0816/representationdetails/5da768d5e1847000154b928a/
+- format: csv
+  name: CAP History (CSV)
+  url: https://phl.carto.com/api/v2/sql?filename=ppd_complaints_history&format=csv&skipfields=cartodb_id,the_geom,the_geom_webmercator&q=SELECT%20*%20FROM%20ppd_complaints_history
+- format: api
+  name: CAP History (API)
+  url: https://cityofphiladelphia.github.io/carto-api-explorer/#ppd_complaints_history
+- format: html
+  name: CAP History (Metadata)
+  url: https://metadata.phila.gov/#home/datasetdetails/5a3827b4b9464c55711a0816/representationdetails/63c86b4ebe68e70012069642/
+source: ''
+time_period: null
+title: Complaints Against Police
+usage: null

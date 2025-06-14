@@ -1,5 +1,5 @@
 [project]
-name = "cheesesnake"
+name = "philly-cheesesnake"
 version = "0.1.0"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -21,9 +21,10 @@ dependencies = [
 dev = ["ruff>0", "basedpyright>0"]
 test = ["pytest>0"]
 notebook = [
+    "catppuccin-jupyterlab>=0.2.4",
     "ipykernel>0",
- "jupyterlab>0",
- "jupyterlab-vim>=4.1.4",
+    "jupyterlab>0",
+    "jupyterlab-vim>=4.1.4",
 ]
 
 [build-system]
@@ -32,7 +33,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
-packages = ["cheesesnake"]
+packages = ["philly_cheesesnake"]
 
 [tool.setuptools.package-data]
-"cheesesnake" = ["datasets/*.yaml"]
+"philly_cheesesnake" = ["datasets/*.yaml"]

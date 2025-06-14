@@ -1,10 +1,10 @@
 import asyncio
 
-from cheesesnake import Cheesesnake
+from philly_cheesesnake import PhillyCheesesnake
 
 
 async def main():
-    cs = Cheesesnake()
+    cs = PhillyCheesesnake()
 
     await cs.load_all_into_tables(show_progress=True)
 
