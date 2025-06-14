@@ -24,6 +24,29 @@ class Dataset(BaseModel):
     category: list[str] | None = None
     resources: list[Resource] | None = None
 
+    def get_resource(
+        self,
+        resource_name: str,
+        format: str | None = None,
+    ) -> Resource:
+        r = [
+            r
+            for r in self.resources
+            if r.name == resource_name and (format is None or r.format == format)
+        ]
+
+        if len(r) == 0:
+            raise ValueError(
+                f"resource '{resource_name}' does not exist for dataset '{self.title}'"
+            )
+
+        if len(r) > 1:
+            raise ValueError(
+                "resource name '{resource_name}' is ambiguous, requires format to be specified"
+            )
+
+        return r[0]
+
     @classmethod
     def from_dict(cls, data: dict) -> "Dataset":
         # Handle comma-separated formats in resources

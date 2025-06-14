@@ -2,39 +2,18 @@ import asyncio
 import logging
 from pathlib import Path
 
-import duckdb
-import geopandas as gpd
-import pandas as pd
 from tqdm.asyncio import tqdm_asyncio
 
-from philly_cheesesnake.models import Dataset, Resource
-from philly_cheesesnake.services import ResourcesLoader
+from philly_cheesesnake.models import Dataset
+from philly_cheesesnake.loaders import load
 
 
 class PhillyCheesesnake:
-    """
-    PhillyCheesesnake provides methods for loading, extracting, and querying OpenDataPhilly datasets and resources.
+    def __init__(self) -> None:
+        self._logger = logging.getLogger(__name__)
 
-    Args:
-        datasets_view_name (str): Name of the DuckDB view for datasets. Defaults to "datasets".
-
-    Example:
-        cs = PhillyCheesesnake()
-        df = cs.query("SELECT * FROM datasets")
-    """
-
-    duckdb_extensions = ["spatial"]
-
-    def __init__(
-        self,
-        db_dir: str | Path = ".",
-        db_name: str = "cheesesnake.db",
-        datasets_table_name: str = "datasets",
-    ) -> None:
         self._module_dir: Path = Path(__file__).parent.resolve()
         self._datasets_dir: Path = self._module_dir / "datasets"
-
-        self.logger = logging.getLogger(__name__)
 
         self.datasets: list[Dataset] = sorted(
             [
@@ -43,107 +22,66 @@ class PhillyCheesesnake:
             ],
             key=lambda x: x.title,
         )
-        self.datasets_df = pd.DataFrame(
-            [dataset.model_dump() for dataset in self.datasets]
-        )
 
-        self.resources_loader = ResourcesLoader()
+        self._datasets_map: dict[str, Dataset] = {
+            dataset.title: dataset for dataset in self.datasets
+        }
 
-        self.duckdb_path = Path(db_dir) / db_name
-        if not self.duckdb_path.exists():
-            self.duckdb_path.parent.mkdir(parents=True, exist_ok=True)
+    def _get_dataset(self, dataset_name: str) -> Dataset:
+        dataset = self._datasets_map.get(dataset_name)
 
-        self.duckdb: duckdb.DuckDBPyConnection = duckdb.connect(str(self.duckdb_path))
+        if not dataset:
+            raise ValueError(f"dataset '{dataset_name}' does not exist")
 
-        for extension in self.duckdb_extensions:
-            self.duckdb.install_extension(extension)
-            self.duckdb.load_extension(extension)
+        return dataset
 
-        self.query = self.duckdb.query
+    def list_datasets(self) -> list[str]:
+        return [d.title for d in self.datasets]
 
-        self.add_table(
-            datasets_table_name,
-            self.datasets_df,
-            overwrite=True,
-        )
+    def list_resources(self, dataset_name: str, names_only: bool = False) -> list[str]:
+        dataset = self._get_dataset(dataset_name)
 
-    def to_dataframe_safe(self, resource: object) -> pd.DataFrame | None:
-        # workaround for https://github.com/duckdb/duckdb-spatial/issues/311
-        if isinstance(resource, gpd.GeoDataFrame) and isinstance(
-            resource.geometry, gpd.GeoSeries
-        ):
-            resource["geometry"] = resource["geometry"].to_wkt()
+        resources = dataset.resources or []
 
-        try:
-            return pd.DataFrame(resource)
-        except Exception as e:
-            # Check if resource is a Resource object with a name attribute
-            resource_name = getattr(resource, "name", "unknown")
-            self.logger.debug(
-                f"[WARNING] Resource {resource_name} is not a valid DataFrame (error: {e}). Skipping."
-            )
-            return None
+        if names_only:
+            return "\n".join([r.name for r in resources])
 
-    def tables(self) -> list[str]:
-        return self.duckdb.execute("SHOW TABLES").fetchall()
+        return "".join([str(r) for r in resources])
 
-    def add_table(self, name: str, data: object, overwrite: bool = False) -> None:
-        if overwrite:
-            result = self.duckdb.execute(f'DROP TABLE IF EXISTS "{name}"')
-            result.fetchall()  # Process the result
-            self.duckdb.commit()
+    def list_all_resources(self) -> list[str]:
+        resources = [
+            f"{resource.name} [{dataset.title}]"
+            for dataset in self.datasets
+            for resource in (dataset.resources or [])
+        ]
 
-        df = (
-            self.to_dataframe_safe(data) if not isinstance(data, pd.DataFrame) else data
-        )
-
-        if df is None or df.empty or len(df.columns) == 0:
-            return
-
-        self.duckdb.from_df(df).create(name)
+        return "\n".join(resources)
 
     async def load(
         self,
-        resource: Resource,
-        ignore_load_errors: bool = True,
+        dataset_name: str,
+        resource_name: str,
+        format: str | None = None,
+        ignore_load_errors: bool = False,
     ) -> object | None:
-        if not self.resources_loader.is_dataframable(resource):
-            return None
+        dataset = self._get_dataset(dataset_name)
+
+        resource = dataset.get_resource(resource_name, format=format)
 
         if not resource.url:
             return None
 
         try:
-            data = await self.resources_loader.load(resource, ignore_load_errors)
+            data = await load(resource, ignore_load_errors)
         except Exception as e:
             if ignore_load_errors:
                 raise e
-            self.logger.warning(
+            self._logger.warning(
                 f"Resource {resource.name} could not be loaded (error: {e}). Skipping."
             )
 
         if data is None:
             return None
-
-        if not isinstance(data, pd.DataFrame):
-            # Run dataframe conversion in a thread to avoid blocking
-            data = self.to_dataframe_safe(data)
-            if data is None:
-                return None
-
-        return data
-
-    async def load_into_table(
-        self,
-        resource: Resource,
-        table_name: str,
-        ignore_load_errors: bool = True,
-    ) -> object | None:
-        data = await self.load(resource, ignore_load_errors)
-        if data is None:
-            return None
-
-        self.add_table(table_name, data, overwrite=True)
 
         return data
 
@@ -151,22 +89,7 @@ class PhillyCheesesnake:
         tasks = []
         for dataset in self.datasets:
             for resource in dataset.resources or []:
-                tasks.append(self.load(resource, ignore_load_errors=False))
-
-        gather_fn = tqdm_asyncio.gather if show_progress else asyncio.gather
-
-        return await gather_fn(*tasks)
-
-    async def load_all_into_tables(self, show_progress: bool = False) -> list[object]:
-        tasks = [
-            self.load_into_table(
-                resource=resource,
-                table_name=f"{dataset.title}_{resource.name}_{resource.format}",
-                ignore_load_errors=False,
-            )
-            for dataset in self.datasets
-            for resource in dataset.resources or []
-        ]
+                tasks.append(load(resource, ignore_load_errors=False))
 
         gather_fn = tqdm_asyncio.gather if show_progress else asyncio.gather
 

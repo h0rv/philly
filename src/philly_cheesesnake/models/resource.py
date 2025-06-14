@@ -74,3 +74,10 @@ class Resource(BaseModel):
     @classmethod
     def from_dict(cls, data: dict) -> "Resource":
         return cls(**data)
+
+    def __str__(self) -> str:
+        return f"""\
+{self.name}
+    {self.format}
+    {self.url}
+"""

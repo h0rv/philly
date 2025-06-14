@@ -4,14 +4,13 @@ version = "0.1.0"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "duckdb>=1.2.2",
+    "fire[cli]>=0.7.0",
     "geojson>=3.2.0",
-    "geopandas>=1.0.1",
     "geoparquet>=0.0.3",
     "gtfs-realtime-bindings>=1.0.0",
+    "geopandas>=1.1.0",
     "httpx>=0.28.1",
-    "pandas>=2.2.3",
-    "pyarrow>=19.0.1",
+    "pandas>=2.3.0",
     "pydantic>=2.11.3",
     "pyyaml>=6.0.2",
     "tqdm>=4.67.1",
@@ -27,13 +26,18 @@ notebook = [
     "jupyterlab-vim>=4.1.4",
 ]
 
+[project.scripts]
+phl = "philly_cheesesnake.__main__:main"
+
 [build-system]
 requires = ["setuptools>=75"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
-packages = ["philly_cheesesnake"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.setuptools.package-data]
 "philly_cheesesnake" = ["datasets/*.yaml"]

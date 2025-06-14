@@ -2,16 +2,48 @@
 
 <img src="./assets/logo.png" width="256" alt="logo">
 
-Python Swiff Army knife and utility for working with [OpenDataPhilly](https://opendataphilly.org/) datasets!
+Python Swiff Army knife and CLI for working with [OpenDataPhilly](https://opendataphilly.org/) datasets.
 
 ## Examples
 
 ```python
 from philly_cheesesnake import PhillyCheesesnake
 
-cs = PhillyCheesesnake()
+ps = PhillyCheesesnake()
 
 # TODO:
+print(ps.list_datasets())
+```
+
+### CLI
+
+Help/Usage:
+
+```bash
+phl
+```
+
+```bash
+phl list-datasets
+```
+
+Search datasets with fuzzy search ([`fzf` install instructions](https://github.com/junegunn/fzf?tab=readme-ov-file#installation))
+
+```bash
+phl list-datasets | fzf
+```
+
+```bash
+phl list-all-resources | fzf
+```
+
+Interactively find and load a resource:
+
+```bash
+phl list-datasets \
+    | fzf \
+    | xargs -I {} bash -c \
+    'phl list-resources "{}" --names-only | fzf | xargs -I @ phl load "{}" "@"'
 ```
 
 ## Development
@@ -20,6 +52,14 @@ cs = PhillyCheesesnake()
 
 ```bash
 uv run scripts/update_datasets.py
+```
+
+### CLI
+
+#### Install CLI
+
+```bash
+uv tool install phl --editable
 ```
 
 ## Resources

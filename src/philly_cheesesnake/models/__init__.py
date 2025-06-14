@@ -1,5 +1,5 @@
-from philly_cheesesnake.models.dataset import Dataset
-from philly_cheesesnake.models.resource import Resource, ResourceFormat
+from .dataset import Dataset
+from .resource import Resource, ResourceFormat
 
 __all__ = [
     "Dataset",
