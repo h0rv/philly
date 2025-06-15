@@ -4,7 +4,6 @@ import logging
 import re
 import xml.etree.ElementTree as ET
 import zipfile
-from dataclasses import dataclass
 from io import BytesIO, StringIO
 from typing import Callable
 
@@ -242,140 +241,38 @@ async def load_tiff(resource: Resource) -> bytes:
     return await _get_content(resource.url)
 
 
-@dataclass
-class ResourceLoader:
-    format: ResourceFormat
-    load_func: Callable[[Resource], object | None]
-
-    def __call__(self, resource: Resource) -> object | None:
-        return self.load_func(resource)
-
-
-loaders: dict[ResourceFormat, ResourceLoader] = {
-    ResourceFormat.API: ResourceLoader(
-        format=ResourceFormat.API,
-        load_func=load_api,
-    ),
-    ResourceFormat.APP: ResourceLoader(
-        format=ResourceFormat.APP,
-        load_func=load_app,
-    ),
-    ResourceFormat.APPLICATION: ResourceLoader(
-        format=ResourceFormat.APPLICATION,
-        load_func=load_app,
-    ),
-    ResourceFormat.CSV: ResourceLoader(
-        format=ResourceFormat.CSV,
-        load_func=load_csv,
-    ),
-    ResourceFormat.ECW: ResourceLoader(
-        format=ResourceFormat.ECW,
-        load_func=load_ecw,
-    ),
-    ResourceFormat.GDB: ResourceLoader(
-        format=ResourceFormat.GDB,
-        load_func=load_gdb,
-    ),
-    ResourceFormat.GEOJSON: ResourceLoader(
-        format=ResourceFormat.GEOJSON,
-        load_func=load_geojson,
-    ),
-    ResourceFormat.GEOPARQUET: ResourceLoader(
-        format=ResourceFormat.GEOPARQUET,
-        load_func=load_geoparquet,
-    ),
-    ResourceFormat.GEOSERVICE: ResourceLoader(
-        format=ResourceFormat.GEOSERVICE,
-        load_func=load_geoservice,
-    ),
-    ResourceFormat.GEOPACKAGE: ResourceLoader(
-        format=ResourceFormat.GEOPACKAGE,
-        load_func=load_geopackage,
-    ),
-    ResourceFormat.GTFS: ResourceLoader(
-        format=ResourceFormat.GTFS,
-        load_func=load_gtfs,
-    ),
-    ResourceFormat.GTFS_RT: ResourceLoader(
-        format=ResourceFormat.GTFS_RT,
-        load_func=load_gtfs_rt,
-    ),
-    ResourceFormat.HTML: ResourceLoader(
-        format=ResourceFormat.HTML,
-        load_func=load_html,
-    ),
-    ResourceFormat.IMG: ResourceLoader(
-        format=ResourceFormat.IMG,
-        load_func=load_image,
-    ),
-    ResourceFormat.JPEG: ResourceLoader(
-        format=ResourceFormat.JPEG,
-        load_func=load_image,
-    ),
-    ResourceFormat.JSON: ResourceLoader(
-        format=ResourceFormat.JSON,
-        load_func=load_json,
-    ),
-    ResourceFormat.KML: ResourceLoader(
-        format=ResourceFormat.KML,
-        load_func=load_kml,
-    ),
-    ResourceFormat.KMZ: ResourceLoader(
-        format=ResourceFormat.KMZ,
-        load_func=load_kmz,
-    ),
-    ResourceFormat.LAS: ResourceLoader(
-        format=ResourceFormat.LAS,
-        load_func=load_las,
-    ),
-    ResourceFormat.PDF: ResourceLoader(
-        format=ResourceFormat.PDF,
-        load_func=load_pdf,
-    ),
-    ResourceFormat.PNG: ResourceLoader(
-        format=ResourceFormat.PNG,
-        load_func=load_image,
-    ),
-    ResourceFormat.PNG_24: ResourceLoader(
-        format=ResourceFormat.PNG_24,
-        load_func=load_image,
-    ),
-    ResourceFormat.RSS: ResourceLoader(
-        format=ResourceFormat.RSS,
-        load_func=load_rss,
-    ),
-    ResourceFormat.SHP: ResourceLoader(
-        format=ResourceFormat.SHP,
-        load_func=load_shp,
-    ),
-    ResourceFormat.TEXT: ResourceLoader(
-        format=ResourceFormat.TEXT,
-        load_func=load_text,
-    ),
-    ResourceFormat.TIF: ResourceLoader(
-        format=ResourceFormat.TIF,
-        load_func=load_tiff,
-    ),
-    ResourceFormat.TIFF: ResourceLoader(
-        format=ResourceFormat.TIFF,
-        load_func=load_tiff,
-    ),
-    ResourceFormat.XLSX: ResourceLoader(
-        format=ResourceFormat.XLSX,
-        load_func=load_excel,
-    ),
-    ResourceFormat.XML: ResourceLoader(
-        format=ResourceFormat.XML,
-        load_func=load_xml,
-    ),
-    ResourceFormat.XSLX: ResourceLoader(
-        format=ResourceFormat.XSLX,
-        load_func=load_excel,
-    ),
-    ResourceFormat.ZIP: ResourceLoader(
-        format=ResourceFormat.ZIP,
-        load_func=load_zip,
-    ),
+loaders: dict[ResourceFormat, Callable] = {
+    ResourceFormat.API: load_api,
+    ResourceFormat.APP: load_app,
+    ResourceFormat.APPLICATION: load_app,
+    ResourceFormat.CSV: load_csv,
+    ResourceFormat.ECW: load_ecw,
+    ResourceFormat.GDB: load_gdb,
+    ResourceFormat.GEOJSON: load_geojson,
+    ResourceFormat.GEOPARQUET: load_geoparquet,
+    ResourceFormat.GEOSERVICE: load_geoservice,
+    ResourceFormat.GEOPACKAGE: load_geopackage,
+    ResourceFormat.GTFS: load_gtfs,
+    ResourceFormat.GTFS_RT: load_gtfs_rt,
+    ResourceFormat.HTML: load_html,
+    ResourceFormat.IMG: load_image,
+    ResourceFormat.JPEG: load_image,
+    ResourceFormat.JSON: load_json,
+    ResourceFormat.KML: load_kml,
+    ResourceFormat.KMZ: load_kmz,
+    ResourceFormat.LAS: load_las,
+    ResourceFormat.PDF: load_pdf,
+    ResourceFormat.PNG: load_image,
+    ResourceFormat.PNG_24: load_image,
+    ResourceFormat.RSS: load_rss,
+    ResourceFormat.SHP: load_shp,
+    ResourceFormat.TEXT: load_text,
+    ResourceFormat.TIF: load_tiff,
+    ResourceFormat.TIFF: load_tiff,
+    ResourceFormat.XLSX: load_excel,
+    ResourceFormat.XML: load_xml,
+    ResourceFormat.XSLX: load_excel,
+    ResourceFormat.ZIP: load_zip,
 }
 
 
