@@ -17,6 +17,20 @@ print(ps.list_datasets())
 
 ### CLI
 
+#### Install
+
+Install globally:
+
+```
+uv tool install philly-cheesesnake
+```
+
+Run directly:
+
+```bash
+uvx --from philly-cheesesnake phl
+```
+
 Help/Usage:
 
 ```bash
