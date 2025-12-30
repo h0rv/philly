@@ -9,10 +9,10 @@ Python Swiff Army knife and CLI for working with [OpenDataPhilly](https://openda
 ```python
 from philly import Philly
 
-ps = Philly()
+phl = Philly()
 
 # TODO:
-print(ps.list_datasets())
+print(phl.list_datasets())
 ```
 
 ### CLI
@@ -79,5 +79,5 @@ uv tool install phl --editable
 ## Resources
 
 * OpenDataPhilly
-    * https://opendataphilly.org/
-    * https://github.com/opendataphilly/
+  * https://opendataphilly.org/
+  * https://github.com/opendataphilly/
