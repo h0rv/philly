@@ -7,10 +7,14 @@ import yaml
 from philly.models import Dataset
 from philly.services import GitHub
 
+REPO = os.environ.get("REPO", "opendataphilly/opendataphilly-jkan")
+BRANCH = os.environ.get("BRANCH", "main")
+
 
 async def get_all_datasets():
     async for file in GitHub.get_all_files_contents(
-        repo="opendataphilly/opendataphilly-jkan",
+        repo=REPO,
+        branch=BRANCH,
         path="_datasets",
     ):
         # split the document by its ---
