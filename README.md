@@ -1,4 +1,4 @@
-# Philly Cheesesnake
+# Philly
 
 <img src="./assets/logo.png" width="256" alt="logo">
 
@@ -7,9 +7,9 @@ Python Swiff Army knife and CLI for working with [OpenDataPhilly](https://openda
 ## Examples
 
 ```python
-from philly_cheesesnake import PhillyCheesesnake
+from philly import Philly
 
-ps = PhillyCheesesnake()
+ps = Philly()
 
 # TODO:
 print(ps.list_datasets())
@@ -22,13 +22,13 @@ print(ps.list_datasets())
 Install globally:
 
 ```
-uv tool install philly-cheesesnake
+uv tool install philly
 ```
 
 Run directly:
 
 ```bash
-uvx --from philly-cheesesnake phl
+uvx --from philly phl
 ```
 
 Help/Usage:

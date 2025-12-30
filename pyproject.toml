@@ -1,5 +1,5 @@
 [project]
-name = "philly-cheesesnake"
+name = "philly"
 version = "0.1.0"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -27,7 +27,7 @@ notebook = [
 ]
 
 [project.scripts]
-phl = "philly_cheesesnake.__main__:main"
+phl = "philly.__main__:main"
 
 [build-system]
 requires = ["setuptools>=75"]
@@ -40,4 +40,4 @@ package-dir = {"" = "src"}
 where = ["src"]
 
 [tool.setuptools.package-data]
-"philly_cheesesnake" = ["datasets/*.yaml"]
+"philly" = ["datasets/*.yaml"]

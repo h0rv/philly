@@ -13,8 +13,8 @@ import httpx
 import pandas as pd
 from google.transit import gtfs_realtime_pb2 as gtfs_rt
 
-from philly_cheesesnake.models import Resource, ResourceFormat
-from philly_cheesesnake.services import GitHub
+from philly.models import Resource, ResourceFormat
+from philly.services import GitHub
 
 
 async def _get_content(url: str) -> bytes:

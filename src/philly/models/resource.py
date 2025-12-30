@@ -1,6 +1,6 @@
 from pydantic import BaseModel, field_validator
 
-from philly_cheesesnake.models.yaml_enum import YamlEnum
+from philly.models.yaml_enum import YamlEnum
 
 
 class ResourceFormat(YamlEnum):

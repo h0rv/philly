@@ -4,8 +4,8 @@ import re
 
 import yaml
 
-from philly_cheesesnake.models import Dataset
-from philly_cheesesnake.services import GitHub
+from philly.models import Dataset
+from philly.services import GitHub
 
 
 async def get_all_datasets():
@@ -39,7 +39,7 @@ async def main():
         # Replace any character that is not alphanumeric, dash, or underscore with underscore
         clean_title = re.sub(r"[^\w\-]", "_", dataset.title)
         with open(
-            f"src/philly_cheesesnake/datasets/{clean_title}.yaml",
+            f"src/philly/datasets/{clean_title}.yaml",
             "w",
             encoding="utf-8",
         ) as f:

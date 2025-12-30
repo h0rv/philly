@@ -3,7 +3,7 @@ import json
 import yaml
 from pydantic import BaseModel
 
-from philly_cheesesnake.models.resource import Resource
+from philly.models.resource import Resource
 
 
 class Dataset(BaseModel):

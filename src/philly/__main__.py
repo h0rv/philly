@@ -1,10 +1,10 @@
 from fire import Fire
 
-from .philly_cheesesnake import PhillyCheesesnake
+from .philly import Philly
 
 
 def main() -> None:
-    Fire(PhillyCheesesnake)
+    Fire(Philly)
 
 
 if __name__ == "__main__":

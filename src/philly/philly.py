@@ -4,11 +4,11 @@ from pathlib import Path
 
 from tqdm.asyncio import tqdm_asyncio
 
-from philly_cheesesnake.models import Dataset
-from philly_cheesesnake.loaders import load
+from philly.models import Dataset
+from philly.loaders import load
 
 
-class PhillyCheesesnake:
+class Philly:
     def __init__(self) -> None:
         self._logger = logging.getLogger(__name__)
 
