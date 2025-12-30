@@ -38,7 +38,7 @@ class Philly:
     def list_datasets(self) -> list[str]:
         return [d.title for d in self.datasets]
 
-    def list_resources(self, dataset_name: str, names_only: bool = False) -> list[str]:
+    def list_resources(self, dataset_name: str, names_only: bool = False) -> str:
         dataset = self._get_dataset(dataset_name)
 
         resources = dataset.resources or []
@@ -48,7 +48,7 @@ class Philly:
 
         return "".join([str(r) for r in resources])
 
-    def list_all_resources(self) -> list[str]:
+    def list_all_resources(self) -> str:
         resources = [
             f"{resource.name} [{dataset.title}]"
             for dataset in self.datasets
@@ -71,14 +71,16 @@ class Philly:
         if not resource.url:
             return None
 
+        data: object | None = None
         try:
-            data = await load(resource, ignore_load_errors)
+            data = await load(resource, ignore_errors=ignore_load_errors)
         except Exception as e:
-            if ignore_load_errors:
+            if not ignore_load_errors:
                 raise e
             self._logger.warning(
                 f"Resource {resource.name} could not be loaded (error: {e}). Skipping."
             )
+            return None
 
         if data is None:
             return None
@@ -89,7 +91,7 @@ class Philly:
         tasks = []
         for dataset in self.datasets:
             for resource in dataset.resources or []:
-                tasks.append(load(resource, ignore_load_errors=False))
+                tasks.append(load(resource, ignore_errors=False))
 
         gather_fn = tqdm_asyncio.gather if show_progress else asyncio.gather
 

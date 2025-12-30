@@ -13,6 +13,8 @@ class YamlEnum(str, Enum):
 
     @classmethod
     def _missing_(cls, value):
+        if not isinstance(value, str):
+            return None
         value = value.lower().replace(" ", "_").replace("-", "_").strip()
         for member in cls:
             if member.lower() == value:

@@ -1,4 +1,5 @@
 import json
+from typing import Any
 
 import yaml
 from pydantic import BaseModel
@@ -29,10 +30,12 @@ class Dataset(BaseModel):
         resource_name: str,
         format: str | None = None,
     ) -> Resource:
+        resources = self.resources or []
         r = [
-            r
-            for r in self.resources
-            if r.name == resource_name and (format is None or r.format == format)
+            resource
+            for resource in resources
+            if resource.name == resource_name
+            and (format is None or resource.format == format)
         ]
 
         if len(r) == 0:
@@ -48,7 +51,7 @@ class Dataset(BaseModel):
         return r[0]
 
     @classmethod
-    def from_dict(cls, data: dict) -> "Dataset":
+    def from_dict(cls, data: dict[str, Any]) -> "Dataset":
         # Handle comma-separated formats in resources
         if "resources" in data and data["resources"]:
             resources = []

@@ -1,3 +1,6 @@
+from collections.abc import AsyncGenerator
+from typing import Any
+
 import httpx
 
 
@@ -20,7 +23,7 @@ class GitHub:
         repo: str,
         branch: str = "main",
         path: str = "",
-    ) -> list[dict]:
+    ) -> list[dict[str, Any]]:
         """
         Get all files in a GitHub repository directory.
 
@@ -57,7 +60,7 @@ class GitHub:
         repo: str,
         branch: str = "main",
         path: str = "",
-    ) -> list[dict]:
+    ) -> AsyncGenerator[str, None]:
         files = await GitHub.get_all_files(repo, branch, path)
         for file in files:
             content = await GitHub._get_file_content(file["download_url"])

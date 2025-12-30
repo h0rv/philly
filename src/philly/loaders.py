@@ -5,7 +5,9 @@ import re
 import xml.etree.ElementTree as ET
 import zipfile
 from io import BytesIO, StringIO
-from typing import Callable
+from pathlib import Path
+from tempfile import NamedTemporaryFile
+from typing import Any, Awaitable, Callable, cast
 
 import geojson
 import geopandas as gpd
@@ -17,7 +19,7 @@ from philly.models import Resource, ResourceFormat
 from philly.services import GitHub
 
 
-async def _get_content(url: str) -> bytes:
+async def _get_content(url: str | None) -> bytes:
     if not url:
         raise ValueError("Resource URL is not set")
 
@@ -41,7 +43,7 @@ async def _get_content(url: str) -> bytes:
         return content
 
 
-async def load_csv(resource: Resource) -> list[dict[str, object]]:
+async def load_csv(resource: Resource) -> list[dict[str, str]]:
     content = await _get_content(resource.url)
     csv_data = StringIO(content.decode("utf-8", errors="replace"))
     try:
@@ -136,8 +138,9 @@ async def load_gtfs(resource: Resource) -> str:
     return str(content)
 
 
-async def load_gtfs_rt(resource: Resource) -> gtfs_rt.FeedMessage:
-    feed = gtfs_rt.FeedMessage()
+async def load_gtfs_rt(resource: Resource) -> Any:
+    feed_cls = cast(Any, gtfs_rt).FeedMessage
+    feed = feed_cls()
     content = await _get_content(resource.url)
     feed.ParseFromString(content)
     return feed
@@ -145,12 +148,16 @@ async def load_gtfs_rt(resource: Resource) -> gtfs_rt.FeedMessage:
 
 async def load_geoparquet(resource: Resource) -> gpd.GeoDataFrame:
     content = await _get_content(resource.url)
-    with BytesIO(content) as f:
-        gdf = gpd.read_parquet(f)
-    return gdf
+    with NamedTemporaryFile(suffix=".parquet", delete=False) as temp_file:
+        temp_file.write(content)
+        temp_path = Path(temp_file.name)
+    try:
+        return gpd.read_parquet(temp_path)
+    finally:
+        temp_path.unlink(missing_ok=True)
 
 
-async def load_api(resource: Resource) -> dict[str, any]:
+async def load_api(resource: Resource) -> dict[str, Any]:
     """Load data from an API endpoint asynchronously"""
     content = await _get_content(resource.url)
     try:
@@ -174,7 +181,7 @@ async def load_gdb(resource: Resource) -> gpd.GeoDataFrame | NotImplementedError
     raise NotImplementedError("GDB format loading requires GDAL/OGR support")
 
 
-async def load_geoservice(resource: Resource) -> dict[str, any]:
+async def load_geoservice(resource: Resource) -> dict[str, Any]:
     """Load data from a geo service endpoint asynchronously"""
     content = await _get_content(resource.url)
     try:
@@ -241,7 +248,7 @@ async def load_tiff(resource: Resource) -> bytes:
     return await _get_content(resource.url)
 
 
-loaders: dict[ResourceFormat, Callable] = {
+loaders: dict[ResourceFormat, Callable[[Resource], Awaitable[object | None]]] = {
     ResourceFormat.API: load_api,
     ResourceFormat.APP: load_app,
     ResourceFormat.APPLICATION: load_app,

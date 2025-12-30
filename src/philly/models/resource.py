@@ -1,3 +1,5 @@
+from typing import Any
+
 from pydantic import BaseModel, field_validator
 
 from philly.models.yaml_enum import YamlEnum
@@ -47,7 +49,7 @@ class Resource(BaseModel):
 
     @classmethod
     @field_validator("format", mode="before")
-    def lowercase_format(cls, value: any) -> any:
+    def lowercase_format(cls, value: Any) -> Any:
         if not isinstance(value, str):
             raise ValueError("format must be a string")
 
@@ -72,7 +74,7 @@ class Resource(BaseModel):
             ) from e
 
     @classmethod
-    def from_dict(cls, data: dict) -> "Resource":
+    def from_dict(cls, data: dict[str, Any]) -> "Resource":
         return cls(**data)
 
     def __str__(self) -> str:
