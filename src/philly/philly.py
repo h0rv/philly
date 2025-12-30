@@ -2,10 +2,11 @@ import asyncio
 import logging
 from pathlib import Path
 
-from tqdm.asyncio import tqdm_asyncio
+import httpx
+from tqdm import tqdm
 
-from philly.models import Dataset
-from philly.loaders import load
+from philly.models import Dataset, Resource
+from philly.loaders import load, use_http_client
 
 
 class Philly:
@@ -87,12 +88,52 @@ class Philly:
 
         return data
 
-    async def load_all(self, show_progress: bool = False) -> list[object]:
-        tasks = []
-        for dataset in self.datasets:
-            for resource in dataset.resources or []:
-                tasks.append(load(resource, ignore_errors=False))
+    async def load_all(
+        self,
+        show_progress: bool = False,
+        ignore_load_errors: bool = True,
+        max_concurrency: int | None = 20,
+    ) -> list[object | None]:
+        resources = [
+            resource
+            for dataset in self.datasets
+            for resource in (dataset.resources or [])
+        ]
+        if not resources:
+            return []
 
-        gather_fn = tqdm_asyncio.gather if show_progress else asyncio.gather
+        concurrency = (
+            max_concurrency
+            if max_concurrency and max_concurrency > 0
+            else len(resources)
+        )
+        results: list[object | None] = [None] * len(resources)
+        semaphore = asyncio.Semaphore(concurrency)
 
-        return await gather_fn(*tasks)
+        progress = tqdm(total=len(resources)) if show_progress else None
+
+        async def _load_one(index: int, resource: Resource) -> None:
+            async with semaphore:
+                if ignore_load_errors:
+                    try:
+                        results[index] = await load(resource, ignore_errors=True)
+                    except Exception as e:
+                        self._logger.warning(
+                            f"Resource load failed for {resource}: {e}. Skipping."
+                        )
+                        results[index] = None
+                else:
+                    results[index] = await load(resource, ignore_errors=False)
+            if progress is not None:
+                progress.update(1)
+
+        async with httpx.AsyncClient() as client:
+            async with use_http_client(client):
+                async with asyncio.TaskGroup() as tg:
+                    for index, resource in enumerate(resources):
+                        tg.create_task(_load_one(index, resource))
+
+        if progress is not None:
+            progress.close()
+
+        return results
