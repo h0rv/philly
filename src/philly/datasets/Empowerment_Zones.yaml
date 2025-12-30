@@ -2,7 +2,8 @@ area_of_interest: City of Philadelphia
 category:
 - Economy
 - Planning / Zoning
-created: '2014-12-08T22:30:22.412019'
+- Boundaries
+created: null
 license: City of Philadelphia License
 maintainer: ''
 maintainer_email: brian.ivey@phila.gov
@@ -18,13 +19,13 @@ organization: City of Philadelphia
 resources:
 - format: csv
   name: Empowerment Zones (CSV)
-  url: https://opendata.arcgis.com/datasets/78fa563815654742909159b53fa4b065_0.csv
+  url: https://hub.arcgis.com/api/v3/datasets/78fa563815654742909159b53fa4b065_0/downloads/data?format=csv&spatialRefId=2272&where=1%3D1
 - format: shp
   name: Empowerment Zones (SHP)
-  url: https://opendata.arcgis.com/datasets/78fa563815654742909159b53fa4b065_0.zip
+  url: https://hub.arcgis.com/api/v3/datasets/78fa563815654742909159b53fa4b065_0/downloads/data?format=shp&spatialRefId=2272&where=1%3D1
 - format: geojson
   name: Empowerment Zones (GeoJSON)
-  url: https://opendata.arcgis.com/datasets/78fa563815654742909159b53fa4b065_0.geojson
+  url: https://hub.arcgis.com/api/v3/datasets/78fa563815654742909159b53fa4b065_0/downloads/data?format=geojson&spatialRefId=4326&where=1%3D1
 - format: api
   name: Empowerment Zones (API)
   url: https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Empowerment_Zones/FeatureServer/0/query?outFields=*&where=1%3D1

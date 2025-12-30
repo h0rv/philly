@@ -1,6 +1,7 @@
 area_of_interest: null
 category:
 - Health / Human Services
+- Environment
 created: null
 license: City of Philadelphia License
 maintainer: ''
@@ -22,10 +23,7 @@ organization: City of Philadelphia
 resources:
 - format: csv
   name: Lead Paint Certifications (CSV)
-  url: https://opendata.arcgis.com/api/v3/datasets/cc1703fe3a4c42adb519075d7bda5ba8_0/downloads/data?format=csv&spatialRefId=4326&where=1%3D1
-- format: geojson
-  name: Lead Paint Certifications (GeoJSON)
-  url: https://opendata.arcgis.com/api/v3/datasets/cc1703fe3a4c42adb519075d7bda5ba8_0/downloads/data?format=geojson&spatialRefId=4326&where=1%3D1
+  url: https://hub.arcgis.com/api/v3/datasets/cc1703fe3a4c42adb519075d7bda5ba8_0/downloads/data?format=csv&spatialRefId=3857&where=1%3D1
 - format: api
   name: Lead Paint Certifications (API)
   url: https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/lhhp_lead_certifications/FeatureServer/0/query?outFields=*&where=1%3D1

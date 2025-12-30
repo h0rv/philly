@@ -1,11 +1,10 @@
 area_of_interest: null
 category:
-- Health / Human Services
 - Public Safety
 created: null
 license: City of Philadelphia License
 maintainer: ''
-maintainer_email: ''
+maintainer_email: michelle.argyriou@phila.gov
 maintainer_link: null
 maintainer_phone: null
 notes: 'As part of the Philadelphia Police Department''s (PPD) accountability processes,
@@ -18,10 +17,15 @@ notes: 'As part of the Philadelphia Police Department''s (PPD) accountability pr
   number, and CAP History dataset details the timeline by which PPD released the complaint,
   concluded the investigation, and determined any resulting discipline. See metadata
   links below for dataset and field descriptions. Includes data from the past five
-  years. Updated monthly.'
+  years. Updated monthly.
+
+  Historical records for 2009-2012 are also available at: https://opendataphilly.org/datasets/complaints-against-police/ '
 opendataphilly_rating: null
 organization: City of Philadelphia
 resources:
+- format: application
+  name: Complaints Against Police (Web Application)
+  url: https://www.phillypolice.com/accountability/complaints/
 - format: csv
   name: Complaints Against Police (CSV)
   url: https://phl.carto.com/api/v2/sql?q=SELECT+*+FROM+ppd_complaints&filename=ppd_complaints&format=csv&skipfields=cartodb_id,the_geom,the_geom_webmercator

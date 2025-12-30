@@ -17,11 +17,14 @@ opendataphilly_rating: null
 organization: Volunteer
 resources:
 - format: shp
-  name: Pennypack Park Trails Web Shapefile
-  url: http://www.arcgis.com/home/item.html?id=8caeca8122e54b65b7bc04a24d3d0850#data
-- format: html
-  name: Pennypack Park Trail Map
-  url: http://jasonsladinski.maps.arcgis.com/apps/webappviewer/index.html?id=8dd092b90db74fbdb71ffed204305fc0
+  name: Pennypack Park Trails Map shapefile
+  url: https://github.com/opendataphilly/open-geo-data/blob/master/pennypack-trails/pennypack-trails.zip
+- format: geojson
+  name: Pennypack Park Trails Map GeoJSON
+  url: https://github.com/opendataphilly/open-geo-data/blob/master/pennypack-trails/pennypack-trails.geojson
+- format: geoparquet
+  name: Pennypack Park Trails Web GeoParquet
+  url: https://github.com/opendataphilly/open-geo-data/blob/master/pennypack-trails/pennypack-trails.parquet
 source: ''
 time_period: null
 title: Pennypack Park Trail Map

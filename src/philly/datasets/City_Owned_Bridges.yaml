@@ -1,7 +1,7 @@
 area_of_interest: null
 category:
 - Transportation
-created: '2015-09-01T14:57:48.780192'
+created: null
 license: City of Philadelphia License
 maintainer: Max Steinbrenner
 maintainer_email: max.steinbrenner@phila.gov
@@ -14,13 +14,13 @@ organization: City of Philadelphia
 resources:
 - format: csv
   name: City Owned Bridges (CSV)
-  url: https://opendata.arcgis.com/datasets/da0aac472cc6431dbea2fc90ad3f7463_0.csv
+  url: https://hub.arcgis.com/api/v3/datasets/da0aac472cc6431dbea2fc90ad3f7463_0/downloads/data?format=csv&spatialRefId=2272&where=1%3D1
 - format: shp
   name: City Owned Bridges (SHP)
-  url: https://opendata.arcgis.com/datasets/da0aac472cc6431dbea2fc90ad3f7463_0.zip
+  url: https://hub.arcgis.com/api/v3/datasets/da0aac472cc6431dbea2fc90ad3f7463_0/downloads/data?format=shp&spatialRefId=2272&where=1%3D1
 - format: geojson
   name: City Owned Bridges (GeoJSON)
-  url: https://opendata.arcgis.com/datasets/da0aac472cc6431dbea2fc90ad3f7463_0.geojson
+  url: https://hub.arcgis.com/api/v3/datasets/da0aac472cc6431dbea2fc90ad3f7463_0/downloads/data?format=geojson&spatialRefId=4326&where=1%3D1
 - format: api
   name: City Owned Bridges (API)
   url: https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/City_Owned_Bridges/FeatureServer/0/query?outFields=*&where=1%3D1

@@ -2,7 +2,7 @@ area_of_interest: null
 category:
 - Planning / Zoning
 - Transportation
-created: '2015-06-09T07:17:26.585413'
+created: null
 license: City of Philadelphia License
 maintainer: Mike Matela
 maintainer_email: michael.matela@phila.gov
@@ -14,13 +14,13 @@ organization: City of Philadelphia
 resources:
 - format: csv
   name: Historic Streets - Line (CSV)
-  url: https://opendata.arcgis.com/datasets/9409bce14c4e4768a11a8432e80bfa68_0.csv
+  url: https://hub.arcgis.com/api/v3/datasets/9409bce14c4e4768a11a8432e80bfa68_0/downloads/data?format=csv&spatialRefId=2272&where=1%3D1
 - format: shp
   name: Historic Streets - Line (SHP)
-  url: https://opendata.arcgis.com/datasets/9409bce14c4e4768a11a8432e80bfa68_0.zip
+  url: https://hub.arcgis.com/api/v3/datasets/9409bce14c4e4768a11a8432e80bfa68_0/downloads/data?format=shp&spatialRefId=2272&where=1%3D1
 - format: geojson
   name: Historic Streets - Line (GeoJSON)
-  url: https://opendata.arcgis.com/datasets/9409bce14c4e4768a11a8432e80bfa68_0.geojson
+  url: https://hub.arcgis.com/api/v3/datasets/9409bce14c4e4768a11a8432e80bfa68_0/downloads/data?format=geojson&spatialRefId=4326&where=1%3D1
 - format: api
   name: Historic Streets - Line (API)
   url: https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Historic_Streets/FeatureServer/0/query?outFields=*&where=1%3D1
@@ -29,13 +29,13 @@ resources:
   url: https://metadata.phila.gov/#home/datasetdetails/555f8129f15fcb6c6ed44105/representationdetails/5571b1b3e4fb1d91393c2138/
 - format: csv
   name: Historic Streets - Polygon (CSV)
-  url: https://opendata.arcgis.com/datasets/b2c418f6e531486283f0c35a1104faee_0.csv
+  url: https://hub.arcgis.com/api/v3/datasets/b2c418f6e531486283f0c35a1104faee_0/downloads/data?format=csv&spatialRefId=2272&where=1%3D1
 - format: shp
   name: Historic Streets - Polygon (SHP)
-  url: https://opendata.arcgis.com/datasets/b2c418f6e531486283f0c35a1104faee_0.zip
+  url: https://hub.arcgis.com/api/v3/datasets/b2c418f6e531486283f0c35a1104faee_0/downloads/data?format=shp&spatialRefId=2272&where=1%3D1
 - format: geojson
   name: Historic Streets - Polygon (GeoJSON)
-  url: https://opendata.arcgis.com/datasets/b2c418f6e531486283f0c35a1104faee_0.geojson
+  url: https://hub.arcgis.com/api/v3/datasets/b2c418f6e531486283f0c35a1104faee_0/downloads/data?format=geojson&spatialRefId=4326&where=1%3D1
 - format: api
   name: Historic Streets - Polygon (API)
   url: https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Historic_Streets_Poly/FeatureServer/0/query?outFields=*&where=1%3D1

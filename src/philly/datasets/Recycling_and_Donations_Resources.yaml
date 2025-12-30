@@ -14,7 +14,7 @@ organization: City of Philadelphia
 resources:
 - format: html
   name: Recycling and Donations Resources Finder App (Application)
-  url: null
+  url: https://www.phila.gov/recycling-donation-finder/
 - format: csv
   name: Recycling and Donations Resources (CSV)
   url: https://phl.carto.com/api/v2/sql?q=SELECT+*+FROM+recycling_and_donations&filename=recycling_and_donations&format=csv&skipfields=cartodb_id

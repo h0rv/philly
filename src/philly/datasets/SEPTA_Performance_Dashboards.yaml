@@ -2,10 +2,10 @@ area_of_interest: Southeastern Pennsylvania (Bucks, Chester, Delaware, Montgomer
   Philadelphia counties)
 category:
 - Transportation
-created: '2024-04-28'
+created: ''
 license: License Not Specified
 maintainer: SEPTA
-maintainer_email: septoid@gmail.com
+maintainer_email: planning@septa.org
 maintainer_link: https://wwww.septa.org/open-data/
 maintainer_phone: null
 notes: Visual dashboards that describe ridership and performance metrics.
@@ -16,7 +16,7 @@ resources:
   name: Recovery vs. Pre-pandemic Ridership
   url: https://recovery.septa.org/
 - format: html
-  name: System Performance by Route 2013-2023
+  name: System Performance by Route 2013-2024
   url: https://public.tableau.com/app/profile/septa.data.group/viz/RouteOperatingStatistics/SystemPerformanceByRoute
 - format: html
   name: Average Daily Bus Ridership by Stop

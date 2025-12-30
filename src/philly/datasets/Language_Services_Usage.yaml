@@ -18,7 +18,7 @@ resources:
   url: http://www.phila.gov/language-usage-dashboard
 - format: csv
   name: Language Usage (CSV)
-  url: https://opendata.arcgis.com/api/v3/datasets/fbc598ae916a4b58939276b8fc3f127c_0/downloads/data?format=csv&spatialRefId=4326&where=1%3D1
+  url: https://hub.arcgis.com/api/v3/datasets/fbc598ae916a4b58939276b8fc3f127c_0/downloads/data?format=csv&spatialRefId=3857&where=1%3D1
 - format: api
   name: Language Usage (API)
   url: https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Lang_Access_Services/FeatureServer/0/query?outFields=*&where=1%3D1
