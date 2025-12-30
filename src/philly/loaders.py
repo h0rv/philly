@@ -272,7 +272,9 @@ async def load_shp(resource: Resource) -> gpd.GeoDataFrame | NotImplementedError
         try:
             return _read_shp_zip_bytes(content)
         except Exception as e:
-            raise ValueError(f"Could not read shapefile from zip bytes: {str(e)}") from e
+            raise ValueError(
+                f"Could not read shapefile from zip bytes: {str(e)}"
+            ) from e
 
     if normalized_url.startswith("http"):
         raise ValueError("Shapefile URL did not return a zip archive")

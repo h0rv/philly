@@ -1,0 +1,23 @@
+cache:
+  enabled: true
+  directory: ~/.cache/philly
+  ttl: 3600
+  max_size_mb: null
+defaults:
+  format_preference:
+  - csv
+  - geojson
+  - json
+  - shp
+  ignore_load_errors: false
+  max_concurrency: 20
+  show_progress: true
+cli:
+  output_format: auto
+  quiet: false
+  verbose: false
+  compact: false
+network:
+  timeout: 120
+  retries: 3
+  user_agent: philly/1.0

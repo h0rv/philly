@@ -17,8 +17,12 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = ["ruff>0", "basedpyright>0"]
-test = ["pytest>0"]
+dev = [
+    "ruff>0",
+    "basedpyright>0",
+    "poethepoet>=0.37.0",
+]
+test = ["pytest>0", "pytest-asyncio>0"]
 notebook = [
     "catppuccin-jupyterlab>=0.2.4",
     "ipykernel>0",
@@ -41,3 +45,11 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 "philly" = ["datasets/*.yaml"]
+
+[tool.poe.tasks]
+fmt = "uv run ruff format"
+lint = "uv run ruff check --fix"
+type-check = "uv run basedpyright --level error"
+test = "uv run pytest tests"
+
+all = ["fmt", "lint", "type-check"]
