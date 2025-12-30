@@ -1,5 +1,9 @@
 philly.db*
 
+# DuckDB database files (large, regenerable from analysis scripts)
+*.duckdb
+*.duckdb.wal
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -175,3 +179,4 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 .python-version
+philly.yml

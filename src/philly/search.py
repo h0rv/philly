@@ -43,7 +43,7 @@ def _extract_keywords(text: str | None) -> set[str]:
     if not text:
         return set()
 
-    words = text.lower().split()
+    words = str(text).lower().split()
     keywords: set[str] = set()
 
     for word in words:
@@ -165,7 +165,7 @@ def search(
     Returns:
         List of dataset titles sorted by relevance
     """
-    query_lower = query.lower()
+    query_lower = str(query).lower()
     results: dict[str, int] = {}  # title -> relevance score
 
     # Search in titles (substring or fuzzy match)
@@ -230,7 +230,7 @@ def search_resources(
     Returns:
         List of strings in format "resource_name [dataset_title]"
     """
-    query_lower = query.lower()
+    query_lower = str(query).lower()
     results: list[str] = []
 
     # Search resource names

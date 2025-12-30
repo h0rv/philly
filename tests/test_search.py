@@ -812,6 +812,24 @@ class TestEdgeCases:
 
         assert "COVID-19 Testing Sites" in results
 
+    def test_search_with_numeric_query_parameter(self):
+        """Test that numeric query parameters are converted to strings (Issue #2 fix)."""
+        dataset = Dataset(
+            title="311 Service and Information Requests",
+            category=["Services"],
+            notes="Call center and online 311 requests",
+        )
+
+        index = build_search_index([dataset])
+
+        # Test with integer query (simulates Python Fire converting "311" to int)
+        results = search(index, 311)
+        assert "311 Service and Information Requests" in results
+
+        # Test with string query should still work
+        results = search(index, "311")
+        assert "311 Service and Information Requests" in results
+
 
 class TestPhillyClassSearchIntegration:
     """Integration tests using the real Philly class with real datasets."""

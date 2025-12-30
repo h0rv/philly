@@ -663,44 +663,88 @@ class Philly:
         """
         dataset = self._get_dataset(dataset_name)
 
-        if resource_name is None:
-            # Auto-select resource
+        # Determine which resources to try
+        if resource_name is not None:
+            # User specified a resource, only try that one
+            resources_to_try = [dataset.get_resource(resource_name)]
+        else:
+            # Auto-select: try resources in order of format preference
+            resources_to_try = []
             format_preference = self.config.defaults.format_preference
             for preferred_format in format_preference:
                 resource = find_resource_by_format(dataset, preferred_format)
-                if resource:
-                    break
-            else:
-                raise ValueError(f"No resource found for dataset '{dataset_name}'")
-        else:
-            resource = dataset.get_resource(resource_name)
+                if resource and resource not in resources_to_try:
+                    resources_to_try.append(resource)
 
-        if not resource.url:
-            return None
+            # If no resources match preferences, try all available resources
+            if not resources_to_try and dataset.resources:
+                resources_to_try = dataset.resources
 
-        # Sample based on format
-        resource_format = str(resource.format).lower()
+            if not resources_to_try:
+                raise ValueError(f"No resources found for dataset '{dataset_name}'")
 
-        if resource_format == "csv" or resource.url.endswith(".csv"):
-            data = await sample_csv(resource.url, n)
-        elif resource_format == "geojson" or resource.url.endswith(".geojson"):
-            data = await sample_geojson(resource.url, n)
-        elif resource_format == "json" or resource.url.endswith(".json"):
-            data = await sample_json(resource.url, n)
-        else:
-            # Try JSON as fallback
+        # Try each resource until we get data
+        last_error = None
+        for resource in resources_to_try:
+            if not resource.url:
+                continue
+
             try:
-                data = await sample_json(resource.url, n)
-            except Exception:
-                # Try CSV as fallback
-                try:
-                    data = await sample_csv(resource.url, n)
-                except Exception as e:
-                    raise ValueError(
-                        f"Unable to sample format '{resource_format}': {e}"
-                    ) from e
+                # Sample based on format
+                resource_format = str(resource.format).lower()
 
-        return format_chunk(data, output_format)
+                # Skip formats that can't be sampled
+                if resource_format in ("html", "shp", "api", "xml"):
+                    continue
+
+                if resource_format == "csv" or resource.url.endswith(".csv"):
+                    data = await sample_csv(resource.url, n)
+                elif resource_format == "geojson" or resource.url.endswith(".geojson"):
+                    data = await sample_geojson(resource.url, n)
+                elif resource_format == "json" or resource.url.endswith(".json"):
+                    data = await sample_json(resource.url, n)
+                else:
+                    # Try JSON as fallback
+                    try:
+                        data = await sample_json(resource.url, n)
+                    except Exception:
+                        # Try CSV as fallback
+                        data = await sample_csv(resource.url, n)
+
+                # Check if we got data
+                if data and len(data) > 0:
+                    return format_chunk(data, output_format)
+
+                # Empty data, try next resource if auto-selecting
+                if resource_name is None:
+                    continue
+                else:
+                    # User specified this resource, raise error
+                    raise ValueError(
+                        f"Dataset '{dataset_name}' returned no data. "
+                        f"The dataset may be empty, unavailable, or the URL may be returning only headers. "
+                        f"Resource: {resource.name} ({resource.format})"
+                    )
+
+            except Exception as e:
+                last_error = e
+                # If user specified resource, raise immediately
+                if resource_name is not None:
+                    raise
+                # Otherwise, try next resource
+                continue
+
+        # All resources failed
+        error_msg = f"Unable to sample dataset '{dataset_name}'. "
+        if len(resources_to_try) > 1:
+            error_msg += f"Tried {len(resources_to_try)} resources but all returned empty or failed."
+        else:
+            error_msg += "No valid data available."
+
+        if last_error:
+            error_msg += f" Last error: {last_error}"
+
+        raise ValueError(error_msg)
 
     async def get_columns(
         self,
