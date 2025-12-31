@@ -1,0 +1,15 @@
+{
+  "analysis_date": "2025-12-31T00:03:12.634463",
+  "num_sales": 116765,
+  "year_range": "2020-2024",
+  "median_assessment_ratio": 0.7688524590163934,
+  "mean_assessment_ratio": 0.8139379623254097,
+  "cod": 34.692639229173054,
+  "prd": 1.0818052897087296,
+  "prb": -0.12664621079153715,
+  "regressivity_gap": 0.22099999999999997,
+  "bottom_quintile_ratio": 0.9863,
+  "top_quintile_ratio": 0.7653,
+  "pct_over_assessed": 21.115060163576413,
+  "pct_under_assessed": 78.108165974393
+}

@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The 311 Gap: Philadelphia's Service Inequality</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+        }
+        .map-container {
+            height: 600px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+        .tooltip {
+            background: white;
+            border: 2px solid #333;
+            border-radius: 4px;
+            padding: 8px;
+            font-size: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        #scatterPlot {
+            width: 100%;
+            height: 400px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-5xl font-bold text-gray-900 mb-4">
+                The 311 Gap
+            </h1>
+            <p class="text-2xl text-gray-600 mb-2">
+                Statistical Evidence of Service Inequity in Philadelphia
+            </p>
+            <p class="text-lg text-gray-500">
+                Analysis of 1,084,488 service requests (2023-2024) × US Census income data
+            </p>
+        </header>
+
+        <!-- Key Findings -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="stat-card">
+                <div class="text-sm uppercase tracking-wide opacity-90 mb-2">Income Correlation</div>
+                <div class="text-4xl font-bold mb-1">ρ = -0.338</div>
+                <div class="text-sm opacity-90">p < 0.000001 (highly significant)</div>
+            </div>
+            <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                <div class="text-sm uppercase tracking-wide opacity-90 mb-2">The Gap</div>
+                <div class="text-4xl font-bold mb-1">22 Days</div>
+                <div class="text-sm opacity-90">Low-income areas wait longer</div>
+            </div>
+            <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                <div class="text-sm uppercase tracking-wide opacity-90 mb-2">Census Tracts</div>
+                <div class="text-4xl font-bold mb-1">363</div>
+                <div class="text-sm opacity-90">Analyzed with complete data</div>
+            </div>
+        </div>
+
+        <!-- Interactive Map -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Interactive Map: Income vs. Response Times</h2>
+            <p class="text-gray-600 mb-6">
+                Click on census tracts to see detailed information. The map shows median household income with response time overlays.
+            </p>
+
+            <div class="flex gap-4 mb-4">
+                <button id="showIncome" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                    Show Income Map
+                </button>
+                <button id="showResponse" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition">
+                    Show Response Time Map
+                </button>
+                <button id="showPoverty" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+                    Show Poverty Rate Map
+                </button>
+            </div>
+
+            <div id="map" class="map-container"></div>
+
+            <div id="mapLegend" class="mt-4 p-4 bg-white rounded-lg shadow"></div>
+        </section>
+
+        <!-- Scatter Plot -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Income vs. Response Time Correlation</h2>
+            <p class="text-gray-600 mb-6">
+                Each point represents a census tract. Hover to see details.
+            </p>
+            <div class="bg-white p-6 rounded-lg shadow">
+                <canvas id="scatterPlot"></canvas>
+            </div>
+        </section>
+
+        <!-- Data Table -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Explore the Data</h2>
+            <p class="text-gray-600 mb-6">
+                Sort and filter census tracts. Click column headers to sort.
+            </p>
+
+            <div class="mb-4">
+                <input
+                    type="text"
+                    id="searchBox"
+                    placeholder="Search by GEOID or filter data..."
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+            </div>
+
+            <div class="bg-white rounded-lg shadow overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table id="dataTable" class="w-full">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-200">
+                                    Census Tract
+                                </th>
+                                <th class="px-4 py-3 text-right text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-200">
+                                    Median Income
+                                </th>
+                                <th class="px-4 py-3 text-right text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-200">
+                                    Response Time (hrs)
+                                </th>
+                                <th class="px-4 py-3 text-right text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-200">
+                                    Poverty Rate
+                                </th>
+                                <th class="px-4 py-3 text-right text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-gray-200">
+                                    Total Requests
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody" class="divide-y divide-gray-200">
+                            <!-- Data will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Methodology -->
+        <section class="mb-12 bg-white p-8 rounded-lg shadow">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Methodology</h2>
+            <div class="prose max-w-none text-gray-600">
+                <p class="mb-4">
+                    This analysis combines 1,084,488 Philadelphia 311 service requests from 2023-2024 with
+                    US Census Bureau American Community Survey (ACS) 5-Year Estimates for income and poverty data.
+                </p>
+                <h3 class="text-xl font-bold text-gray-900 mt-6 mb-3">Data Sources:</h3>
+                <ul class="list-disc pl-6 mb-4">
+                    <li>311 Service Requests: OpenDataPhilly CARTO API</li>
+                    <li>Census Income Data: US Census Bureau ACS 2022 (B19013_001E, B17001)</li>
+                    <li>Geographic Boundaries: Philadelphia census tracts (384 tracts)</li>
+                </ul>
+                <h3 class="text-xl font-bold text-gray-900 mt-6 mb-3">Statistical Analysis:</h3>
+                <ul class="list-disc pl-6 mb-4">
+                    <li>Spearman rank correlation: ρ = -0.3379, p < 0.000001</li>
+                    <li>Negative correlation indicates lower income neighborhoods experience slower service</li>
+                    <li>P-value < 0.000001 indicates less than 0.0001% chance of random occurrence</li>
+                    <li>363 census tracts analyzed with complete data (≥10 requests per tract)</li>
+                </ul>
+                <h3 class="text-xl font-bold text-gray-900 mt-6 mb-3">Key Finding:</h3>
+                <p class="mb-4">
+                    Residents in the lowest-income census tracts (bottom 20%, median income $27,112) wait
+                    <strong>1,095 hours (45.6 days)</strong> for service, while residents in the highest-income tracts
+                    (top 20%, median income $102,969) wait <strong>570 hours (23.8 days)</strong> — a gap of
+                    <strong>525 hours (21.9 days)</strong>.
+                </p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-gray-500 text-sm border-t border-gray-200 pt-8">
+            <p>Data analysis by Philadelphia Open Data Investigation | Powered by DuckDB-Wasm</p>
+            <p class="mt-2">All data sources are public and analysis is fully reproducible</p>
+        </footer>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Chart.js for scatter plot -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+
+    <script>
+        // Load data
+        let tractData = [];
+        let geoJsonData = null;
+        let map = null;
+        let currentLayer = null;
+
+        // Initialize
+        async function init() {
+            // Load tract data
+            const tractResponse = await fetch('tract_data.json');
+            tractData = await tractResponse.json();
+
+            // Load GeoJSON
+            const geoResponse = await fetch('census_tracts.geojson');
+            geoJsonData = await geoResponse.json();
+
+            // Merge data
+            mergeData();
+
+            // Initialize visualizations
+            initMap();
+            initScatterPlot();
+            initDataTable();
+        }
+
+        function mergeData() {
+            // Create lookup map
+            const dataMap = {};
+            tractData.forEach(d => {
+                dataMap[d.GEOID10] = d;
+            });
+
+            // Merge into GeoJSON features
+            geoJsonData.features.forEach(feature => {
+                const geoid = feature.properties.GEOID10;
+                if (dataMap[geoid]) {
+                    Object.assign(feature.properties, dataMap[geoid]);
+                }
+            });
+        }
+
+        function initMap() {
+            // Create map
+            map = L.map('map').setView([39.9526, -75.1652], 11);
+
+            // Add base layer
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                attribution: '© OpenStreetMap contributors © CARTO',
+                maxZoom: 19
+            }).addTo(map);
+
+            // Show income by default
+            showIncomeMap();
+
+            // Button handlers
+            document.getElementById('showIncome').addEventListener('click', showIncomeMap);
+            document.getElementById('showResponse').addEventListener('click', showResponseMap);
+            document.getElementById('showPoverty').addEventListener('click', showPovertyMap);
+        }
+
+        function showIncomeMap() {
+            if (currentLayer) map.removeLayer(currentLayer);
+
+            currentLayer = L.geoJSON(geoJsonData, {
+                style: feature => {
+                    const income = feature.properties.median_income;
+                    const hasData = income && income > 0 && income < 1000000;
+                    return {
+                        fillColor: hasData ? getIncomeColor(income) : 'white',
+                        weight: 1,
+                        opacity: 1,
+                        color: '#999',
+                        fillOpacity: hasData ? 0.7 : 0.2
+                    };
+                },
+                onEachFeature: (feature, layer) => {
+                    layer.on({
+                        mouseover: e => highlightFeature(e),
+                        mouseout: e => resetHighlight(e),
+                        click: e => showDetails(feature.properties)
+                    });
+                }
+            }).addTo(map);
+
+            updateLegend('income');
+        }
+
+        function showResponseMap() {
+            if (currentLayer) map.removeLayer(currentLayer);
+
+            currentLayer = L.geoJSON(geoJsonData, {
+                style: feature => {
+                    const hours = feature.properties.median_response_hours;
+                    const hasData = hours && hours > 0;
+                    return {
+                        fillColor: hasData ? getResponseColor(hours) : 'white',
+                        weight: 1,
+                        opacity: 1,
+                        color: '#999',
+                        fillOpacity: hasData ? 0.7 : 0.2
+                    };
+                },
+                onEachFeature: (feature, layer) => {
+                    layer.on({
+                        mouseover: e => highlightFeature(e),
+                        mouseout: e => resetHighlight(e),
+                        click: e => showDetails(feature.properties)
+                    });
+                }
+            }).addTo(map);
+
+            updateLegend('response');
+        }
+
+        function showPovertyMap() {
+            if (currentLayer) map.removeLayer(currentLayer);
+
+            currentLayer = L.geoJSON(geoJsonData, {
+                style: feature => {
+                    const poverty = feature.properties.poverty_rate;
+                    const hasData = poverty !== null && poverty !== undefined;
+                    return {
+                        fillColor: hasData ? getPovertyColor(poverty) : 'white',
+                        weight: 1,
+                        opacity: 1,
+                        color: '#999',
+                        fillOpacity: hasData ? 0.7 : 0.2
+                    };
+                },
+                onEachFeature: (feature, layer) => {
+                    layer.on({
+                        mouseover: e => highlightFeature(e),
+                        mouseout: e => resetHighlight(e),
+                        click: e => showDetails(feature.properties)
+                    });
+                }
+            }).addTo(map);
+
+            updateLegend('poverty');
+        }
+
+        function getIncomeColor(income) {
+            // Red (low) to Yellow to Green (high)
+            return income > 100000 ? '#1a9850' :
+                   income > 75000  ? '#91cf60' :
+                   income > 50000  ? '#d9ef8b' :
+                   income > 35000  ? '#fee08b' :
+                   income > 20000  ? '#fc8d59' :
+                                     '#d73027';
+        }
+
+        function getResponseColor(hours) {
+            // Red (slow) to Green (fast)
+            return hours > 1500 ? '#d73027' :
+                   hours > 1200 ? '#fc8d59' :
+                   hours > 900  ? '#fee08b' :
+                   hours > 600  ? '#d9ef8b' :
+                   hours > 300  ? '#91cf60' :
+                                  '#1a9850';
+        }
+
+        function getPovertyColor(rate) {
+            return rate > 40 ? '#67001f' :
+                   rate > 30 ? '#b2182b' :
+                   rate > 20 ? '#d6604d' :
+                   rate > 15 ? '#f4a582' :
+                   rate > 10 ? '#fddbc7' :
+                               '#f7f7f7';
+        }
+
+        function highlightFeature(e) {
+            const layer = e.target;
+            layer.setStyle({
+                weight: 3,
+                color: '#333',
+                fillOpacity: 0.9
+            });
+            layer.bringToFront();
+        }
+
+        function resetHighlight(e) {
+            currentLayer.resetStyle(e.target);
+        }
+
+        function showDetails(props) {
+            const hasData = props.median_income && props.median_income > 0 && props.median_income < 1000000;
+
+            if (!hasData) {
+                alert(`Census Tract: ${props.GEOID10 || props.NAME10}\n\n⚠️ Insufficient data for this tract\n\nThis tract was excluded from the analysis because:\n• Income data unavailable or invalid\n• Fewer than 10 service requests\n• Missing demographic data\n\nShowing data for 353 of 384 Philadelphia census tracts.`);
+                return;
+            }
+
+            const neighborhood = props.neighborhood || 'Unknown';
+            const tractName = props.NAME10 ? `Tract ${props.NAME10}` : props.GEOID10;
+            const income = props.median_income ? `$${props.median_income.toLocaleString()}` : 'N/A';
+            const response = props.median_response_hours ? `${props.median_response_hours.toFixed(1)} hrs (${(props.median_response_hours/24).toFixed(1)} days)` : 'N/A';
+            const poverty = props.poverty_rate ? `${props.poverty_rate.toFixed(1)}%` : 'N/A';
+
+            alert(`${neighborhood}\n${tractName}\n\nMedian Income: ${income}\nMedian Response Time: ${response}\nPoverty Rate: ${poverty}\nTotal Requests: ${props.total_requests?.toLocaleString() || 'N/A'}`);
+        }
+
+        function updateLegend(type) {
+            const legend = document.getElementById('mapLegend');
+
+            if (type === 'income') {
+                legend.innerHTML = `
+                    <div class="font-bold mb-2">Median Household Income</div>
+                    <div class="flex gap-2 items-center flex-wrap">
+                        <div class="flex items-center gap-1">
+                            <div class="w-6 h-6 border border-gray-300" style="background: #1a9850"></div>
+                            <span class="text-sm">&gt;$100k</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-6 h-6 border border-gray-300" style="background: #91cf60"></div>
+                            <span class="text-sm">$75k-$100k</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-6 h-6 border border-gray-300" style="background: #d9ef8b"></div>
+                            <span class="text-sm">$50k-$75k</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-6 h-6 border border-gray-300" style="background: #fee08b"></div>
+                            <span class="text-sm">$35k-$50k</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-6 h-6 border border-gray-300" style="background: #fc8d59"></div>
+                            <span class="text-sm">$20k-$35k</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-6 h-6 border border-gray-300" style="background: #d73027"></div>
+                            <span class="text-sm">&lt;$20k</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-6 h-6 border border-gray-300" style="background: white"></div>
+                            <span class="text-sm">No data</span>
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'response') {
+                legend.innerHTML = `
+                    <div class="font-bold mb-2">Median Response Time (hours)</div>
+                    <div class="flex gap-2 items-center flex-wrap">
+                        <div class="flex items-center gap-1">
+                            <div class="w-6 h-6 border border-gray-300" style="background: #d73027"></div>
+                            <span class="text-sm">&gt;1500 hrs (Slowest)</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-6 h-6 border border-gray-300" style="background: #fc8d59"></div>
+                            <span class="text-sm">1200-1500</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-6 h-6 border border-gray-300" style="background: #fee08b"></div>
+                            <span class="text-sm">900-1200</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-6 h-6 border border-gray-300" style="background: #d9ef8b"></div>
+                            <span class="text-sm">600-900</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-6 h-6 border border-gray-300" style="background: #91cf60"></div>
+                            <span class="text-sm">300-600</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-6 h-6 border border-gray-300" style="background: #1a9850"></div>
+                            <span class="text-sm">&lt;300 (Fastest)</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-6 h-6 border border-gray-300" style="background: white"></div>
+                            <span class="text-sm">No data</span>
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'poverty') {
+                legend.innerHTML = `
+                    <div class="font-bold mb-2">Poverty Rate (%)</div>
+                    <div class="flex gap-2 items-center flex-wrap">
+                        <div class="flex items-center gap-1">
+                            <div class="w-6 h-6" style="background: #67001f"></div>
+                            <span class="text-sm">&gt;40%</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-6 h-6" style="background: #b2182b"></div>
+                            <span class="text-sm">30-40%</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-6 h-6" style="background: #d6604d"></div>
+                            <span class="text-sm">20-30%</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-6 h-6" style="background: #f4a582"></div>
+                            <span class="text-sm">15-20%</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-6 h-6" style="background: #fddbc7"></div>
+                            <span class="text-sm">10-15%</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-6 h-6" style="background: #f7f7f7"></div>
+                            <span class="text-sm">&lt;10%</span>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function initScatterPlot() {
+            const ctx = document.getElementById('scatterPlot');
+
+            const data = tractData
+                .filter(d => d.median_income > 0 && d.median_income < 1000000)
+                .map(d => ({
+                    x: d.median_income / 1000,
+                    y: d.median_response_hours,
+                    geoid: d.GEOID10,
+                    poverty: d.poverty_rate
+                }));
+
+            new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Census Tracts',
+                        data: data,
+                        backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Income vs. Response Time (Spearman ρ = -0.338, p < 0.000001)',
+                            font: { size: 16 }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => {
+                                    const point = ctx.raw;
+                                    return [
+                                        `Tract: ${point.geoid}`,
+                                        `Income: $${(point.x * 1000).toLocaleString()}`,
+                                        `Response: ${point.y.toFixed(1)} hrs (${(point.y/24).toFixed(1)} days)`,
+                                        `Poverty: ${point.poverty?.toFixed(1)}%`
+                                    ];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Median Household Income ($1000s)'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Median Response Time (hours)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function initDataTable() {
+            const tableBody = document.getElementById('tableBody');
+            const searchBox = document.getElementById('searchBox');
+
+            function renderTable(data = tractData) {
+                tableBody.innerHTML = '';
+
+                data
+                    .filter(d => d.median_income > 0 && d.median_income < 1000000)
+                    .forEach(row => {
+                        const tr = document.createElement('tr');
+                        tr.className = 'hover:bg-gray-50';
+                        tr.innerHTML = `
+                            <td class="px-4 py-3 text-sm text-gray-900">${row.GEOID10}</td>
+                            <td class="px-4 py-3 text-sm text-gray-900 text-right">$${row.median_income?.toLocaleString() || 'N/A'}</td>
+                            <td class="px-4 py-3 text-sm text-gray-900 text-right">${row.median_response_hours?.toFixed(1) || 'N/A'}</td>
+                            <td class="px-4 py-3 text-sm text-gray-900 text-right">${row.poverty_rate?.toFixed(1)}%</td>
+                            <td class="px-4 py-3 text-sm text-gray-900 text-right">${row.total_requests?.toLocaleString() || 'N/A'}</td>
+                        `;
+                        tableBody.appendChild(tr);
+                    });
+            }
+
+            searchBox.addEventListener('input', e => {
+                const query = e.target.value.toLowerCase();
+                const filtered = tractData.filter(d =>
+                    d.GEOID10?.toLowerCase().includes(query)
+                );
+                renderTable(filtered);
+            });
+
+            renderTable();
+        }
+
+        // Start the app
+        init();
+    </script>
+</body>
+</html>

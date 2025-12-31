@@ -1,0 +1,1244 @@
+[
+  {
+    "neighborhood": "Center City East",
+    "avg_response_hours": 19.0,
+    "avg_response_days": 0.7916666666666666,
+    "median_income": 69267.0,
+    "poverty_rate": 21.820062047569806,
+    "total_requests": 4014,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Chinatown",
+    "avg_response_hours": 197.0,
+    "avg_response_days": 8.208333333333334,
+    "median_income": 98994.0,
+    "poverty_rate": 19.205690574985184,
+    "total_requests": 1305,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Rittenhouse",
+    "avg_response_hours": 240.0,
+    "avg_response_days": 10.0,
+    "median_income": 104419.0,
+    "poverty_rate": 8.406169685827408,
+    "total_requests": 1210,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "Fitler Square",
+    "avg_response_hours": 261.0,
+    "avg_response_days": 10.875,
+    "median_income": 116935.0,
+    "poverty_rate": 7.7991205739412175,
+    "total_requests": 1521,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Society Hill",
+    "avg_response_hours": 269.0,
+    "avg_response_days": 11.208333333333334,
+    "median_income": 134428.5,
+    "poverty_rate": 4.9605083480923895,
+    "total_requests": 2570,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "Hawthorne",
+    "avg_response_hours": 273.25,
+    "avg_response_days": 11.385416666666666,
+    "median_income": 112461.0,
+    "poverty_rate": 5.1325418432550265,
+    "total_requests": 2906,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "Logan Square",
+    "avg_response_hours": 278.0,
+    "avg_response_days": 11.583333333333334,
+    "median_income": 90763.5,
+    "poverty_rate": 13.80322640819805,
+    "total_requests": 1981,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "Northern Liberties",
+    "avg_response_hours": 283.5,
+    "avg_response_days": 11.8125,
+    "median_income": 172610.0,
+    "poverty_rate": 10.135696482968706,
+    "total_requests": 2748,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Graduate Hospital",
+    "avg_response_hours": 287.5,
+    "avg_response_days": 11.979166666666666,
+    "median_income": 114137.5,
+    "poverty_rate": 13.449341480166602,
+    "total_requests": 4152,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "Washington Square West",
+    "avg_response_hours": 299.1,
+    "avg_response_days": 12.4625,
+    "median_income": 79562.0,
+    "poverty_rate": 15.555612907961617,
+    "total_requests": 5818,
+    "num_tracts": 5
+  },
+  {
+    "neighborhood": "Riverfront",
+    "avg_response_hours": 304.0,
+    "avg_response_days": 12.666666666666666,
+    "median_income": 156061.0,
+    "poverty_rate": 3.0085316569375844,
+    "total_requests": 953,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Fishtown - Lower Kensington",
+    "avg_response_hours": 370.0,
+    "avg_response_days": 15.416666666666666,
+    "median_income": 120835.0,
+    "poverty_rate": 7.67801291572904,
+    "total_requests": 4922,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "Bella Vista",
+    "avg_response_hours": 377.0,
+    "avg_response_days": 15.708333333333334,
+    "median_income": 98015.0,
+    "poverty_rate": 14.91395793499044,
+    "total_requests": 2599,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Callowhill",
+    "avg_response_hours": 379.0,
+    "avg_response_days": 15.791666666666666,
+    "median_income": 101268.0,
+    "poverty_rate": 21.07873527588345,
+    "total_requests": 1954,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Old Kensington",
+    "avg_response_hours": 386.0,
+    "avg_response_days": 16.083333333333332,
+    "median_income": 131027.0,
+    "poverty_rate": 11.466517022072578,
+    "total_requests": 3235,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Queen Village",
+    "avg_response_hours": 419.0,
+    "avg_response_days": 17.458333333333332,
+    "median_income": 120427.33333333333,
+    "poverty_rate": 10.055278036724953,
+    "total_requests": 4101,
+    "num_tracts": 3
+  },
+  {
+    "neighborhood": "Manayunk",
+    "avg_response_hours": 429.5,
+    "avg_response_days": 17.895833333333332,
+    "median_income": 84861.0,
+    "poverty_rate": 7.873329459616501,
+    "total_requests": 1516,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "West Poplar",
+    "avg_response_hours": 433.5,
+    "avg_response_days": 18.0625,
+    "median_income": 41898.0,
+    "poverty_rate": 37.504560379423566,
+    "total_requests": 988,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Newbold",
+    "avg_response_hours": 454.0,
+    "avg_response_days": 18.916666666666668,
+    "median_income": 60783.5,
+    "poverty_rate": 17.26221397649969,
+    "total_requests": 3320,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "Ludlow",
+    "avg_response_hours": 466.0,
+    "avg_response_days": 19.416666666666668,
+    "median_income": 33550.0,
+    "poverty_rate": 20.88546679499519,
+    "total_requests": 777,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "East Passyunk",
+    "avg_response_hours": 472.0,
+    "avg_response_days": 19.666666666666668,
+    "median_income": 78871.0,
+    "poverty_rate": 18.336252189141856,
+    "total_requests": 1765,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Spruce Hill",
+    "avg_response_hours": 474.0,
+    "avg_response_days": 19.75,
+    "median_income": 47896.5,
+    "poverty_rate": 24.421673928115542,
+    "total_requests": 2783,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "Spring Garden",
+    "avg_response_hours": 502.0,
+    "avg_response_days": 20.916666666666668,
+    "median_income": 101422.0,
+    "poverty_rate": 11.04406926730922,
+    "total_requests": 4189,
+    "num_tracts": 3
+  },
+  {
+    "neighborhood": "Passyunk Square",
+    "avg_response_hours": 503.0,
+    "avg_response_days": 20.958333333333332,
+    "median_income": 100010.0,
+    "poverty_rate": 7.897013718061539,
+    "total_requests": 2860,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "East Kensington",
+    "avg_response_hours": 503.0,
+    "avg_response_days": 20.958333333333332,
+    "median_income": 102794.0,
+    "poverty_rate": 12.636734693877552,
+    "total_requests": 4755,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Dearnley Park",
+    "avg_response_hours": 505.5,
+    "avg_response_days": 21.0625,
+    "median_income": 95200.0,
+    "poverty_rate": 6.37539010254124,
+    "total_requests": 534,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Point Breeze",
+    "avg_response_hours": 507.8333333333333,
+    "avg_response_days": 21.15972222222222,
+    "median_income": 81065.83333333333,
+    "poverty_rate": 17.60937341985448,
+    "total_requests": 10180,
+    "num_tracts": 6
+  },
+  {
+    "neighborhood": "Yorktown",
+    "avg_response_hours": 514.5,
+    "avg_response_days": 21.4375,
+    "median_income": 30332.0,
+    "poverty_rate": 37.94077111835692,
+    "total_requests": 1620,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "Dickinson Narrows",
+    "avg_response_hours": 516.0,
+    "avg_response_days": 21.5,
+    "median_income": 81215.0,
+    "poverty_rate": 17.169430256209097,
+    "total_requests": 2879,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "McGuire",
+    "avg_response_hours": 522.0,
+    "avg_response_days": 21.75,
+    "median_income": 27088.0,
+    "poverty_rate": 44.54086781029263,
+    "total_requests": 1660,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Franklin Mills",
+    "avg_response_hours": 544.0,
+    "avg_response_days": 22.666666666666668,
+    "median_income": 92578.0,
+    "poverty_rate": 16.23152709359606,
+    "total_requests": 1031,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Packer Park",
+    "avg_response_hours": 545.0,
+    "avg_response_days": 22.708333333333332,
+    "median_income": 113974.0,
+    "poverty_rate": 5.720106566368908,
+    "total_requests": 905,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Pennsport",
+    "avg_response_hours": 561.0,
+    "avg_response_days": 23.375,
+    "median_income": 95745.0,
+    "poverty_rate": 5.4004992058089405,
+    "total_requests": 1813,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "East Poplar",
+    "avg_response_hours": 565.0,
+    "avg_response_days": 23.541666666666668,
+    "median_income": 32083.0,
+    "poverty_rate": 37.29817007534984,
+    "total_requests": 537,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Germantown - Penn Knox",
+    "avg_response_hours": 623.0,
+    "avg_response_days": 25.958333333333332,
+    "median_income": 16042.0,
+    "poverty_rate": 38.93065998329156,
+    "total_requests": 541,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Harrowgate",
+    "avg_response_hours": 624.0,
+    "avg_response_days": 26.0,
+    "median_income": 40837.0,
+    "poverty_rate": 31.181269953884357,
+    "total_requests": 2086,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Lower Moyamensing",
+    "avg_response_hours": 639.8333333333334,
+    "avg_response_days": 26.659722222222225,
+    "median_income": 70803.0,
+    "poverty_rate": 13.895820888701406,
+    "total_requests": 5637,
+    "num_tracts": 3
+  },
+  {
+    "neighborhood": "Francisville",
+    "avg_response_hours": 640.5,
+    "avg_response_days": 26.6875,
+    "median_income": 143636.0,
+    "poverty_rate": 4.3403629230014715,
+    "total_requests": 1594,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Richmond",
+    "avg_response_hours": 642.8333333333334,
+    "avg_response_days": 26.784722222222225,
+    "median_income": 56011.333333333336,
+    "poverty_rate": 21.130407117181417,
+    "total_requests": 14034,
+    "num_tracts": 6
+  },
+  {
+    "neighborhood": "Fairmount",
+    "avg_response_hours": 649.5,
+    "avg_response_days": 27.0625,
+    "median_income": 111697.0,
+    "poverty_rate": 6.278421907574133,
+    "total_requests": 1902,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "Normandy Village",
+    "avg_response_hours": 710.5,
+    "avg_response_days": 29.604166666666668,
+    "median_income": 81354.0,
+    "poverty_rate": 4.783653846153846,
+    "total_requests": 520,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Aston-Woodbridge",
+    "avg_response_hours": 732.0,
+    "avg_response_days": 30.5,
+    "median_income": 70417.0,
+    "poverty_rate": 7.505248425472358,
+    "total_requests": 872,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Sharswood",
+    "avg_response_hours": 747.0,
+    "avg_response_days": 31.125,
+    "median_income": 41042.0,
+    "poverty_rate": 32.78837420526794,
+    "total_requests": 951,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "East Falls",
+    "avg_response_hours": 751.0,
+    "avg_response_days": 31.291666666666668,
+    "median_income": 66351.5,
+    "poverty_rate": 13.99934783464235,
+    "total_requests": 456,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "West Kensington",
+    "avg_response_hours": 759.25,
+    "avg_response_days": 31.635416666666668,
+    "median_income": 49896.75,
+    "poverty_rate": 29.013321606467347,
+    "total_requests": 6820,
+    "num_tracts": 4
+  },
+  {
+    "neighborhood": "Pennypack",
+    "avg_response_hours": 765.1666666666666,
+    "avg_response_days": 31.881944444444443,
+    "median_income": 76877.0,
+    "poverty_rate": 7.98334767867071,
+    "total_requests": 2223,
+    "num_tracts": 3
+  },
+  {
+    "neighborhood": "Cedar Park",
+    "avg_response_hours": 771.0,
+    "avg_response_days": 32.125,
+    "median_income": 70502.5,
+    "poverty_rate": 21.980161417074218,
+    "total_requests": 4303,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "Whitman",
+    "avg_response_hours": 789.5,
+    "avg_response_days": 32.895833333333336,
+    "median_income": 78257.0,
+    "poverty_rate": 19.345893979593598,
+    "total_requests": 2562,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "Walnut Hill",
+    "avg_response_hours": 811.0,
+    "avg_response_days": 33.791666666666664,
+    "median_income": 55354.5,
+    "poverty_rate": 20.381902923391145,
+    "total_requests": 3178,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "Wissahickon",
+    "avg_response_hours": 838.0,
+    "avg_response_days": 34.916666666666664,
+    "median_income": 104435.0,
+    "poverty_rate": 7.6213158678178035,
+    "total_requests": 761,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Andorra",
+    "avg_response_hours": 854.5,
+    "avg_response_days": 35.604166666666664,
+    "median_income": 107037.0,
+    "poverty_rate": 1.8979833926453145,
+    "total_requests": 412,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Franklinville",
+    "avg_response_hours": 862.5,
+    "avg_response_days": 35.9375,
+    "median_income": 21670.5,
+    "poverty_rate": 46.618597585540755,
+    "total_requests": 2551,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "Germany Hill",
+    "avg_response_hours": 863.0,
+    "avg_response_days": 35.958333333333336,
+    "median_income": 109102.0,
+    "poverty_rate": 4.8560700876095115,
+    "total_requests": 1107,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Parkwood Manor",
+    "avg_response_hours": 864.25,
+    "avg_response_days": 36.010416666666664,
+    "median_income": 92662.0,
+    "poverty_rate": 7.370995691322822,
+    "total_requests": 1871,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "Upper Roxborough",
+    "avg_response_hours": 866.25,
+    "avg_response_days": 36.09375,
+    "median_income": 82450.5,
+    "poverty_rate": 7.950949189092493,
+    "total_requests": 2109,
+    "num_tracts": 4
+  },
+  {
+    "neighborhood": "Modena",
+    "avg_response_hours": 869.5,
+    "avg_response_days": 36.229166666666664,
+    "median_income": 89257.5,
+    "poverty_rate": 9.109477014901705,
+    "total_requests": 1786,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "West Passyunk",
+    "avg_response_hours": 881.0,
+    "avg_response_days": 36.708333333333336,
+    "median_income": 54665.0,
+    "poverty_rate": 16.081627928585437,
+    "total_requests": 2827,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "Olney",
+    "avg_response_hours": 885.3125,
+    "avg_response_days": 36.888020833333336,
+    "median_income": 49597.25,
+    "poverty_rate": 31.820951716373354,
+    "total_requests": 9621,
+    "num_tracts": 8
+  },
+  {
+    "neighborhood": "Hunting Park",
+    "avg_response_hours": 908.3333333333334,
+    "avg_response_days": 37.84722222222222,
+    "median_income": 35524.333333333336,
+    "poverty_rate": 33.60427486931824,
+    "total_requests": 4356,
+    "num_tracts": 3
+  },
+  {
+    "neighborhood": "Stadium District",
+    "avg_response_hours": 920.5,
+    "avg_response_days": 38.354166666666664,
+    "median_income": 66431.0,
+    "poverty_rate": 18.60643185298622,
+    "total_requests": 1540,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Grays Ferry",
+    "avg_response_hours": 922.0,
+    "avg_response_days": 38.416666666666664,
+    "median_income": 48597.0,
+    "poverty_rate": 28.807664065756846,
+    "total_requests": 3997,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "Upper Kensington",
+    "avg_response_hours": 923.5,
+    "avg_response_days": 38.479166666666664,
+    "median_income": 28944.833333333332,
+    "poverty_rate": 51.35296789796405,
+    "total_requests": 9300,
+    "num_tracts": 6
+  },
+  {
+    "neighborhood": "Hartranft",
+    "avg_response_hours": 938.8333333333334,
+    "avg_response_days": 39.11805555555556,
+    "median_income": 31643.333333333332,
+    "poverty_rate": 44.05577983875147,
+    "total_requests": 7236,
+    "num_tracts": 6
+  },
+  {
+    "neighborhood": "East Oak Lane",
+    "avg_response_hours": 948.5,
+    "avg_response_days": 39.520833333333336,
+    "median_income": 69950.75,
+    "poverty_rate": 14.812824321019422,
+    "total_requests": 2668,
+    "num_tracts": 4
+  },
+  {
+    "neighborhood": "Burholme",
+    "avg_response_hours": 969.5,
+    "avg_response_days": 40.395833333333336,
+    "median_income": 56641.0,
+    "poverty_rate": 17.939366309550948,
+    "total_requests": 760,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Roxborough",
+    "avg_response_hours": 973.25,
+    "avg_response_days": 40.552083333333336,
+    "median_income": 92550.0,
+    "poverty_rate": 9.437140249204285,
+    "total_requests": 3304,
+    "num_tracts": 4
+  },
+  {
+    "neighborhood": "Feltonville",
+    "avg_response_hours": 975.6666666666666,
+    "avg_response_days": 40.65277777777778,
+    "median_income": 34726.666666666664,
+    "poverty_rate": 39.898979663763676,
+    "total_requests": 2854,
+    "num_tracts": 3
+  },
+  {
+    "neighborhood": "Millbrook",
+    "avg_response_hours": 997.5,
+    "avg_response_days": 41.5625,
+    "median_income": 80833.0,
+    "poverty_rate": 5.172774869109947,
+    "total_requests": 1044,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Girard Estates",
+    "avg_response_hours": 1001.0,
+    "avg_response_days": 41.708333333333336,
+    "median_income": 84401.5,
+    "poverty_rate": 8.807623560580508,
+    "total_requests": 3401,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "Bustleton",
+    "avg_response_hours": 1003.9166666666666,
+    "avg_response_days": 41.82986111111111,
+    "median_income": 72571.0,
+    "poverty_rate": 10.442090283698846,
+    "total_requests": 5537,
+    "num_tracts": 6
+  },
+  {
+    "neighborhood": "Germantown - Westside",
+    "avg_response_hours": 1005.5,
+    "avg_response_days": 41.895833333333336,
+    "median_income": 61450.0,
+    "poverty_rate": 18.903355032548824,
+    "total_requests": 1006,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Lexington Park",
+    "avg_response_hours": 1034.5,
+    "avg_response_days": 43.104166666666664,
+    "median_income": 49178.0,
+    "poverty_rate": 13.872286882667506,
+    "total_requests": 1532,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Frankford",
+    "avg_response_hours": 1036.2,
+    "avg_response_days": 43.175000000000004,
+    "median_income": 42384.2,
+    "poverty_rate": 37.38751714707947,
+    "total_requests": 7385,
+    "num_tracts": 5
+  },
+  {
+    "neighborhood": "North Central",
+    "avg_response_hours": 1050.75,
+    "avg_response_days": 43.78125,
+    "median_income": 39967.25,
+    "poverty_rate": 44.80571740373087,
+    "total_requests": 5844,
+    "num_tracts": 4
+  },
+  {
+    "neighborhood": "Academy Gardens",
+    "avg_response_hours": 1054.0,
+    "avg_response_days": 43.916666666666664,
+    "median_income": 84336.0,
+    "poverty_rate": 12.763258056330882,
+    "total_requests": 759,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Glenwood",
+    "avg_response_hours": 1054.0,
+    "avg_response_days": 43.916666666666664,
+    "median_income": 21210.0,
+    "poverty_rate": 46.971935007385525,
+    "total_requests": 1400,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Stanton",
+    "avg_response_hours": 1059.0,
+    "avg_response_days": 44.125,
+    "median_income": 35295.5,
+    "poverty_rate": 27.658496203822004,
+    "total_requests": 2766,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "University City",
+    "avg_response_hours": 1068.3333333333333,
+    "avg_response_days": 44.513888888888886,
+    "median_income": 28301.333333333332,
+    "poverty_rate": 52.08745473688126,
+    "total_requests": 1739,
+    "num_tracts": 3
+  },
+  {
+    "neighborhood": "Bridesburg",
+    "avg_response_hours": 1068.5,
+    "avg_response_days": 44.520833333333336,
+    "median_income": 69343.0,
+    "poverty_rate": 15.053143536543939,
+    "total_requests": 2824,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "Oxford Circle",
+    "avg_response_hours": 1097.2222222222222,
+    "avg_response_days": 45.71759259259259,
+    "median_income": 55444.88888888889,
+    "poverty_rate": 20.086136449537427,
+    "total_requests": 8274,
+    "num_tracts": 9
+  },
+  {
+    "neighborhood": "Southwest Germantown",
+    "avg_response_hours": 1127.6666666666667,
+    "avg_response_days": 46.986111111111114,
+    "median_income": 46233.666666666664,
+    "poverty_rate": 24.145665182277696,
+    "total_requests": 3872,
+    "num_tracts": 3
+  },
+  {
+    "neighborhood": "Juniata Park",
+    "avg_response_hours": 1134.3333333333333,
+    "avg_response_days": 47.263888888888886,
+    "median_income": 49873.666666666664,
+    "poverty_rate": 31.283402765977158,
+    "total_requests": 4136,
+    "num_tracts": 3
+  },
+  {
+    "neighborhood": "Chestnut Hill",
+    "avg_response_hours": 1143.4,
+    "avg_response_days": 47.64166666666667,
+    "median_income": 127439.6,
+    "poverty_rate": 5.184578152379125,
+    "total_requests": 2138,
+    "num_tracts": 5
+  },
+  {
+    "neighborhood": "Strawberry Mansion",
+    "avg_response_hours": 1149.4,
+    "avg_response_days": 47.89166666666667,
+    "median_income": 27102.6,
+    "poverty_rate": 38.66670193995098,
+    "total_requests": 6759,
+    "num_tracts": 5
+  },
+  {
+    "neighborhood": "Morrell Park",
+    "avg_response_hours": 1163.5,
+    "avg_response_days": 48.479166666666664,
+    "median_income": 80541.5,
+    "poverty_rate": 5.407340050928079,
+    "total_requests": 1643,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "Fox Chase",
+    "avg_response_hours": 1192.7,
+    "avg_response_days": 49.69583333333333,
+    "median_income": 70857.2,
+    "poverty_rate": 9.89874187476436,
+    "total_requests": 4673,
+    "num_tracts": 5
+  },
+  {
+    "neighborhood": "Somerton",
+    "avg_response_hours": 1202.2142857142858,
+    "avg_response_days": 50.092261904761905,
+    "median_income": 65869.57142857143,
+    "poverty_rate": 14.407551059326602,
+    "total_requests": 4763,
+    "num_tracts": 7
+  },
+  {
+    "neighborhood": "Tioga",
+    "avg_response_hours": 1217.5,
+    "avg_response_days": 50.729166666666664,
+    "median_income": 33373.333333333336,
+    "poverty_rate": 29.288925225811607,
+    "total_requests": 5173,
+    "num_tracts": 3
+  },
+  {
+    "neighborhood": "Logan",
+    "avg_response_hours": 1235.7,
+    "avg_response_days": 51.487500000000004,
+    "median_income": 36015.8,
+    "poverty_rate": 35.0651222254924,
+    "total_requests": 6380,
+    "num_tracts": 5
+  },
+  {
+    "neighborhood": "Fern Rock",
+    "avg_response_hours": 1237.0,
+    "avg_response_days": 51.541666666666664,
+    "median_income": 44802.0,
+    "poverty_rate": 27.471716674864734,
+    "total_requests": 974,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Wissinoming",
+    "avg_response_hours": 1241.625,
+    "avg_response_days": 51.734375,
+    "median_income": 41946.5,
+    "poverty_rate": 31.641593904684804,
+    "total_requests": 5165,
+    "num_tracts": 4
+  },
+  {
+    "neighborhood": "West Central Germantown",
+    "avg_response_hours": 1244.0,
+    "avg_response_days": 51.833333333333336,
+    "median_income": 59534.0,
+    "poverty_rate": 18.96942242355606,
+    "total_requests": 1095,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Northwood",
+    "avg_response_hours": 1260.1666666666667,
+    "avg_response_days": 52.50694444444445,
+    "median_income": 52560.333333333336,
+    "poverty_rate": 23.546944816969262,
+    "total_requests": 4589,
+    "num_tracts": 3
+  },
+  {
+    "neighborhood": "Melrose Park Gardens",
+    "avg_response_hours": 1269.5,
+    "avg_response_days": 52.895833333333336,
+    "median_income": 61146.0,
+    "poverty_rate": 20.326223337515685,
+    "total_requests": 760,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Torresdale",
+    "avg_response_hours": 1289.5,
+    "avg_response_days": 53.729166666666664,
+    "median_income": 69021.0,
+    "poverty_rate": 12.832560887951418,
+    "total_requests": 2748,
+    "num_tracts": 3
+  },
+  {
+    "neighborhood": "Tacony",
+    "avg_response_hours": 1308.0,
+    "avg_response_days": 54.5,
+    "median_income": 54144.0,
+    "poverty_rate": 20.66856775476473,
+    "total_requests": 6517,
+    "num_tracts": 4
+  },
+  {
+    "neighborhood": "Powelton",
+    "avg_response_hours": 1317.0,
+    "avg_response_days": 54.875,
+    "median_income": 37674.0,
+    "poverty_rate": 53.82932166301969,
+    "total_requests": 670,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Mayfair",
+    "avg_response_hours": 1317.857142857143,
+    "avg_response_days": 54.910714285714285,
+    "median_income": 57389.42857142857,
+    "poverty_rate": 19.99268414029396,
+    "total_requests": 7895,
+    "num_tracts": 7
+  },
+  {
+    "neighborhood": "East Mount Airy",
+    "avg_response_hours": 1320.0,
+    "avg_response_days": 55.0,
+    "median_income": 73443.5,
+    "poverty_rate": 8.92756500979239,
+    "total_requests": 3557,
+    "num_tracts": 4
+  },
+  {
+    "neighborhood": "Brewerytown",
+    "avg_response_hours": 1326.0,
+    "avg_response_days": 55.25,
+    "median_income": 49161.0,
+    "poverty_rate": 26.646136259787884,
+    "total_requests": 3619,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "Rhawnhurst",
+    "avg_response_hours": 1326.4,
+    "avg_response_days": 55.26666666666667,
+    "median_income": 57444.6,
+    "poverty_rate": 20.893250089278922,
+    "total_requests": 4724,
+    "num_tracts": 5
+  },
+  {
+    "neighborhood": "Woodland Terrace",
+    "avg_response_hours": 1362.5,
+    "avg_response_days": 56.770833333333336,
+    "median_income": 48581.0,
+    "poverty_rate": 22.40067624683009,
+    "total_requests": 970,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Nicetown",
+    "avg_response_hours": 1375.5,
+    "avg_response_days": 57.3125,
+    "median_income": 43306.0,
+    "poverty_rate": 45.52761213378273,
+    "total_requests": 1384,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Allegheny West",
+    "avg_response_hours": 1396.625,
+    "avg_response_days": 58.192708333333336,
+    "median_income": 38017.0,
+    "poverty_rate": 27.949617335533684,
+    "total_requests": 5105,
+    "num_tracts": 4
+  },
+  {
+    "neighborhood": "Lawndale",
+    "avg_response_hours": 1408.0,
+    "avg_response_days": 58.666666666666664,
+    "median_income": 49230.0,
+    "poverty_rate": 24.120012750154054,
+    "total_requests": 4785,
+    "num_tracts": 4
+  },
+  {
+    "neighborhood": "Cedarbrook",
+    "avg_response_hours": 1436.5,
+    "avg_response_days": 59.854166666666664,
+    "median_income": 54778.0,
+    "poverty_rate": 11.972626573263087,
+    "total_requests": 2360,
+    "num_tracts": 4
+  },
+  {
+    "neighborhood": "West Powelton",
+    "avg_response_hours": 1450.0,
+    "avg_response_days": 60.416666666666664,
+    "median_income": 43839.0,
+    "poverty_rate": 27.961672473867594,
+    "total_requests": 1050,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Pennypack Woods",
+    "avg_response_hours": 1452.0,
+    "avg_response_days": 60.5,
+    "median_income": 65673.0,
+    "poverty_rate": 11.054530023339698,
+    "total_requests": 836,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Ogontz",
+    "avg_response_hours": 1458.3333333333333,
+    "avg_response_days": 60.763888888888886,
+    "median_income": 36525.666666666664,
+    "poverty_rate": 27.360190677751508,
+    "total_requests": 4490,
+    "num_tracts": 3
+  },
+  {
+    "neighborhood": "Wister",
+    "avg_response_hours": 1460.0,
+    "avg_response_days": 60.833333333333336,
+    "median_income": 19589.0,
+    "poverty_rate": 48.692070030895984,
+    "total_requests": 1661,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Mantua",
+    "avg_response_hours": 1470.0,
+    "avg_response_days": 61.25,
+    "median_income": 30241.5,
+    "poverty_rate": 43.98214646200415,
+    "total_requests": 2227,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "Germantown - Morton",
+    "avg_response_hours": 1475.5,
+    "avg_response_days": 61.479166666666664,
+    "median_income": 30883.0,
+    "poverty_rate": 31.441645258926364,
+    "total_requests": 2790,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "East Germantown",
+    "avg_response_hours": 1478.25,
+    "avg_response_days": 61.59375,
+    "median_income": 42857.5,
+    "poverty_rate": 27.97748184782992,
+    "total_requests": 4330,
+    "num_tracts": 4
+  },
+  {
+    "neighborhood": "East Parkside",
+    "avg_response_hours": 1482.0,
+    "avg_response_days": 61.75,
+    "median_income": 14983.0,
+    "poverty_rate": 53.71931110296811,
+    "total_requests": 1427,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Belmont",
+    "avg_response_hours": 1486.0,
+    "avg_response_days": 61.916666666666664,
+    "median_income": 37917.0,
+    "poverty_rate": 31.59839852171235,
+    "total_requests": 1526,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Dunlap",
+    "avg_response_hours": 1488.0,
+    "avg_response_days": 62.0,
+    "median_income": 33509.0,
+    "poverty_rate": 25.538461538461537,
+    "total_requests": 1632,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Haddington",
+    "avg_response_hours": 1493.8,
+    "avg_response_days": 62.24166666666667,
+    "median_income": 34914.2,
+    "poverty_rate": 32.30744073877747,
+    "total_requests": 6543,
+    "num_tracts": 5
+  },
+  {
+    "neighborhood": "Holmesburg",
+    "avg_response_hours": 1499.1666666666667,
+    "avg_response_days": 62.46527777777778,
+    "median_income": 66095.33333333333,
+    "poverty_rate": 19.356627570774453,
+    "total_requests": 3931,
+    "num_tracts": 3
+  },
+  {
+    "neighborhood": "Southwest Schuylkill",
+    "avg_response_hours": 1502.75,
+    "avg_response_days": 62.614583333333336,
+    "median_income": 38852.5,
+    "poverty_rate": 20.875639705546703,
+    "total_requests": 3207,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "Mill Creek",
+    "avg_response_hours": 1508.5,
+    "avg_response_days": 62.854166666666664,
+    "median_income": 35756.0,
+    "poverty_rate": 31.87783902266593,
+    "total_requests": 2242,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "Haverford North",
+    "avg_response_hours": 1510.0,
+    "avg_response_days": 62.916666666666664,
+    "median_income": 25000.0,
+    "poverty_rate": 38.92999430848037,
+    "total_requests": 754,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Overbrook",
+    "avg_response_hours": 1510.7777777777778,
+    "avg_response_days": 62.949074074074076,
+    "median_income": 66795.22222222222,
+    "poverty_rate": 21.21569878389564,
+    "total_requests": 9448,
+    "num_tracts": 9
+  },
+  {
+    "neighborhood": "Clearview",
+    "avg_response_hours": 1511.0,
+    "avg_response_days": 62.958333333333336,
+    "median_income": 62616.0,
+    "poverty_rate": 24.263698630136986,
+    "total_requests": 1471,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Wynnefield",
+    "avg_response_hours": 1520.5,
+    "avg_response_days": 63.354166666666664,
+    "median_income": 51505.0,
+    "poverty_rate": 24.06838713841796,
+    "total_requests": 4382,
+    "num_tracts": 3
+  },
+  {
+    "neighborhood": "Carroll Park",
+    "avg_response_hours": 1521.0,
+    "avg_response_days": 63.375,
+    "median_income": 36268.5,
+    "poverty_rate": 30.256275052959843,
+    "total_requests": 3693,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "West Parkside",
+    "avg_response_hours": 1524.5,
+    "avg_response_days": 63.520833333333336,
+    "median_income": 45519.0,
+    "poverty_rate": 27.69693928750627,
+    "total_requests": 2286,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Wynnefield Heights",
+    "avg_response_hours": 1525.5,
+    "avg_response_days": 63.5625,
+    "median_income": 50452.666666666664,
+    "poverty_rate": 22.71191177148677,
+    "total_requests": 1010,
+    "num_tracts": 3
+  },
+  {
+    "neighborhood": "West Oak Lane",
+    "avg_response_hours": 1529.0,
+    "avg_response_days": 63.708333333333336,
+    "median_income": 55980.0,
+    "poverty_rate": 17.198798693989513,
+    "total_requests": 9290,
+    "num_tracts": 7
+  },
+  {
+    "neighborhood": "Kingsessing",
+    "avg_response_hours": 1531.0,
+    "avg_response_days": 63.791666666666664,
+    "median_income": 44262.75,
+    "poverty_rate": 25.925378143682753,
+    "total_requests": 5744,
+    "num_tracts": 4
+  },
+  {
+    "neighborhood": "Cobbs Creek",
+    "avg_response_hours": 1531.125,
+    "avg_response_days": 63.796875,
+    "median_income": 44121.25,
+    "poverty_rate": 27.67051778644612,
+    "total_requests": 13909,
+    "num_tracts": 8
+  },
+  {
+    "neighborhood": "Elmwood",
+    "avg_response_hours": 1531.1666666666667,
+    "avg_response_days": 63.798611111111114,
+    "median_income": 42802.666666666664,
+    "poverty_rate": 20.344524522465715,
+    "total_requests": 3986,
+    "num_tracts": 3
+  },
+  {
+    "neighborhood": "Penrose",
+    "avg_response_hours": 1537.0,
+    "avg_response_days": 64.04166666666667,
+    "median_income": 46446.0,
+    "poverty_rate": 22.471374045801525,
+    "total_requests": 1486,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Unknown",
+    "avg_response_hours": 1556.0,
+    "avg_response_days": 64.83333333333333,
+    "median_income": 43081.0,
+    "poverty_rate": 19.46597760551249,
+    "total_requests": 1488,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "West Mount Airy",
+    "avg_response_hours": 1557.375,
+    "avg_response_days": 64.890625,
+    "median_income": 102247.5,
+    "poverty_rate": 5.465486187280824,
+    "total_requests": 3226,
+    "num_tracts": 4
+  },
+  {
+    "neighborhood": "Paschall",
+    "avg_response_hours": 1620.0,
+    "avg_response_days": 67.5,
+    "median_income": 34441.666666666664,
+    "poverty_rate": 36.60034935338368,
+    "total_requests": 3513,
+    "num_tracts": 3
+  },
+  {
+    "neighborhood": "Byberry",
+    "avg_response_hours": 1639.0,
+    "avg_response_days": 68.29166666666667,
+    "median_income": 102143.0,
+    "poverty_rate": 27.55813953488372,
+    "total_requests": 281,
+    "num_tracts": 1
+  },
+  {
+    "neighborhood": "Eastwick",
+    "avg_response_hours": 1658.25,
+    "avg_response_days": 69.09375,
+    "median_income": 47261.5,
+    "poverty_rate": 25.30823928666355,
+    "total_requests": 838,
+    "num_tracts": 2
+  },
+  {
+    "neighborhood": "Wissahickon Park",
+    "avg_response_hours": 2434.5,
+    "avg_response_days": 101.4375,
+    "median_income": 103727.0,
+    "poverty_rate": 0,
+    "total_requests": 404,
+    "num_tracts": 1
+  }
+]

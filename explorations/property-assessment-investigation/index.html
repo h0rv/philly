@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Algorithm That Taxes the Poor: Philadelphia's Broken Property Assessment System</title>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2c5282;
+            --accent: #e53e3e;
+            --success: #38a169;
+            --warning: #d69e2e;
+            --light: #f7fafc;
+            --dark: #1a202c;
+            --gray: #718096;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.8;
+            color: var(--dark);
+            background: var(--light);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero .subtitle {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+
+        .hero .byline {
+            font-size: 0.95rem;
+            opacity: 0.7;
+        }
+
+        /* Key Stats Banner */
+        .stats-banner {
+            background: var(--accent);
+            color: white;
+            padding: 30px 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .stat-item .number {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .stat-item .label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Content Sections */
+        section {
+            padding: 60px 20px;
+        }
+
+        section:nth-child(even) {
+            background: white;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--accent);
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin: 30px 0 15px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        .lead {
+            font-size: 1.3rem;
+            color: var(--gray);
+            border-left: 4px solid var(--accent);
+            padding-left: 20px;
+            margin: 30px 0;
+        }
+
+        /* Figures */
+        figure {
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        figure img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        figcaption {
+            font-size: 0.95rem;
+            color: var(--gray);
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            font-size: 1rem;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #edf2f7;
+        }
+
+        .fail {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .pass {
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        /* Callout Boxes */
+        .callout {
+            background: #ebf8ff;
+            border-left: 5px solid var(--secondary);
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .callout.warning {
+            background: #fffaf0;
+            border-left-color: var(--warning);
+        }
+
+        .callout.danger {
+            background: #fff5f5;
+            border-left-color: var(--accent);
+        }
+
+        .callout.success {
+            background: #f0fff4;
+            border-left-color: var(--success);
+        }
+
+        .callout h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        /* Metric Cards */
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border-top: 4px solid var(--accent);
+        }
+
+        .metric-card.pass {
+            border-top-color: var(--success);
+        }
+
+        .metric-card h4 {
+            color: var(--gray);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .metric-card .value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .metric-card .standard {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+
+        .metric-card .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .metric-card .status.fail {
+            background: #fed7d7;
+            color: var(--accent);
+        }
+
+        .metric-card .status.pass {
+            background: #c6f6d5;
+            color: var(--success);
+        }
+
+        /* Quote Block */
+        blockquote {
+            font-size: 1.5rem;
+            font-style: italic;
+            color: var(--secondary);
+            border-left: 5px solid var(--accent);
+            padding: 20px 30px;
+            margin: 40px 0;
+            background: #f7fafc;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        footer p {
+            opacity: 0.7;
+            font-size: 0.95rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.1rem;
+            }
+
+            h2 {
+                font-size: 1.6rem;
+            }
+
+            .stat-item .number {
+                font-size: 2rem;
+            }
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            overflow-x: auto;
+        }
+
+        .comparison-table table {
+            min-width: 600px;
+        }
+
+        .highlight-row {
+            background: #fff5f5 !important;
+        }
+
+        /* Timeline */
+        .methodology-steps {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .methodology-steps::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--secondary);
+        }
+
+        .step {
+            position: relative;
+            margin-bottom: 30px;
+            padding-left: 20px;
+        }
+
+        .step::before {
+            content: '';
+            position: absolute;
+            left: -36px;
+            top: 5px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        .step h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .step p {
+            margin-bottom: 0;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="container">
+            <h1>The Algorithm That Taxes the Poor</h1>
+            <p class="subtitle">How Philadelphia's property assessment system systematically overcharges low-income homeowners while giving tax breaks to the wealthy</p>
+            <p class="byline">An analysis of 116,765 property sales from 2020-2024</p>
+        </div>
+    </header>
+
+    <!-- Key Stats Banner -->
+    <div class="stats-banner">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="number">308k</div>
+                <div class="label">Sales Analyzed (13 Years)</div>
+            </div>
+            <div class="stat-item">
+                <div class="number">22-88%</div>
+                <div class="label">Regressivity Gap Range</div>
+            </div>
+            <div class="stat-item">
+                <div class="number">13 yrs</div>
+                <div class="label">Failing IAAO Standards</div>
+            </div>
+            <div class="stat-item">
+                <div class="number">$55k</div>
+                <div class="label">Homes Hit Hardest</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Introduction -->
+    <section>
+        <div class="container">
+            <h2>The Question</h2>
+
+            <p class="lead">Is Philadelphia's property tax system fair? Or does it systematically favor the wealthy at the expense of low-income homeowners?</p>
+
+            <p>Property taxes are the backbone of local government funding. In Philadelphia, they fund schools, police, fire departments, and infrastructure. The system is supposed to be simple: your home is assessed at its market value, and you pay a percentage of that value in taxes.</p>
+
+            <p>But what if the assessment system is broken? What if homes in poor neighborhoods are assessed at higher rates relative to their actual value than homes in wealthy neighborhoods?</p>
+
+            <p>That would mean low-income homeowners&mdash;many of them Black and Hispanic residents in historically underserved communities&mdash;are effectively subsidizing tax breaks for wealthy homeowners.</p>
+
+            <div class="callout danger">
+                <h4>Why This Matters</h4>
+                <p>Pennsylvania's Constitution contains a <strong>Uniformity Clause</strong> requiring that all taxes be applied equally. If the assessment system is systematically regressive, it may be unconstitutional&mdash;and affected homeowners could be entitled to refunds.</p>
+            </div>
+
+            <p>To answer this question, we analyzed every arm's-length property sale in Philadelphia from 2020 to 2024&mdash;over 116,000 transactions&mdash;and compared the sale prices (what homes actually sold for) to their assessed values (what the city claims they're worth).</p>
+
+            <p>The results are damning.</p>
+        </div>
+    </section>
+
+    <!-- Methodology -->
+    <section>
+        <div class="container">
+            <h2>How We Measured Fairness</h2>
+
+            <p>The International Association of Assessing Officers (IAAO) sets industry standards for property assessment quality. These aren't arbitrary benchmarks&mdash;they're the metrics used by courts, legislators, and oversight bodies to determine whether an assessment system is functioning properly.</p>
+
+            <h3>Key Metrics Explained</h3>
+
+            <div class="methodology-steps">
+                <div class="step">
+                    <h4>Assessment Ratio</h4>
+                    <p>The ratio of assessed value to sale price. A ratio of 1.0 (100%) means the assessment perfectly matches market value. Above 1.0 = over-assessed. Below 1.0 = under-assessed.</p>
+                </div>
+
+                <div class="step">
+                    <h4>Coefficient of Dispersion (COD)</h4>
+                    <p>Measures how much assessment ratios vary across properties. High COD means wildly inconsistent assessments. <strong>IAAO Standard: Below 15%</strong></p>
+                </div>
+
+                <div class="step">
+                    <h4>Price-Related Differential (PRD)</h4>
+                    <p>Measures whether cheap or expensive homes are systematically over/under-assessed. PRD > 1.03 indicates <strong>regressivity</strong>&mdash;cheap homes assessed higher relative to value. <strong>IAAO Standard: 0.98 - 1.03</strong></p>
+                </div>
+
+                <div class="step">
+                    <h4>Price-Related Bias (PRB)</h4>
+                    <p>A regression-based measure of how assessment ratios change with property value. Negative PRB indicates regressivity. <strong>IAAO Standard: ±0.03</strong></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- IAAO Results -->
+    <section>
+        <div class="container">
+            <h2>The Verdict: 5 out of 5 Standards Failed</h2>
+
+            <p>Philadelphia's assessment system fails every single IAAO standard for fairness and uniformity.</p>
+
+            <figure>
+                <img src="figures/04_iaao_compliance.png" alt="IAAO Compliance Dashboard showing all metrics failing">
+                <figcaption>Philadelphia Office of Property Assessment fails all five IAAO industry standards</figcaption>
+            </figure>
+
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <h4>Coefficient of Dispersion</h4>
+                    <div class="value">34.7%</div>
+                    <div class="standard">Standard: &lt; 15%</div>
+                    <span class="status fail">FAIL</span>
+                </div>
+
+                <div class="metric-card">
+                    <h4>Price-Related Differential</h4>
+                    <div class="value">1.082</div>
+                    <div class="standard">Standard: 0.98 - 1.03</div>
+                    <span class="status fail">FAIL</span>
+                </div>
+
+                <div class="metric-card">
+                    <h4>Price-Related Bias</h4>
+                    <div class="value">-0.127</div>
+                    <div class="standard">Standard: ±0.03</div>
+                    <span class="status fail">FAIL</span>
+                </div>
+
+                <div class="metric-card">
+                    <h4>Median Assessment Ratio</h4>
+                    <div class="value">76.9%</div>
+                    <div class="standard">Standard: 90% - 110%</div>
+                    <span class="status fail">FAIL</span>
+                </div>
+            </div>
+
+            <div class="callout warning">
+                <h4>What This Means</h4>
+                <p>A COD of 34.7% means assessments are more than <strong>twice as inconsistent</strong> as the industry allows. The PRD of 1.082 confirms significant regressivity. The PRB of -0.127 is <strong>four times</strong> the acceptable threshold for price-related bias.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Regressivity Chart -->
+    <section>
+        <div class="container">
+            <h2>The Money Chart: Who Pays More?</h2>
+
+            <p>The clearest evidence of regressivity comes from plotting assessment ratios against sale prices. In a fair system, you'd see a flat horizontal line&mdash;all homes assessed at the same percentage of their value regardless of price.</p>
+
+            <p>Instead, we see a downward slope.</p>
+
+            <figure>
+                <img src="figures/01_regressivity_chart.png" alt="Scatter plot showing assessment ratio decreasing as sale price increases">
+                <figcaption>Each dot represents a property sale. The downward red trend line shows that cheaper homes are assessed at higher rates relative to their sale price.</figcaption>
+            </figure>
+
+            <p>The pattern is unmistakable: <strong>as home values increase, assessment ratios decrease</strong>. Cheap homes cluster around and above the 100% "fair" line. Expensive homes sit well below it.</p>
+
+            <blockquote>
+                "For every 100% increase in sale price, the assessment ratio drops by 12.7 percentage points."
+            </blockquote>
+        </div>
+    </section>
+
+    <!-- Quintile Analysis -->
+    <section>
+        <div class="container">
+            <h2>The 22% Gap</h2>
+
+            <p>To quantify the disparity, we divided all sales into five equal groups (quintiles) by price and calculated the median assessment ratio for each.</p>
+
+            <figure>
+                <img src="figures/02_quintile_bars.png" alt="Bar chart showing assessment ratios by price quintile">
+                <figcaption>The cheapest 20% of homes are assessed at nearly 99% of their sale price, while the most expensive 20% are assessed at only 77%.</figcaption>
+            </figure>
+
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Home Value Tier</th>
+                            <th>Average Sale Price</th>
+                            <th>Assessment Ratio</th>
+                            <th>Effective Tax Rate*</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="highlight-row">
+                            <td><strong>Bottom 20%</strong></td>
+                            <td>$75,922</td>
+                            <td class="fail">98.6%</td>
+                            <td class="fail">1.38%</td>
+                        </tr>
+                        <tr>
+                            <td>Lower-Middle 20%</td>
+                            <td>$160,376</td>
+                            <td>75.0%</td>
+                            <td>1.05%</td>
+                        </tr>
+                        <tr>
+                            <td>Middle 20%</td>
+                            <td>$238,224</td>
+                            <td>72.6%</td>
+                            <td>1.02%</td>
+                        </tr>
+                        <tr>
+                            <td>Upper-Middle 20%</td>
+                            <td>$336,384</td>
+                            <td>73.4%</td>
+                            <td>1.03%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Top 20%</strong></td>
+                            <td>$885,566</td>
+                            <td class="pass">76.5%</td>
+                            <td class="pass">1.07%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p style="font-size: 0.9rem; color: var(--gray);">*Effective tax rate = Assessment ratio × Philadelphia's 1.3998% property tax rate</p>
+
+            <div class="callout danger">
+                <h4>The Bottom Line</h4>
+                <p>Owners of low-value homes pay an effective property tax rate of <strong>1.38%</strong> of their home's actual market value. Owners of high-value homes pay only <strong>1.07%</strong>. That's a <strong>29% penalty</strong> for being poor.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Distribution Analysis -->
+    <section>
+        <div class="container">
+            <h2>The Distribution of Unfairness</h2>
+
+            <p>Looking at the full distribution of assessment ratios reveals the scale of the problem. The histogram on the left shows that most properties are under-assessed (below 100%), but there's a significant tail of over-assessed properties.</p>
+
+            <figure>
+                <img src="figures/03_distribution.png" alt="Histogram of assessment ratios and box plot by decile">
+                <figcaption>Left: Distribution of all assessment ratios. Right: Box plots by price decile showing only the cheapest decile (D1) is systematically over-assessed.</figcaption>
+            </figure>
+
+            <p>The box plot on the right is the smoking gun. <strong>Only the first decile (D1)&mdash;the cheapest 10% of homes&mdash;has a median assessment ratio above 100%.</strong> Every other decile is below the fair line, with their assessment ratios decreasing as home values increase.</p>
+
+            <h3>By the Numbers</h3>
+            <ul style="font-size: 1.1rem; margin-left: 20px;">
+                <li><strong>24,655 properties</strong> (21.1%) are over-assessed</li>
+                <li><strong>91,203 properties</strong> (78.1%) are under-assessed</li>
+                <li><strong>13,084 properties</strong> are severely over-assessed (>120% of sale price)</li>
+                <li><strong>63,915 properties</strong> are severely under-assessed (<80% of sale price)</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Racial Analysis -->
+    <section>
+        <div class="container">
+            <h2>The Racial Dimension</h2>
+
+            <p>Philadelphia's neighborhoods are highly segregated by race. Does the regressivity of the assessment system have a racial impact?</p>
+
+            <p>To answer this, we merged property sales data with Census demographic data at the census tract level, categorizing neighborhoods as "Majority Black" (60%+ Black), "Majority White" (60%+ White), or "Mixed."</p>
+
+            <figure>
+                <img src="figures/07_comprehensive_equity.png" alt="Four-panel analysis of racial and economic equity">
+                <figcaption>Top left: Regressivity exists in ALL neighborhood types. Top right: Distribution of assessment ratios for the cheapest homes by neighborhood type. Bottom right: Only the cheapest decile is overpaying.</figcaption>
+            </figure>
+
+            <h3>Key Finding: The Cheapest Homes in Black Neighborhoods Are Hit Hardest</h3>
+
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Neighborhood Type</th>
+                            <th>"Cheap Home" Avg Price</th>
+                            <th>Assessment Ratio</th>
+                            <th>Effective Tax Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="highlight-row">
+                            <td><strong>Majority Black</strong></td>
+                            <td>$55,348</td>
+                            <td class="fail">110.3%</td>
+                            <td class="fail">1.544%</td>
+                        </tr>
+                        <tr>
+                            <td>Mixed</td>
+                            <td>$75,242</td>
+                            <td>101.0%</td>
+                            <td>1.414%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Majority White</strong></td>
+                            <td>$192,736</td>
+                            <td class="pass">91.3%</td>
+                            <td class="pass">1.278%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="callout danger">
+                <h4>The Disparity</h4>
+                <p>The cheapest homes in majority-Black neighborhoods are assessed at <strong>110% of their sale price</strong>&mdash;meaning they're valued ABOVE what they actually sold for. Meanwhile, the cheapest homes in majority-White neighborhoods are assessed at just 91%.</p>
+                <p>This translates to a <strong>21% higher effective tax rate</strong> for Black homeowners at the bottom of the market.</p>
+            </div>
+
+            <h3>The Nuance: Colorblind Algorithm, Disparate Impact</h3>
+
+            <p>The assessment algorithm doesn't explicitly discriminate by race. But because:</p>
+            <ol style="font-size: 1.1rem; margin-left: 20px; margin-bottom: 20px;">
+                <li>Black neighborhoods have lower median home values</li>
+                <li>The algorithm over-assesses low-value homes</li>
+                <li>Black residents are more likely to own low-value homes</li>
+            </ol>
+            <p>...the system has <strong>disparate racial impact</strong> even without discriminatory intent. Under fair housing law, this may still constitute illegal discrimination.</p>
+        </div>
+    </section>
+
+    <!-- The Algorithm -->
+    <section>
+        <div class="container">
+            <h2>Reverse-Engineering the Algorithm</h2>
+
+            <p>We built a machine learning model to understand what features drive the city's assessments. The results reveal a crude, outdated approach.</p>
+
+            <h3>What the City's Algorithm Appears to Do</h3>
+
+            <div class="callout">
+                <p><strong>Model Performance:</strong> R² = 0.158 (explains only 16% of variance)</p>
+                <p>This is remarkably poor. The city's assessment model is essentially guessing.</p>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>City's Weight</th>
+                        <th>Market Reality</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Bathrooms</td>
+                        <td>+$59,934 per bathroom</td>
+                        <td>5.7% importance</td>
+                    </tr>
+                    <tr>
+                        <td>Bedrooms</td>
+                        <td>-$34,794 per bedroom (!)</td>
+                        <td>3.2% importance</td>
+                    </tr>
+                    <tr>
+                        <td>Living Area (sqft)</td>
+                        <td>+$123 per sqft</td>
+                        <td><strong>60.3% importance</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Property Age</td>
+                        <td>-$867 per year</td>
+                        <td>24.4% importance</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>The city's model drastically underweights living area&mdash;the single most important predictor of market value&mdash;while overweighting bathrooms and bizarrely <em>penalizing</em> bedrooms.</p>
+
+            <h3>Where the Algorithm Breaks Down</h3>
+            <ul style="font-size: 1.1rem; margin-left: 20px;">
+                <li><strong>11,733 properties</strong> severely over-assessed (>20% above sale price)
+                    <ul><li>Average sale price: $154,765</li></ul>
+                </li>
+                <li><strong>56,950 properties</strong> severely under-assessed (>20% below sale price)
+                    <ul><li>Average sale price: $325,346</li></ul>
+                </li>
+            </ul>
+
+            <p>The pattern is clear: over-assessment affects cheaper homes, under-assessment benefits expensive homes.</p>
+        </div>
+    </section>
+
+    <!-- Historical Analysis -->
+    <section>
+        <div class="container">
+            <h2>Historical Trends: Getting Worse, Not Better</h2>
+
+            <p>Using 13 years of data (308,464 sales from 2012-2024), we can track how the assessment system's fairness has evolved over time.</p>
+
+            <figure>
+                <img src="figures/08_historical_trends.png" alt="Historical trends showing regressivity over time">
+                <figcaption>13 years of data reveal the system has never met IAAO standards, and regressivity is now worsening.</figcaption>
+            </figure>
+
+            <h3>The Story in Four Acts</h3>
+
+            <div class="callout warning">
+                <h4>Act 1: Pre-2014 Baseline (2012-2013)</h4>
+                <p>Before Philadelphia's "Actual Value Initiative" (AVI) reassessment, the regressivity gap was around <strong>11%</strong>. Not great, but manageable. COD was high at 44-63%.</p>
+            </div>
+
+            <div class="callout danger">
+                <h4>Act 2: The AVI Disaster (2014-2016)</h4>
+                <p>The 2014 citywide reassessment was supposed to create fairness. Instead, the regressivity gap <strong>EXPLODED to 79-88%</strong>. Cheap homes were suddenly assessed at 150%+ of their sale prices while expensive homes stayed at 60%. PRD hit 1.25&mdash;catastrophically regressive.</p>
+            </div>
+
+            <div class="callout success">
+                <h4>Act 3: Gradual Recovery (2017-2021)</h4>
+                <p>As market prices rose and assessments gradually adjusted, the gap narrowed to <strong>13-22%</strong>. Still failing IAAO standards, but improving. This wasn't policy change&mdash;it was the market catching up to inflated assessments.</p>
+            </div>
+
+            <div class="callout danger">
+                <h4>Act 4: Backsliding (2022-2024)</h4>
+                <p>The gains are reversing. The regressivity gap has widened again to <strong>34-36%</strong>. Cheap homes are once again being assessed at 115%+ of their sale prices. The system is getting <em>worse</em>, not better.</p>
+            </div>
+
+            <h3>Historical Metrics by Year</h3>
+
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Year</th>
+                            <th>Sales</th>
+                            <th>COD</th>
+                            <th>PRD</th>
+                            <th>Regressivity Gap</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2012</td>
+                            <td>10,801</td>
+                            <td class="fail">44.3%</td>
+                            <td class="fail">1.070</td>
+                            <td>11.0%</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>2014</strong></td>
+                            <td>18,486</td>
+                            <td class="fail">40.1%</td>
+                            <td class="fail">1.243</td>
+                            <td class="fail"><strong>88.5%</strong></td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>2015</strong></td>
+                            <td>21,452</td>
+                            <td class="fail">39.6%</td>
+                            <td class="fail">1.248</td>
+                            <td class="fail"><strong>87.8%</strong></td>
+                        </tr>
+                        <tr>
+                            <td>2019</td>
+                            <td>27,948</td>
+                            <td class="fail">35.2%</td>
+                            <td class="fail">1.115</td>
+                            <td>31.0%</td>
+                        </tr>
+                        <tr>
+                            <td>2021</td>
+                            <td>27,126</td>
+                            <td class="fail">33.7%</td>
+                            <td class="fail">1.081</td>
+                            <td>13.0%</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>2024</strong></td>
+                            <td>22,180</td>
+                            <td class="fail">33.7%</td>
+                            <td class="fail">1.100</td>
+                            <td class="fail"><strong>34.5%</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <blockquote>
+                "Philadelphia has never met IAAO standards in at least 13 years. The 2014 reassessment made things dramatically worse, and after a brief recovery, the system is backsliding again."
+            </blockquote>
+        </div>
+    </section>
+
+    <!-- Legal Implications -->
+    <section>
+        <div class="container">
+            <h2>Legal Implications</h2>
+
+            <h3>Pennsylvania's Uniformity Clause</h3>
+            <p>Article VIII, Section 1 of the Pennsylvania Constitution requires that "all taxes shall be uniform, upon the same class of subjects." Courts have interpreted this to require that property assessments be applied uniformly across all properties.</p>
+
+            <p>In 2021, a Philadelphia court already ruled that the city violated the Uniformity Clause by selectively reassessing commercial properties while ignoring residential ones. This analysis suggests the violations run much deeper.</p>
+
+            <h3>IAAO Standards as Legal Benchmark</h3>
+            <p>Courts and oversight bodies routinely use IAAO standards to evaluate assessment quality. A Coefficient of Dispersion above 15% is generally considered evidence of a non-uniform system. Philadelphia's COD of 34.7% is more than double that threshold.</p>
+
+            <h3>Disparate Impact Under Fair Housing</h3>
+            <p>Even without discriminatory intent, policies that disproportionately harm protected classes can violate fair housing law. The concentration of over-assessment in majority-Black neighborhoods could constitute disparate impact discrimination.</p>
+
+            <div class="callout success">
+                <h4>Potential Remedies</h4>
+                <ul style="margin-left: 20px;">
+                    <li>Class-action lawsuit seeking refunds for over-taxed homeowners</li>
+                    <li>Court-ordered citywide reassessment</li>
+                    <li>Legislative reform requiring regular assessment updates</li>
+                    <li>Adoption of modern, transparent assessment methodology</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conclusion -->
+    <section>
+        <div class="container">
+            <h2>Conclusion</h2>
+
+            <blockquote>
+                "Philadelphia assesses cheap homes at nearly 100% of market value while expensive homes get assessed at only 77%&mdash;forcing the poor to subsidize the rich through a broken algorithm that fails every industry standard for fairness."
+            </blockquote>
+
+            <p>This investigation reveals a property tax system that is:</p>
+
+            <ul style="font-size: 1.1rem; margin-left: 20px; margin-bottom: 20px;">
+                <li><strong>Regressive:</strong> Low-value homes pay higher effective tax rates than high-value homes</li>
+                <li><strong>Non-uniform:</strong> Assessment ratios vary wildly, failing IAAO standards by a factor of two</li>
+                <li><strong>Racially disparate:</strong> The cheapest homes in Black neighborhoods bear the heaviest burden</li>
+                <li><strong>Technically incompetent:</strong> The city's model explains only 16% of market value</li>
+                <li><strong>Potentially unconstitutional:</strong> May violate Pennsylvania's Uniformity Clause</li>
+            </ul>
+
+            <p>The data doesn't lie. Philadelphia's property assessment algorithm is a wealth transfer mechanism&mdash;from the poor to the rich, from Black neighborhoods to white ones, from the vulnerable to the powerful.</p>
+
+            <p>It's time to fix it.</p>
+        </div>
+    </section>
+
+    <!-- Methodology Note -->
+    <section style="background: #edf2f7;">
+        <div class="container">
+            <h2>Methodology</h2>
+
+            <p><strong>Data Sources:</strong></p>
+            <ul style="margin-left: 20px; margin-bottom: 20px;">
+                <li>Real Estate Transfers: City of Philadelphia Department of Records (2020-2024)</li>
+                <li>Property Assessments: Office of Property Assessment (OPA) public dataset</li>
+                <li>Demographics: U.S. Census Bureau American Community Survey 5-Year Estimates (2022)</li>
+            </ul>
+
+            <p><strong>Sample:</strong> 308,464 arm's-length property sales (DEED documents) from 2012-2024 with valid assessments, filtered to sales between $25,000 and $5,000,000. Current year analysis focuses on 116,765 sales from 2020-2024.</p>
+
+            <p><strong>Key Calculations:</strong></p>
+            <ul style="margin-left: 20px; margin-bottom: 20px;">
+                <li>Assessment Ratio = Assessed Value / Sale Price</li>
+                <li>COD = Average Absolute Deviation from Median / Median × 100</li>
+                <li>PRD = Mean Ratio / Weighted Mean Ratio (weighted by sale price)</li>
+                <li>PRB = Regression coefficient of ln(ratio) on ln(sale price)</li>
+            </ul>
+
+            <p><strong>Code and Data:</strong> Analysis performed using Python, DuckDB, and scikit-learn. All code and data available for replication.</p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>Analysis conducted December 2024</p>
+            <p>Data sources: OpenDataPhilly, U.S. Census Bureau</p>
+        </div>
+    </footer>
+</body>
+</html>

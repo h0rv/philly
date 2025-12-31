@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Philadelphia Data Explorations</title>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #2c5282;
+            --accent: #e53e3e;
+            --light: #f7fafc;
+            --dark: #1a202c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .exploration-list {
+            display: grid;
+            gap: 20px;
+        }
+
+        .exploration-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-left: 5px solid var(--secondary);
+        }
+
+        .exploration-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+            border-left-color: var(--accent);
+        }
+
+        .exploration-card h2 {
+            color: var(--primary);
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+
+        .exploration-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .exploration-card .meta {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #e2e8f0;
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-right: 8px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--secondary);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Philadelphia Data Explorations</h1>
+        <p>Data journalism investigations using OpenDataPhilly</p>
+    </header>
+
+    <div class="container">
+        <div class="exploration-list">
+
+            <a href="property-assessment-investigation/index.html" class="exploration-card">
+                <h2>The Algorithm That Taxes the Poor</h2>
+                <p>Reverse-engineering Philadelphia's property assessment system reveals systematic regressivity: low-value homes are assessed at nearly 100% of market value while expensive homes get just 77%. Analysis of 308,000+ sales over 13 years shows the system has never met industry standards.</p>
+                <div class="meta">
+                    <span class="tag">Property Tax</span>
+                    <span class="tag">IAAO Standards</span>
+                    <span class="tag">Equity</span>
+                </div>
+            </a>
+
+            <a href="311-service-equity-investigation/index.html" class="exploration-card">
+                <h2>The 311 Gap: Service Inequality</h2>
+                <p>Investigation into whether Philadelphia's 311 service response times vary by neighborhood income. Combines 311 request data with Census demographics to test for disparities in city services.</p>
+                <div class="meta">
+                    <span class="tag">311 Services</span>
+                    <span class="tag">Demographics</span>
+                    <span class="tag">Response Times</span>
+                </div>
+            </a>
+
+        </div>
+    </div>
+
+    <footer>
+        <p>Built with the <a href="https://github.com/h0rv/philly">philly</a> library | Data from <a href="https://opendataphilly.org">OpenDataPhilly</a></p>
+    </footer>
+</body>
+</html>
