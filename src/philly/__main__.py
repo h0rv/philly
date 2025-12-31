@@ -429,7 +429,7 @@ class PhillyCLI:
         self,
         dataset: str,
         resource: str | None = None,
-        n: int = 10,
+        limit: int = 10,
         output_format: str | None = None,
     ) -> None:
         """Preview data without downloading the entire file.
@@ -437,25 +437,25 @@ class PhillyCLI:
         Args:
             dataset: Name of the dataset
             resource: Optional resource name (auto-selected if not provided)
-            n: Number of rows to sample
+            limit: Number of rows to sample
             output_format: Override CLI output format for this command
 
         Examples:
             phl sample "Crime Incidents"
-            phl sample "Crime Incidents" --n 20
-            phl sample "Crime Incidents" --n 50 --output-format json
+            phl sample "Crime Incidents" --limit 20
+            phl sample "Crime Incidents" --limit 50 --output-format json
         """
         if output_format:
             self._formatter = OutputFormatter(format=output_format)
 
-        self._progress.progress(f"Sampling {n} rows from '{dataset}'...")
+        self._progress.progress(f"Sampling {limit} rows from '{dataset}'...")
 
         async def _sample():
-            return await self._philly.sample(dataset, resource, n=n)
+            return await self._philly.sample(dataset, resource, n=limit)
 
         try:
             data = asyncio.run(_sample())
-            self._progress.success(f"Sampled {n} rows")
+            self._progress.success(f"Sampled {limit} rows")
             print(self._formatter.format_output(data))
         except Exception as e:
             self._progress.error(str(e))
