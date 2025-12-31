@@ -245,6 +245,8 @@ class PhillyCLI:
         limit: int | None = None,
         offset: int | None = None,
         output_format: str | None = None,
+        stream: bool = False,
+        chunk_size: int = 10000,
     ) -> None:
         """Load a dataset resource.
 
@@ -257,36 +259,171 @@ class PhillyCLI:
             limit: Maximum number of rows to return
             offset: Number of rows to skip
             output_format: Override CLI output format for this command
+            stream: Stream data without loading everything into memory
+            chunk_size: Number of rows per chunk when streaming (default: 10000)
 
         Examples:
             phl load "Crime Incidents"
             phl load "Crime Incidents" --format csv --limit 100
             phl load "Crime Incidents" --where "dispatch_date >= '2024-01-01'" --limit 50
             phl load "Crime Incidents" --output-format json
+            phl load "Crime Incidents" --stream
         """
         if output_format:
             self._formatter = OutputFormatter(format=output_format)
 
-        self._progress.progress(f"Loading '{dataset}'...")
-
-        async def _load():
-            return await self._philly.load(
-                dataset,
-                resource,
+        if stream:
+            self._stream_impl(
+                dataset=dataset,
+                resource=resource,
                 format=format,
                 where=where,
                 columns=columns,
-                limit=limit,
-                offset=offset,
+                chunk_size=chunk_size,
+                output_format=output_format,
             )
+        else:
+            self._progress.progress(f"Loading '{dataset}'...")
+
+            async def _load():
+                return await self._philly.load(
+                    dataset,
+                    resource,
+                    format=format,
+                    where=where,
+                    columns=columns,
+                    limit=limit,
+                    offset=offset,
+                )
+
+            try:
+                data = asyncio.run(_load())
+                self._progress.success("Data loaded successfully")
+                print(self._formatter.format_output(data))
+            except Exception as e:
+                self._progress.error(str(e))
+                sys.exit(1)
+
+    def _stream_impl(
+        self,
+        dataset: str,
+        resource: str | None = None,
+        format: str | None = None,
+        where: str | None = None,
+        columns: list[str] | None = None,
+        chunk_size: int = 10000,
+        output_format: str | None = None,
+    ) -> None:
+        """Internal implementation for streaming data.
+
+        Args:
+            dataset: Name of the dataset
+            resource: Optional resource name
+            format: Resource format to load
+            where: SQL WHERE clause for filtering
+            columns: List of columns to select
+            chunk_size: Number of rows per chunk
+            output_format: Output format override
+        """
+        import csv
+        import json
+
+        if output_format:
+            self._formatter = OutputFormatter(format=output_format)
+
+        self._progress.progress(f"Streaming '{dataset}'...")
+
+        # Determine output format
+        fmt = output_format or self._formatter.format
+        if fmt == "auto":
+            # Default to jsonl for streaming (one JSON object per line)
+            fmt = "jsonl"
+
+        async def _stream():
+            row_count = 0
+            csv_writer = None
+            headers_written = False
+
+            async for chunk in self._philly.stream(
+                dataset,
+                resource,
+                chunk_size=chunk_size,
+                where=where,
+                columns=columns,
+                show_progress=False,
+            ):
+                for row in chunk:
+                    if fmt == "jsonl":
+                        # Output one JSON object per line
+                        print(json.dumps(row), flush=True)
+                    elif fmt == "json":
+                        # Also use jsonl for streaming JSON
+                        print(json.dumps(row), flush=True)
+                    elif fmt == "csv":
+                        # CSV format - write header once, then rows
+                        if csv_writer is None:
+                            if row:
+                                keys = list(row.keys())
+                                csv_writer = csv.DictWriter(sys.stdout, fieldnames=keys)
+                                csv_writer.writeheader()
+                                headers_written = True
+                        if csv_writer and headers_written:
+                            csv_writer.writerow(row)
+                            sys.stdout.flush()
+                    else:
+                        # For other formats, output as jsonl
+                        print(json.dumps(row), flush=True)
+
+                    row_count += 1
+
+            self._progress.success(f"Streamed {row_count:,} rows")
 
         try:
-            data = asyncio.run(_load())
-            self._progress.success("Data loaded successfully")
-            print(self._formatter.format_output(data))
+            asyncio.run(_stream())
         except Exception as e:
             self._progress.error(str(e))
             sys.exit(1)
+
+    def stream(
+        self,
+        dataset: str,
+        resource: str | None = None,
+        format: str | None = None,
+        where: str | None = None,
+        columns: list[str] | None = None,
+        chunk_size: int = 10000,
+        output_format: str | None = None,
+    ) -> None:
+        """Stream data without loading everything into memory.
+
+        This is an alias for 'load --stream'. Streams data line-by-line to stdout,
+        making it memory-efficient for large datasets and ideal for Unix pipelines.
+
+        Args:
+            dataset: Name of the dataset
+            resource: Optional resource name (auto-selected if not provided)
+            format: Resource format to load (csv, json, etc.)
+            where: SQL WHERE clause for server-side filtering
+            columns: List of columns to select
+            chunk_size: Number of rows per chunk (default: 10000)
+            output_format: Override CLI output format for this command
+
+        Examples:
+            phl stream "Crime Incidents"
+            phl stream "Crime Incidents" --format csv
+            phl stream "Crime Incidents" --where "hour = '14'" | grep robbery
+            phl stream "Crime Incidents" --output-format jsonl | jq '.text_general_code'
+        """
+        self.load(
+            dataset=dataset,
+            resource=resource,
+            format=format,
+            where=where,
+            columns=columns,
+            stream=True,
+            chunk_size=chunk_size,
+            output_format=output_format,
+        )
 
     def sample(
         self,

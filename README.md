@@ -37,6 +37,10 @@ phl search "crime" --fuzzy
 # Load data
 phl load "Crime Incidents" --format csv --limit 1000
 
+# Stream data (memory-efficient, ideal for large datasets)
+phl stream "Crime Incidents" --output-format csv
+phl load "Crime Incidents" --stream  # equivalent
+
 # Sample preview
 phl sample "Crime Incidents" --n 10
 
@@ -54,7 +58,20 @@ phl config show
 phl config init
 ```
 
-Output formats: `--format json|csv|table`
+Output formats: `--format json|csv|table` (or `--output-format` for specific commands)
+
+### Streaming for Unix Pipelines
+
+Stream large datasets line-by-line without loading everything into memory:
+
+```bash
+# Stream and pipe to Unix tools
+phl stream "Crime Incidents" --output-format csv | awk -F',' '$13 == "300"'
+phl stream "Crime Incidents" --output-format jsonl | jq '.text_general_code' | sort | uniq -c
+
+# Filter server-side before streaming
+phl stream "Crime Incidents" --where "hour = '14'" --output-format csv | head -100
+```
 
 ## Features
 
