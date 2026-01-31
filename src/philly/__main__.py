@@ -94,6 +94,9 @@ class ConfigCommands:
         print(value)
 
 
+__version__ = "0.1.0"
+
+
 class PhillyCLI:
     """Command-line interface for Philly library.
 
@@ -102,7 +105,7 @@ class PhillyCLI:
     Examples:
         phl datasets
         phl search "crime" --fuzzy
-        phl sample "Crime Incidents" --n 20 --output-format json
+        phl sample "Crime Incidents" --limit 20 --output-format json
         phl load "Crime Incidents" --format csv --limit 100
     """
 
@@ -140,6 +143,14 @@ class PhillyCLI:
         self._progress = ProgressTracker(show_progress=not quiet, quiet=quiet)
         self._verbose = verbose
         self.config = ConfigCommands()
+
+    def version(self) -> None:
+        """Show version.
+
+        Examples:
+            phl version
+        """
+        print(f"philly {__version__}")
 
     def datasets(self) -> None:
         """List all available datasets.
@@ -526,6 +537,36 @@ class PhillyCLI:
             data = asyncio.run(_examples())
             self._progress.success(f"Generated {len(data)} examples")
             print(self._formatter.format_output(data))
+        except Exception as e:
+            self._progress.error(str(e))
+            sys.exit(1)
+
+    def count(
+        self,
+        dataset: str,
+        resource: str | None = None,
+        where: str | None = None,
+    ) -> None:
+        """Count rows in a dataset (uses server-side count when possible).
+
+        Args:
+            dataset: Name of the dataset
+            resource: Optional resource name
+            where: SQL WHERE clause for filtering
+
+        Examples:
+            phl count "Crime Incidents"
+            phl count "Crime Incidents" --where "dispatch_date >= '2024-01-01'"
+        """
+        self._progress.progress(f"Counting rows in '{dataset}'...")
+
+        async def _count():
+            return await self._philly.count(dataset, resource, where=where)
+
+        try:
+            count = asyncio.run(_count())
+            self._progress.success(f"{count:,} rows")
+            print(count)
         except Exception as e:
             self._progress.error(str(e))
             sys.exit(1)

@@ -237,6 +237,13 @@ class OutputFormatter:
                 # Single dict - show as key-value table
                 table_data = [[k, v] for k, v in data.items()]
                 return tabulate(table_data, headers=["Key", "Value"], tablefmt="simple")
+            elif (
+                isinstance(data, list)
+                and data
+                and not isinstance(data[0], (dict, list, tuple))
+            ):
+                # Simple list of scalars - format as single column
+                return "\n".join(str(item) for item in data)
             else:
                 return tabulate(data, tablefmt="simple")
 

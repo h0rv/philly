@@ -363,6 +363,87 @@ class Philly:
 
         return results
 
+    async def count(
+        self,
+        dataset_name: str,
+        resource_name: str | None = None,
+        where: str | None = None,
+    ) -> int:
+        """Count rows in a dataset resource.
+
+        Uses server-side COUNT for Carto/ArcGIS backends when possible.
+
+        Args:
+            dataset_name: Name of the dataset
+            resource_name: Optional resource name (auto-selected if not provided)
+            where: SQL WHERE clause for filtering
+
+        Returns:
+            Number of rows
+
+        Examples:
+            >>> phl = Philly()
+            >>> await phl.count("Crime Incidents")
+            500000
+            >>> await phl.count("Crime Incidents", where="hour = '14'")
+            25000
+        """
+        dataset = self._get_dataset(dataset_name)
+
+        # Find resource (same logic as load)
+        if resource_name is None:
+            format_preference = self.config.defaults.format_preference
+            resource = None
+            for preferred_format in format_preference:
+                resource = find_resource_by_format(dataset, preferred_format)
+                if resource:
+                    break
+            if not resource:
+                raise ValueError(
+                    f"No resource found for dataset '{dataset_name}' with preferred formats"
+                )
+        else:
+            resource = dataset.get_resource(resource_name)
+
+        if not resource.url:
+            return 0
+
+        url = resource.url
+        backend = detect_backend(url)
+
+        async with httpx.AsyncClient(timeout=120) as client:
+            if backend == BackendType.CARTO:
+                # Use SQL COUNT - force JSON format for response
+                count_query = build_carto_query(
+                    url, where=where, columns=["COUNT(*) as count"], limit=1
+                )
+                # Replace format=csv with format=json for COUNT query
+                count_query = count_query.replace("format=csv", "format=json")
+                count_query = count_query.replace("format=geojson", "format=json")
+                resp = await client.get(count_query)
+                resp.raise_for_status()
+                data = resp.json()
+                rows = data.get("rows", [])
+                if rows:
+                    return int(rows[0].get("count", 0))
+                return 0
+
+            elif backend == BackendType.ARCGIS:
+                # Use returnCountOnly
+                count_query = build_arcgis_query(url, where=where or "1=1")
+                count_query += "&returnCountOnly=true"
+                resp = await client.get(count_query)
+                resp.raise_for_status()
+                data = resp.json()
+                return int(data.get("count", 0))
+
+            else:
+                # Fall back to loading and counting
+                data = await self.load(dataset_name, resource_name, where=where)
+                if data is not None and hasattr(data, "__len__"):
+                    return len(data)  # pyright: ignore[reportArgumentType]
+                return 0
+
     def cache_clear(self, dataset_name: str | None = None) -> None:
         """Clear cache entries. If dataset_name is provided, only clear that dataset."""
         if not self._cache:

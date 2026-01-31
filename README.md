@@ -2,18 +2,12 @@
 
 <img src="./assets/logo.png" width="256" alt="logo">
 
-Python library and CLI for working with [OpenDataPhilly](https://opendataphilly.org/) datasets.
+Query Philadelphia's 400+ public datasets with server-side filtering, smart caching, and streaming.
 
 ## Installation
 
 ```bash
-pip install philly
-```
-
-Or with uv:
-
-```bash
-uv pip install philly
+uv add philly
 ```
 
 ## Quick Start
@@ -22,69 +16,55 @@ uv pip install philly
 from philly import Philly
 
 phl = Philly()
-data = await phl.load("Crime Incidents", format="csv", limit=1000)
+
+# Load with server-side filtering (only matching rows are downloaded)
+data = await phl.load("Crime Incidents", where="dispatch_date >= '2024-01-01'", limit=1000)
+
+# Stream large datasets without loading into memory
+async for chunk in phl.stream("Crime Incidents"):
+    process(chunk)
 ```
 
 ## CLI
 
 ```bash
-# List datasets
-phl datasets
-
-# Search
-phl search "crime" --fuzzy
+# Discovery
+phl datasets                           # List all 400+ datasets
+phl search "crime" --fuzzy             # Fuzzy search
+phl info "Crime Incidents"             # Dataset metadata
 
 # Load data
-phl load "Crime Incidents" --format csv --limit 1000
+phl load "Crime Incidents" --limit 100
+phl load "Crime Incidents" --where "hour = '14'" --format csv
 
-# Stream data (memory-efficient, ideal for large datasets)
-phl stream "Crime Incidents" --output-format csv
-phl load "Crime Incidents" --stream  # equivalent
+# Stream to Unix pipes
+phl stream "Crime Incidents" --output-format csv | head -1000
+phl stream "Crime Incidents" --output-format jsonl | jq '.text_general_code'
 
-# Sample preview
-phl sample "Crime Incidents" --n 10
-
-# Dataset info
-phl info "Crime Incidents"
+# Preview
+phl sample "Crime Incidents" --limit 10
 phl columns "Crime Incidents"
 phl schema "Crime Incidents"
+phl count "Crime Incidents"
 
-# Cache
+# Cache management
 phl cache-info
 phl cache-clear
-
-# Config
-phl config show
-phl config init
 ```
 
-Output formats: `--format json|csv|table` (or `--output-format` for specific commands)
+## Why Philly?
 
-### Streaming for Unix Pipelines
-
-Stream large datasets line-by-line without loading everything into memory:
-
-```bash
-# Stream and pipe to Unix tools
-phl stream "Crime Incidents" --output-format csv | awk -F',' '$13 == "300"'
-phl stream "Crime Incidents" --output-format jsonl | jq '.text_general_code' | sort | uniq -c
-
-# Filter server-side before streaming
-phl stream "Crime Incidents" --where "hour = '14'" --output-format csv | head -100
-```
-
-## Features
-
-- **Formats**: CSV, JSON, GeoJSON, Shapefile, GeoPackage, GTFS, and more
-- **Caching**: Automatic with configurable TTL and LRU eviction
-- **Filtering**: Server-side WHERE, LIMIT, OFFSET for Carto/ArcGIS APIs
-- **Search**: Fuzzy search across 400+ datasets
-- **Streaming**: Memory-efficient iteration over large datasets
-- **Preview**: Sample data without downloading everything
+| | requests + pandas | philly |
+|---|---|---|
+| Server-side filtering | Manual URL building | `--where "year = 2024"` |
+| Format handling | Per-format code | Auto-detects from 40+ formats |
+| Caching | DIY | Built-in with TTL + LRU |
+| Dataset discovery | Browse website | `phl search "permits"` |
+| Streaming | Manual chunking | `phl stream` / async generators |
 
 ## Configuration
 
-Create `philly.yml` in your project or `~/.config/philly/config.yml`:
+Create `~/.config/philly/config.yml`:
 
 ```yaml
 cache:
@@ -95,8 +75,6 @@ cache:
 defaults:
   format_preference: [csv, geojson, json]
 ```
-
-See `philly.example.yml` for all options.
 
 ## License
 
