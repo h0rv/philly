@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Philadelphia Bike Flows</title>
+    <script src="https://unpkg.com/deck.gl@8.9.0/dist.min.js"></script>
+    <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+    <link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'SF Mono', Menlo, monospace;
+            background: #0a0a0a;
+            color: #fff;
+            overflow: hidden;
+        }
+        #map { position: absolute; inset: 0; }
+
+        .panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            background: rgba(0,0,0,0.85);
+            padding: 24px;
+            border: 1px solid #222;
+            width: 300px;
+            backdrop-filter: blur(10px);
+        }
+
+        .time {
+            font-size: 4.5rem;
+            font-weight: 300;
+            letter-spacing: -3px;
+            line-height: 1;
+            background: linear-gradient(135deg, #22d3ee, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .period {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: #666;
+            margin-left: 4px;
+        }
+
+        .label {
+            color: #888;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 8px;
+        }
+
+        .stat {
+            font-size: 2rem;
+            font-weight: 300;
+            color: #22d3ee;
+            margin-top: 16px;
+        }
+
+        .stat-label {
+            color: #555;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .slider-container {
+            margin: 24px 0;
+        }
+
+        .slider {
+            width: 100%;
+            -webkit-appearance: none;
+            background: linear-gradient(90deg, #1e1e1e 0%, #333 50%, #1e1e1e 100%);
+            height: 4px;
+            border-radius: 2px;
+            outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: linear-gradient(135deg, #22d3ee, #a78bfa);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.5);
+        }
+
+        .controls {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px;
+            background: transparent;
+            border: 1px solid #333;
+            color: #666;
+            font-family: inherit;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn:hover { color: #fff; border-color: #22d3ee; }
+        .btn.on {
+            color: #22d3ee;
+            border-color: #22d3ee;
+            box-shadow: 0 0 10px rgba(34, 211, 238, 0.2);
+        }
+
+        .insight {
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(34, 211, 238, 0.05);
+            border-left: 2px solid #22d3ee;
+            font-size: 0.8rem;
+            line-height: 1.6;
+            color: #999;
+        }
+
+        .insight strong {
+            color: #22d3ee;
+        }
+
+        .credit {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            font-size: 0.7rem;
+            color: #444;
+            z-index: 100;
+        }
+
+        .credit a { color: #666; }
+
+        .legend {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.85);
+            padding: 16px;
+            border: 1px solid #222;
+            font-size: 0.75rem;
+            z-index: 100;
+        }
+
+        .legend-title {
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            font-size: 0.65rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 6px 0;
+            color: #888;
+        }
+
+        .legend-gradient {
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #22d3ee, #a78bfa);
+            border-radius: 2px;
+        }
+
+        .legend-line {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .legend-line-thin {
+            width: 20px;
+            height: 1px;
+            background: #22d3ee;
+        }
+
+        .legend-line-thick {
+            width: 20px;
+            height: 4px;
+            background: #22d3ee;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <div class="panel">
+        <div>
+            <span class="time" id="time">8</span>
+            <span class="period" id="period">AM</span>
+        </div>
+        <div class="label" id="label">Morning Rush</div>
+
+        <div class="stat" id="trips">12,290</div>
+        <div class="stat-label">bike trips this hour (top 30 routes shown)</div>
+
+        <div class="slider-container">
+            <input type="range" class="slider" id="slider" min="0" max="23" value="8">
+        </div>
+
+        <div class="controls">
+            <button class="btn" id="playBtn">▶ Play</button>
+            <button class="btn" id="speedBtn">1x</button>
+        </div>
+
+        <div class="insight" id="insight">
+            <strong>8 AM:</strong> Morning commute peaks. University City → Center City flows dominate.
+        </div>
+    </div>
+
+    <div class="credit">
+        Data: <a href="https://www.rideindego.com/about/data/">Indego Q4 2024</a> |
+        Built with <a href="https://github.com/h0rv/philly">philly</a>
+    </div>
+
+    <div class="legend">
+        <div class="legend-title">Flow direction</div>
+        <div class="legend-item">
+            <div class="legend-gradient"></div>
+            <span>Origin → Destination</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-line">
+                <div class="legend-line-thin"></div>
+                <span>→</span>
+                <div class="legend-line-thick"></div>
+            </div>
+            <span>More trips</span>
+        </div>
+        <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #333; color: #555; font-size: 0.65rem;">
+            Historical data: Oct–Dec 2024<br>
+            Weekdays only • 300K trips
+        </div>
+    </div>
+
+    <script>
+        let flows = [];
+        let hour = 8;
+        let playing = false;
+        let interval = null;
+        let speed = 1;
+        let animationTime = 0;
+        let deckgl = null;
+
+        const LABELS = {
+            0: 'Midnight', 1: 'Late Night', 2: 'Late Night', 3: 'Pre-Dawn',
+            4: 'Early Morning', 5: 'Early Commute', 6: 'Morning Rush', 7: 'Morning Rush',
+            8: 'Morning Rush', 9: 'Mid-Morning', 10: 'Late Morning', 11: 'Late Morning',
+            12: 'Noon', 13: 'Early Afternoon', 14: 'Afternoon', 15: 'Late Afternoon',
+            16: 'Evening Rush', 17: 'Evening Rush', 18: 'Evening Rush', 19: 'Evening',
+            20: 'Night', 21: 'Night', 22: 'Late Evening', 23: 'Late Night'
+        };
+
+        const INSIGHTS = {
+            0: "<strong>Midnight:</strong> Last rides home. Sparse activity, mostly around bars and nightlife.",
+            5: "<strong>5 AM:</strong> Early risers. First commuters heading to work before the rush.",
+            6: "<strong>6 AM:</strong> Commute begins. University City activates first.",
+            7: "<strong>7 AM:</strong> Building momentum. Flows intensify toward Center City.",
+            8: "<strong>8 AM:</strong> Peak morning. Dominant flow: West Philly → Center City.",
+            9: "<strong>9 AM:</strong> Rush subsiding. Scattered trips across the city.",
+            12: "<strong>Noon:</strong> Lunch hour. Short trips within Center City.",
+            15: "<strong>3 PM:</strong> Afternoon pickup. Students, errands, early leavers.",
+            16: "<strong>4 PM:</strong> Evening rush starts. The commute reverses.",
+            17: "<strong>5 PM:</strong> Peak evening. Strongest flows: Center City → West Philly.",
+            18: "<strong>6 PM:</strong> Rush continues. Dinner trips emerge.",
+            20: "<strong>8 PM:</strong> Evening wind-down. Leisure rides and nightlife.",
+            22: "<strong>10 PM:</strong> Night owl hours. Thin but steady activity."
+        };
+
+        const TRIP_COUNTS = {
+            0: 440, 1: 145, 2: 132, 3: 199, 4: 375, 5: 1730, 6: 4992, 7: 8112,
+            8: 12290, 9: 6361, 10: 3178, 11: 3168, 12: 3857, 13: 4341, 14: 4743,
+            15: 7434, 16: 10241, 17: 13975, 18: 9067, 19: 5386, 20: 2902, 21: 2291,
+            22: 1774, 23: 1087
+        };
+
+        function formatHour(h) {
+            if (h === 0) return '12';
+            if (h === 12) return '12';
+            return (h % 12).toString();
+        }
+
+        function getPeriod(h) {
+            return h < 12 ? 'AM' : 'PM';
+        }
+
+        function getInsight(h) {
+            const keys = Object.keys(INSIGHTS).map(Number).sort((a,b) => a-b);
+            let closest = keys[0];
+            for (const k of keys) {
+                if (k <= h) closest = k;
+            }
+            return INSIGHTS[closest];
+        }
+
+        function render() {
+            document.getElementById('time').textContent = formatHour(hour);
+            document.getElementById('period').textContent = getPeriod(hour);
+            document.getElementById('label').textContent = LABELS[hour];
+            document.getElementById('slider').value = hour;
+            document.getElementById('trips').textContent = TRIP_COUNTS[hour].toLocaleString();
+            document.getElementById('insight').innerHTML = getInsight(hour);
+
+            // Get flows for this hour, sort by count, take top 30
+            const hourFlows = flows
+                .filter(f => f.hour === hour)
+                .sort((a, b) => b.count - a.count)
+                .slice(0, 30);
+
+            const maxCount = hourFlows[0]?.count || 1;
+            const minCount = hourFlows[hourFlows.length - 1]?.count || 1;
+
+            deckgl.setProps({
+                layers: [
+                    new deck.ArcLayer({
+                        id: 'flows',
+                        data: hourFlows,
+                        getSourcePosition: d => d.from,
+                        getTargetPosition: d => d.to,
+                        getSourceColor: [34, 211, 238, 220],
+                        getTargetColor: [167, 139, 250, 220],
+                        // Much more dramatic scaling: 2px to 12px
+                        getWidth: d => 2 + ((d.count - minCount) / (maxCount - minCount)) * 10,
+                        greatCircle: false,
+                        getHeight: 0.4,
+                        getTilt: 0
+                    })
+                ]
+            });
+        }
+
+        function togglePlay() {
+            playing = !playing;
+            document.getElementById('playBtn').classList.toggle('on', playing);
+            document.getElementById('playBtn').textContent = playing ? '⏸ Pause' : '▶ Play';
+
+            if (playing) {
+                interval = setInterval(() => {
+                    hour = (hour + 1) % 24;
+                    render();
+                }, 1500 / speed);
+            } else {
+                clearInterval(interval);
+            }
+        }
+
+        function cycleSpeed() {
+            const speeds = [1, 2, 4];
+            const idx = speeds.indexOf(speed);
+            speed = speeds[(idx + 1) % speeds.length];
+            document.getElementById('speedBtn').textContent = speed + 'x';
+            if (playing) {
+                clearInterval(interval);
+                interval = setInterval(() => {
+                    hour = (hour + 1) % 24;
+                    render();
+                }, 1500 / speed);
+            }
+        }
+
+        async function init() {
+            deckgl = new deck.DeckGL({
+                container: 'map',
+                mapStyle: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+                initialViewState: {
+                    longitude: -75.17,
+                    latitude: 39.955,
+                    zoom: 12.5,
+                    pitch: 45,
+                    bearing: -10
+                },
+                controller: true
+            });
+
+            try {
+                const res = await fetch('data/bike_flows.json');
+                flows = await res.json();
+                console.log(`Loaded ${flows.length} flows`);
+            } catch (e) {
+                console.error('Failed to load flow data:', e);
+            }
+
+            document.getElementById('slider').oninput = e => {
+                hour = parseInt(e.target.value);
+                render();
+            };
+
+            document.getElementById('playBtn').onclick = togglePlay;
+            document.getElementById('speedBtn').onclick = cycleSpeed;
+
+            render();
+        }
+
+        init();
+    </script>
+</body>
+</html>

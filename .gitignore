@@ -4,6 +4,13 @@ philly.db*
 *.duckdb
 *.duckdb.wal
 
+# Exploration data files (regenerable from scripts)
+explorations/**/data/
+explorations/**/*.csv
+explorations/**/*.json
+explorations/**/*.parquet
+explorations/**/*.zip
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -180,3 +187,4 @@ cython_debug/
 .pypirc
 .python-version
 philly.yml
+.playwright-mcp
