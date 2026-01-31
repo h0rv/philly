@@ -28,7 +28,12 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = ["ruff>0", "basedpyright>0", "poethepoet>=0.37.0"]
+dev = [
+    "ruff>0",
+    "basedpyright>0",
+    "poethepoet>=0.37.0",
+    "scipy>=1.16.3",
+]
 test = ["pytest>0", "pytest-asyncio>0"]
 notebook = [
     "catppuccin-jupyterlab>=0.2.4",

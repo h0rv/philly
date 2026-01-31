@@ -25,7 +25,9 @@ async def fetch_crime_hourly() -> pd.DataFrame:
     if "hour" in df.columns:
         df["hour"] = pd.to_numeric(df["hour"], errors="coerce")
     else:
-        df["dispatch_date_time"] = pd.to_datetime(df["dispatch_date_time"], errors="coerce")
+        df["dispatch_date_time"] = pd.to_datetime(
+            df["dispatch_date_time"], errors="coerce"
+        )
         df["hour"] = df["dispatch_date_time"].dt.hour
 
     df["dispatch_date_time"] = pd.to_datetime(df["dispatch_date_time"], errors="coerce")
@@ -68,7 +70,9 @@ async def fetch_parking_hourly() -> pd.DataFrame:
 
     if df.empty:
         print("  Warning: No parking data returned")
-        return pd.DataFrame(columns=["lat", "lng", "hour", "day_of_week", "text_general_code", "type"])
+        return pd.DataFrame(
+            columns=["lat", "lng", "hour", "day_of_week", "text_general_code", "type"]
+        )
 
     # Parse datetime and extract hour
     df["issue_datetime"] = pd.to_datetime(df["issue_datetime"], errors="coerce")

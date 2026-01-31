@@ -1472,6 +1472,7 @@ dev = [
     { name = "basedpyright" },
     { name = "poethepoet" },
     { name = "ruff" },
+    { name = "scipy" },
 ]
 notebook = [
     { name = "catppuccin-jupyterlab" },
@@ -1511,6 +1512,7 @@ dev = [
     { name = "basedpyright", specifier = ">0" },
     { name = "poethepoet", specifier = ">=0.37.0" },
     { name = "ruff", specifier = ">0" },
+    { name = "scipy", specifier = ">=1.16.3" },
 ]
 notebook = [
     { name = "catppuccin-jupyterlab", specifier = ">=0.2.4" },

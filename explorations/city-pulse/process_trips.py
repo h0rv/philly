@@ -4,6 +4,7 @@ import pandas as pd
 from pathlib import Path
 import json
 
+
 def main():
     data_dir = Path(__file__).parent / "data"
 
@@ -23,7 +24,9 @@ def main():
     print(f"One-way trips: {len(one_way):,}")
 
     # Create OD pair key
-    one_way["od_pair"] = one_way["start_station"].astype(str) + "-" + one_way["end_station"].astype(str)
+    one_way["od_pair"] = (
+        one_way["start_station"].astype(str) + "-" + one_way["end_station"].astype(str)
+    )
 
     # Aggregate by OD pair and hour (weekday only for clearer patterns)
     weekday = one_way[~one_way["is_weekend"]]
@@ -31,12 +34,19 @@ def main():
 
     # Group by OD pair and hour
     flows = (
-        weekday.groupby(["od_pair", "hour", "start_station", "end_station",
-                         "start_lat", "start_lon", "end_lat", "end_lon"])
-        .agg(
-            count=("trip_id", "size"),
-            avg_duration=("duration", "mean")
+        weekday.groupby(
+            [
+                "od_pair",
+                "hour",
+                "start_station",
+                "end_station",
+                "start_lat",
+                "start_lon",
+                "end_lat",
+                "end_lon",
+            ]
         )
+        .agg(count=("trip_id", "size"), avg_duration=("duration", "mean"))
         .reset_index()
     )
 
@@ -49,13 +59,15 @@ def main():
     # Prepare for JSON export
     flow_data = []
     for _, row in flows.iterrows():
-        flow_data.append({
-            "hour": int(row["hour"]),
-            "from": [float(row["start_lon"]), float(row["start_lat"])],
-            "to": [float(row["end_lon"]), float(row["end_lat"])],
-            "count": int(row["count"]),
-            "duration": round(row["avg_duration"], 1)
-        })
+        flow_data.append(
+            {
+                "hour": int(row["hour"]),
+                "from": [float(row["start_lon"]), float(row["start_lat"])],
+                "to": [float(row["end_lon"]), float(row["end_lat"])],
+                "count": int(row["count"]),
+                "duration": round(row["avg_duration"], 1),
+            }
+        )
 
     # Save to JSON
     output_path = data_dir / "bike_flows.json"

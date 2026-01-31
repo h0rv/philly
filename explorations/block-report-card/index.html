@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Block's Report Card | Philadelphia</title>
+    <script src="https://unpkg.com/deck.gl@8.9.0/dist.min.js"></script>
+    <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+    <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+    <link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow: hidden;
+        }
+        #map { position: absolute; inset: 0; }
+
+        .search-container {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 200;
+            width: 420px;
+            max-width: calc(100% - 40px);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(10, 10, 10, 0.95);
+            border: 1px solid #333;
+            border-radius: 12px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 1rem;
+            outline: none;
+            backdrop-filter: blur(20px);
+        }
+
+        .search-input::placeholder { color: #666; }
+        .search-input:focus {
+            border-color: #22d3ee;
+            box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15);
+        }
+
+        .search-hint {
+            text-align: center;
+            margin-top: 8px;
+            font-size: 0.75rem;
+            color: #555;
+        }
+
+        .panel {
+            position: absolute;
+            top: 100px;
+            left: 20px;
+            z-index: 100;
+            background: rgba(10, 10, 10, 0.92);
+            padding: 24px;
+            border: 1px solid #222;
+            width: 340px;
+            border-radius: 16px;
+            backdrop-filter: blur(20px);
+            display: none;
+        }
+
+        .panel.visible {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .block-id {
+            font-size: 0.7rem;
+            color: #555;
+            font-family: 'SF Mono', Monaco, monospace;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .overall-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .grade-big {
+            width: 88px;
+            height: 88px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        .overall-text h2 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .verdict {
+            font-size: 0.85rem;
+            color: #888;
+            line-height: 1.4;
+        }
+
+        .metrics {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            padding-top: 20px;
+            border-top: 1px solid #1a1a1a;
+        }
+
+        .metric {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0;
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        .metric:nth-child(1) { animation-delay: 0.05s; }
+        .metric:nth-child(2) { animation-delay: 0.1s; }
+        .metric:nth-child(3) { animation-delay: 0.15s; }
+        .metric:nth-child(4) { animation-delay: 0.2s; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .metric-icon {
+            font-size: 1.2rem;
+            width: 28px;
+            text-align: center;
+        }
+
+        .metric-info {
+            flex: 1;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 5px;
+        }
+
+        .metric-name {
+            font-size: 0.85rem;
+            color: #ccc;
+        }
+
+        .metric-grade {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .metric-bar {
+            height: 6px;
+            background: #1a1a1a;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .metric-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease-out;
+        }
+
+        .bottom-note {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid #1a1a1a;
+            font-size: 0.75rem;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        /* Grade colors */
+        .grade-A { color: #22c55e; background: rgba(34, 197, 94, 0.15); }
+        .grade-B { color: #84cc16; background: rgba(132, 204, 22, 0.15); }
+        .grade-C { color: #eab308; background: rgba(234, 179, 8, 0.15); }
+        .grade-D { color: #f97316; background: rgba(249, 115, 22, 0.15); }
+        .grade-F { color: #ef4444; background: rgba(239, 68, 68, 0.15); }
+        .grade-NA { color: #666; background: rgba(102, 102, 102, 0.15); }
+
+        .text-A { color: #22c55e; }
+        .text-B { color: #84cc16; }
+        .text-C { color: #eab308; }
+        .text-D { color: #f97316; }
+        .text-F { color: #ef4444; }
+        .text-NA { color: #666; }
+
+        .bar-A { background: #22c55e; }
+        .bar-B { background: #84cc16; }
+        .bar-C { background: #eab308; }
+        .bar-D { background: #f97316; }
+        .bar-F { background: #ef4444; }
+        .bar-NA { background: #444; }
+
+        /* Metric toggles */
+        .metric-toggle {
+            position: relative;
+            width: 32px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        .metric-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background: #333;
+            border-radius: 9px;
+            transition: 0.2s;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 12px;
+            width: 12px;
+            left: 3px;
+            bottom: 3px;
+            background: #666;
+            border-radius: 50%;
+            transition: 0.2s;
+        }
+
+        .metric-toggle input:checked + .toggle-slider {
+            background: #22d3ee33;
+        }
+
+        .metric-toggle input:checked + .toggle-slider:before {
+            transform: translateX(14px);
+            background: #22d3ee;
+        }
+
+        .metric.disabled {
+            opacity: 0.35;
+        }
+
+        .metric.disabled .metric-name {
+            text-decoration: line-through;
+        }
+
+        .legend {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(10, 10, 10, 0.92);
+            padding: 14px 16px;
+            border: 1px solid #222;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+        }
+
+        .legend-title {
+            color: #666;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .legend-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #888;
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+        }
+
+        .legend-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 1px solid #222;
+            color: #888;
+            font-size: 0.7rem;
+        }
+
+        .filter-toggle {
+            position: relative;
+            width: 28px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+
+        .filter-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .filter-toggle .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background: #333;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+
+        .filter-toggle .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 10px;
+            width: 10px;
+            left: 3px;
+            bottom: 3px;
+            background: #666;
+            border-radius: 50%;
+            transition: 0.2s;
+        }
+
+        .filter-toggle input:checked + .toggle-slider {
+            background: #22d3ee33;
+        }
+
+        .filter-toggle input:checked + .toggle-slider:before {
+            transform: translateX(12px);
+            background: #22d3ee;
+        }
+
+        .legend-footer {
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 1px solid #222;
+            color: #444;
+            font-size: 0.6rem;
+        }
+
+        .credit {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            font-size: 0.7rem;
+            color: #444;
+            z-index: 100;
+        }
+        .credit a { color: #555; }
+
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 300;
+        }
+
+        .loading-spinner {
+            width: 32px;
+            height: 32px;
+            border: 2px solid #222;
+            border-top-color: #22d3ee;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 12px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loading-text {
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        .instructions {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 150;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .instructions.hidden { opacity: 0; }
+
+        .instructions h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #fff;
+        }
+
+        .instructions p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <div class="loading" id="loading">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Loading 18,872 blocks...</div>
+    </div>
+
+    <div class="instructions" id="instructions">
+        <h2>Your Block's Report Card</h2>
+        <p>Search an address or click the map</p>
+    </div>
+
+    <div class="search-container">
+        <input type="text" class="search-input" id="search" placeholder="Try: 1500 Market St, Broad & Walnut, 19103..." />
+        <div class="search-hint">Press Enter to search</div>
+    </div>
+
+    <div class="panel" id="panel">
+        <div class="block-id" id="block-id">Block #—</div>
+
+        <div class="overall-section">
+            <div class="grade-big" id="overall-grade">-</div>
+            <div class="overall-text">
+                <h2 id="grade-label">Overall</h2>
+                <div class="verdict" id="verdict">—</div>
+            </div>
+        </div>
+
+        <div class="metrics" id="metrics">
+            <div class="metric" id="metric-safety">
+                <div class="metric-icon">🚨</div>
+                <div class="metric-info">
+                    <div class="metric-row">
+                        <span class="metric-name">Safety</span>
+                        <span class="metric-grade" id="safety-grade">-</span>
+                    </div>
+                    <div class="metric-bar"><div class="metric-bar-fill" id="safety-bar"></div></div>
+                </div>
+                <label class="metric-toggle" title="Include in grade">
+                    <input type="checkbox" checked data-metric="safety">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="metric" id="metric-responsiveness">
+                <div class="metric-icon">📞</div>
+                <div class="metric-info">
+                    <div class="metric-row">
+                        <span class="metric-name">311 Response</span>
+                        <span class="metric-grade" id="responsiveness-grade">-</span>
+                    </div>
+                    <div class="metric-bar"><div class="metric-bar-fill" id="responsiveness-bar"></div></div>
+                </div>
+                <label class="metric-toggle" title="Include in grade">
+                    <input type="checkbox" checked data-metric="responsiveness">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="metric" id="metric-cleanliness">
+                <div class="metric-icon">🧹</div>
+                <div class="metric-info">
+                    <div class="metric-row">
+                        <span class="metric-name">Cleanliness</span>
+                        <span class="metric-grade" id="cleanliness-grade">-</span>
+                    </div>
+                    <div class="metric-bar"><div class="metric-bar-fill" id="cleanliness-bar"></div></div>
+                </div>
+                <label class="metric-toggle" title="Include in grade">
+                    <input type="checkbox" checked data-metric="cleanliness">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="metric" id="metric-parking">
+                <div class="metric-icon">🅿️</div>
+                <div class="metric-info">
+                    <div class="metric-row">
+                        <span class="metric-name">Parking Karma</span>
+                        <span class="metric-grade" id="parking-grade">-</span>
+                    </div>
+                    <div class="metric-bar"><div class="metric-bar-fill" id="parking-bar"></div></div>
+                </div>
+                <label class="metric-toggle" title="Include in grade">
+                    <input type="checkbox" checked data-metric="parking">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="bottom-note" id="bottom-note"></div>
+    </div>
+
+    <div class="legend">
+        <div class="legend-title">Grade</div>
+        <div class="legend-row">
+            <div class="legend-item"><div class="legend-dot" style="background: #22c55e;"></div>A</div>
+            <div class="legend-item"><div class="legend-dot" style="background: #84cc16;"></div>B</div>
+            <div class="legend-item"><div class="legend-dot" style="background: #eab308;"></div>C</div>
+            <div class="legend-item"><div class="legend-dot" style="background: #f97316;"></div>D</div>
+            <div class="legend-item"><div class="legend-dot" style="background: #ef4444;"></div>F</div>
+        </div>
+        <div class="legend-toggle">
+            <label class="filter-toggle">
+                <input type="checkbox" id="hide-nonres" checked>
+                <span class="toggle-slider"></span>
+            </label>
+            <span>Hide rivers & parks</span>
+        </div>
+        <div class="legend-footer">
+            Crime & 311: 2024 | Parking: 2017 | Litter: 2017-18
+        </div>
+    </div>
+
+    <div class="credit">
+        <a href="https://opendataphilly.org">OpenDataPhilly</a> ·
+        <a href="https://github.com/h0rv/philly">philly</a>
+    </div>
+
+    <script>
+        let blocksGeojson = null;
+        let gradesData = null;
+        let deckgl = null;
+        let selectedBlockId = null;
+        let enabledMetrics = { safety: true, responsiveness: true, cleanliness: true, parking: true };
+        let hideNonResidential = true;
+
+        const GRADE_COLORS = {
+            'A': [34, 197, 94],
+            'B': [132, 204, 22],
+            'C': [234, 179, 8],
+            'D': [249, 115, 22],
+            'F': [239, 68, 68],
+            'N/A': [80, 80, 80]
+        };
+
+        const VERDICTS = {
+            'A': [
+                "Your block is crushing it",
+                "Top of the class",
+                "Dean's list material",
+                "Gold star block"
+            ],
+            'B': [
+                "Solid block, no complaints",
+                "Above average vibes",
+                "Respectable showing",
+                "Nothing to sneeze at"
+            ],
+            'C': [
+                "Perfectly average",
+                "Right in the middle of the pack",
+                "Could be better, could be worse",
+                "The C stands for 'Could try harder'"
+            ],
+            'D': [
+                "Room for improvement",
+                "Needs some work",
+                "Not great, not terrible",
+                "The city could do better here"
+            ],
+            'F': [
+                "Oof. Rough block",
+                "This block is struggling",
+                "Seen better days",
+                "The PPA loves this block (and not in a good way)"
+            ],
+            'N/A': [
+                "Not enough data"
+            ]
+        };
+
+        function getGradeColor(grade, alpha = 180) {
+            const rgb = GRADE_COLORS[grade] || GRADE_COLORS['N/A'];
+            return [...rgb, alpha];
+        }
+
+        function getRandomVerdict(grade) {
+            const options = VERDICTS[grade] || VERDICTS['N/A'];
+            return options[Math.floor(Math.random() * options.length)];
+        }
+
+        function formatGrade(grade, score) {
+            if (grade === 'N/A') return 'N/A';
+            const pct = score !== null ? Math.round(score) : '?';
+            return `${grade} (${pct}%)`;
+        }
+
+        function gradeToPoints(grade) {
+            const points = { 'A': 4, 'B': 3, 'C': 2, 'D': 1, 'F': 0 };
+            return points[grade] ?? null;
+        }
+
+        function scoreToGrade(score) {
+            if (score >= 80) return 'A';
+            if (score >= 60) return 'B';
+            if (score >= 40) return 'C';
+            if (score >= 20) return 'D';
+            return 'F';
+        }
+
+        function calculateCustomGrade(grades) {
+            const metricKeys = {
+                safety: { score: 's', grade: 'sg' },
+                responsiveness: { score: 'r', grade: 'rg' },
+                cleanliness: { score: 'c', grade: 'cg' },
+                parking: { score: 'p', grade: 'pg' }
+            };
+
+            let totalPoints = 0;
+            let count = 0;
+            let totalScore = 0;
+
+            for (const [metric, keys] of Object.entries(metricKeys)) {
+                if (!enabledMetrics[metric]) continue;
+                const grade = grades[keys.grade];
+                const score = grades[keys.score];
+                const points = gradeToPoints(grade);
+                if (points !== null) {
+                    totalPoints += points;
+                    count++;
+                }
+                if (score !== null) {
+                    totalScore += score;
+                }
+            }
+
+            if (count === 0) {
+                return { grade: 'N/A', gpa: null, avgScore: null };
+            }
+
+            const gpa = totalPoints / count;
+            const avgScore = totalScore / count;
+            let overallGrade;
+            if (gpa >= 3.5) overallGrade = 'A';
+            else if (gpa >= 2.5) overallGrade = 'B';
+            else if (gpa >= 1.5) overallGrade = 'C';
+            else if (gpa >= 0.5) overallGrade = 'D';
+            else overallGrade = 'F';
+
+            return { grade: overallGrade, gpa, avgScore };
+        }
+
+        function updateReportCard(blockId, skipAnimation = false) {
+            const panel = document.getElementById('panel');
+            const grades = gradesData[blockId];
+
+            if (!grades) {
+                panel.classList.remove('visible');
+                return;
+            }
+
+            panel.classList.add('visible');
+            document.getElementById('instructions').classList.add('hidden');
+
+            // Block ID
+            document.getElementById('block-id').textContent = `Block #${blockId}`;
+
+            // Calculate custom overall grade based on enabled metrics
+            const custom = calculateCustomGrade(grades);
+
+            // Overall grade
+            const overallEl = document.getElementById('overall-grade');
+            overallEl.textContent = custom.grade;
+            overallEl.className = `grade-big grade-${custom.grade === 'N/A' ? 'NA' : custom.grade}`;
+
+            // Grade label with GPA
+            const gpaText = custom.gpa !== null ? ` · ${custom.gpa.toFixed(1)} GPA` : '';
+            document.getElementById('grade-label').textContent = `Overall${gpaText}`;
+
+            // Verdict
+            document.getElementById('verdict').textContent = getRandomVerdict(custom.grade);
+
+            // Individual metrics
+            const metrics = [
+                { key: 's', gradeKey: 'sg', name: 'safety' },
+                { key: 'r', gradeKey: 'rg', name: 'responsiveness' },
+                { key: 'c', gradeKey: 'cg', name: 'cleanliness' },
+                { key: 'p', gradeKey: 'pg', name: 'parking' }
+            ];
+
+            metrics.forEach(m => {
+                const score = grades[m.key];
+                const grade = grades[m.gradeKey];
+                const metricEl = document.getElementById(`metric-${m.name}`);
+                const isEnabled = enabledMetrics[m.name];
+
+                // Toggle disabled state
+                metricEl.classList.toggle('disabled', !isEnabled);
+
+                const gradeEl = document.getElementById(`${m.name}-grade`);
+                gradeEl.textContent = formatGrade(grade, score);
+                gradeEl.className = `metric-grade text-${grade === 'N/A' ? 'NA' : grade}`;
+
+                const barEl = document.getElementById(`${m.name}-bar`);
+                barEl.style.width = score !== null ? `${score}%` : '0%';
+                barEl.className = `metric-bar-fill bar-${grade === 'N/A' ? 'NA' : grade}`;
+            });
+
+            // Bottom note - use custom avgScore
+            const noteEl = document.getElementById('bottom-note');
+            if (custom.avgScore !== null) {
+                const pct = Math.round(custom.avgScore);
+                const enabledCount = Object.values(enabledMetrics).filter(v => v).length;
+                const metricsText = enabledCount < 4 ? ` (${enabledCount} metrics)` : '';
+                if (pct >= 70) {
+                    noteEl.textContent = `Better than ${pct}% of Philly blocks${metricsText}. Nice.`;
+                } else if (pct >= 40) {
+                    noteEl.textContent = `Better than ${pct}% of blocks${metricsText}. Middle of the road.`;
+                } else {
+                    noteEl.textContent = `Only beats ${pct}% of blocks${metricsText}. Yikes.`;
+                }
+            } else {
+                noteEl.textContent = 'Not enough data to rank this block.';
+            }
+
+            // Re-trigger animations (unless skipping)
+            if (!skipAnimation) {
+                const metricsEl = document.getElementById('metrics');
+                metricsEl.querySelectorAll('.metric').forEach(el => {
+                    el.style.animation = 'none';
+                    el.offsetHeight;
+                    el.style.animation = null;
+                });
+            }
+        }
+
+        function findBlockAtPoint(lng, lat) {
+            const point = turf.point([lng, lat]);
+            for (const feature of blocksGeojson.features) {
+                if (turf.booleanPointInPolygon(point, feature)) {
+                    return feature.properties.block_id;
+                }
+            }
+            return null;
+        }
+
+        async function geocodeAddress(address) {
+            if (!address.toLowerCase().includes('philadelphia') && !address.toLowerCase().includes('phila')) {
+                address += ', Philadelphia, PA';
+            }
+
+            const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1`;
+
+            try {
+                const response = await fetch(url, {
+                    headers: { 'User-Agent': 'PhillyBlockReportCard/1.0' }
+                });
+                const data = await response.json();
+                if (data.length > 0) {
+                    return {
+                        lat: parseFloat(data[0].lat),
+                        lng: parseFloat(data[0].lon),
+                        display: data[0].display_name
+                    };
+                }
+            } catch (e) {
+                console.error('Geocoding error:', e);
+            }
+            return null;
+        }
+
+        function renderMap() {
+            let features = blocksGeojson.features.map(f => {
+                const blockData = gradesData[f.properties.block_id];
+                const grade = blockData?.g || 'N/A';
+                const isNonResidential = blockData?.nr === 1;
+                const isSelected = f.properties.block_id === selectedBlockId;
+                return {
+                    ...f,
+                    properties: { ...f.properties, grade, isSelected, isNonResidential }
+                };
+            });
+
+            // Filter out non-residential if toggle is on
+            if (hideNonResidential) {
+                features = features.filter(f => !f.properties.isNonResidential);
+            }
+
+            deckgl.setProps({
+                layers: [
+                    new deck.GeoJsonLayer({
+                        id: 'blocks',
+                        data: { type: 'FeatureCollection', features },
+                        filled: true,
+                        stroked: true,
+                        getFillColor: f => getGradeColor(f.properties.grade, f.properties.isSelected ? 200 : 120),
+                        getLineColor: f => f.properties.isSelected ? [34, 211, 238, 255] : [40, 40, 40, 80],
+                        getLineWidth: f => f.properties.isSelected ? 3 : 0.5,
+                        lineWidthUnits: 'pixels',
+                        pickable: true,
+                        autoHighlight: true,
+                        highlightColor: [34, 211, 238, 80],
+                        onClick: info => {
+                            if (info.object) {
+                                selectedBlockId = info.object.properties.block_id;
+                                updateReportCard(selectedBlockId);
+                                renderMap();
+                            }
+                        },
+                        updateTriggers: {
+                            getFillColor: [selectedBlockId],
+                            getLineColor: [selectedBlockId],
+                            getLineWidth: [selectedBlockId]
+                        }
+                    })
+                ]
+            });
+        }
+
+        async function handleSearch(e) {
+            if (e.key !== 'Enter') return;
+
+            const address = e.target.value.trim();
+            if (!address) return;
+
+            e.target.blur();
+
+            const result = await geocodeAddress(address);
+            if (!result) {
+                alert('Address not found. Try another one.');
+                return;
+            }
+
+            if (result.lat < 39.85 || result.lat > 40.15 || result.lng < -75.3 || result.lng > -74.9) {
+                alert('That doesn\'t look like Philadelphia. Try again?');
+                return;
+            }
+
+            const blockId = findBlockAtPoint(result.lng, result.lat);
+            if (!blockId) {
+                alert('Couldn\'t find a block there. Try clicking the map instead.');
+                return;
+            }
+
+            selectedBlockId = blockId;
+            updateReportCard(selectedBlockId);
+
+            deckgl.setProps({
+                initialViewState: {
+                    longitude: result.lng,
+                    latitude: result.lat,
+                    zoom: 16,
+                    pitch: 0,
+                    bearing: 0,
+                    transitionDuration: 1000
+                }
+            });
+
+            renderMap();
+        }
+
+        async function init() {
+            deckgl = new deck.DeckGL({
+                container: 'map',
+                mapStyle: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+                initialViewState: {
+                    longitude: -75.16,
+                    latitude: 39.95,
+                    zoom: 12,
+                    pitch: 0,
+                    bearing: 0
+                },
+                controller: true,
+                onClick: info => {
+                    if (!info.object && info.coordinate) {
+                        const blockId = findBlockAtPoint(info.coordinate[0], info.coordinate[1]);
+                        if (blockId) {
+                            selectedBlockId = blockId;
+                            updateReportCard(selectedBlockId);
+                            renderMap();
+                        }
+                    }
+                }
+            });
+
+            try {
+                const [blocksRes, gradesRes] = await Promise.all([
+                    fetch('data/blocks.geojson'),
+                    fetch('data/grades.json')
+                ]);
+
+                blocksGeojson = await blocksRes.json();
+                gradesData = await gradesRes.json();
+
+                console.log(`Loaded ${blocksGeojson.features.length} blocks`);
+                document.getElementById('loading').style.display = 'none';
+                renderMap();
+            } catch (e) {
+                console.error('Failed to load data:', e);
+                document.getElementById('loading').innerHTML = `
+                    <div style="color: #ef4444;">Failed to load data</div>
+                    <div style="color: #666; font-size: 0.8rem; margin-top: 8px;">
+                        Run fetch_data.py first.
+                    </div>
+                `;
+            }
+
+            document.getElementById('search').addEventListener('keypress', handleSearch);
+
+            // Hide non-residential toggle
+            document.getElementById('hide-nonres').addEventListener('change', (e) => {
+                hideNonResidential = e.target.checked;
+                renderMap();
+            });
+
+            // Metric toggle listeners
+            document.querySelectorAll('.metric-toggle').forEach(label => {
+                // Prevent click from bubbling to map
+                label.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                });
+            });
+            document.querySelectorAll('.metric-toggle input').forEach(checkbox => {
+                checkbox.addEventListener('change', (e) => {
+                    e.stopPropagation();
+                    const metric = e.target.dataset.metric;
+                    enabledMetrics[metric] = e.target.checked;
+                    if (selectedBlockId) {
+                        updateReportCard(selectedBlockId, true);
+                    }
+                });
+            });
+        }
+
+        init();
+    </script>
+</body>
+</html>
