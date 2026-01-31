@@ -14,6 +14,9 @@ opendataphilly_rating: null
 organization: City of Philadelphia
 resources:
 - format: html
+  name: Welcoming Community Resource App (App)
+  url: https://www.phila.gov/oia/resource-finder/
+- format: html
   name: Language Usage Dashboard (Visualization)
   url: http://www.phila.gov/language-usage-dashboard
 - format: csv

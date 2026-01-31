@@ -1,7 +1,7 @@
 area_of_interest: City of Philadelphia
 category:
 - Elections / Politics
-created: '2014-12-08T22:26:32.294770'
+created: null
 license: City of Philadelphia License
 maintainer: Seth Bluestein
 maintainer_email: seth.bluestein@phila.gov
@@ -14,6 +14,12 @@ notes: The locations of polling places in Philadelphia, along with parking code 
 opendataphilly_rating: null
 organization: City of Philadelphia
 resources:
+- format: html
+  name: Polling Places Locator - Atlas (App)
+  url: https://atlas.phila.gov/
+- format: html
+  name: Election Office and Mail-in Ballot Drop-off Locations (App)
+  url: https://vote.phila.gov/ballot-drop-off/
 - format: csv
   name: Polling Places (CSV)
   url: https://phl.carto.com/api/v2/sql?q=SELECT+*,+ST_Y(the_geom)+AS+lat,+ST_X(the_geom)+AS+lng+FROM+polling_places&filename=polling_places&format=csv&skipfields=cartodb_id,the_geom,the_geom_webmercator

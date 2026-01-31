@@ -2,7 +2,7 @@ area_of_interest: null
 category:
 - Planning / Zoning
 - Real Estate / Land Records
-created: '2015-09-22T15:39:56.329223'
+created: null
 license: City of Philadelphia License
 maintainer: Max Steinbrenner
 maintainer_email: max.steinbrenner@phila.gov
@@ -15,13 +15,7 @@ organization: City of Philadelphia
 resources:
 - format: csv
   name: Street Alias List (CSV)
-  url: https://opendata.arcgis.com/api/v3/datasets/1393f28855894d9c8d19f3d90f44cc0e_0/downloads/data?format=csv&spatialRefId=4326
-- format: shp
-  name: Street Alias List (SHP)
-  url: https://opendata.arcgis.com/api/v3/datasets/1393f28855894d9c8d19f3d90f44cc0e_0/downloads/data?format=shp&spatialRefId=4326
-- format: geojson
-  name: Street Alias List (GeoJSON)
-  url: https://opendata.arcgis.com/datasets/1393f28855894d9c8d19f3d90f44cc0e_0.geojson
+  url: https://hub.arcgis.com/api/v3/datasets/1393f28855894d9c8d19f3d90f44cc0e_0/downloads/data?format=csv&spatialRefId=6565&where=1%3D1
 - format: api
   name: Street Alias List (API)
   url: https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/ALIAS_LIST/FeatureServer/0/query?outFields=*&where=1%3D1
