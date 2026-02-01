@@ -8,7 +8,9 @@ philly.db*
 explorations/**/data/
 explorations/**/*.csv
 explorations/**/*.json
+explorations/**/*.geojson
 explorations/**/*.parquet
+explorations/**/*.png
 explorations/**/*.zip
 
 # Byte-compiled / optimized / DLL files
