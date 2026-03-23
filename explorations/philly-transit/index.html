@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Philly Transit 3D</title>
+    <script src="https://unpkg.com/deck.gl@8.9.36/dist.min.js"></script>
+    <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+    <link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet" />
+    <link href="./styles.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="map"></div>
+
+    <div class="loading" id="loading">
+        <div class="card">
+            <div class="spinner"></div>
+            <h2 style="margin:0 0 8px;">Loading Philly Transit 3D</h2>
+            <div class="card-copy">
+                Pulling the latest SEPTA snapshot, route geometry, and regional rail metadata.
+            </div>
+        </div>
+    </div>
+
+    <div class="error" id="error" style="display:none;">
+        <div class="card">
+            <h2 style="margin:0 0 10px;">Couldn’t load the transit fixture</h2>
+            <div class="card-copy" style="margin-bottom: 14px;">
+                Run <code>uv run python explorations/philly-transit/build_data.py</code> and reload.
+            </div>
+        </div>
+    </div>
+
+    <div class="view-toolbar" id="viewToolbar">
+        <button class="toolbar-btn active" id="toggleLeftBtn">Info</button>
+        <button class="toolbar-btn active" id="toggleRightBtn">Rail</button>
+        <button class="toolbar-btn" id="focusModeBtn">Focus</button>
+    </div>
+    <button class="focus-exit hidden-panel" id="exitFocusBtn">Exit focus</button>
+
+    <div class="shell" id="shell">
+        <div class="left-column" id="leftColumn">
+            <div class="panel">
+                <div class="panel-topbar">
+                    <div>
+                        <div class="eyebrow">Exploration MVP</div>
+                        <h1>Philly Transit 3D</h1>
+                    </div>
+                    <div class="panel-actions">
+                        <a class="subbutton link-btn" href="./help.html" target="_blank" rel="noreferrer">Data guide</a>
+                    </div>
+                </div>
+                <div class="lede">Live SEPTA buses, trolleys, subway/metro, and regional rail in one view.</div>
+
+                <div class="section-label">Vehicle modes</div>
+                <div class="modes" id="modes"></div>
+
+                <div class="section-label">Live view</div>
+                <div class="live-card">
+                    <div class="live-row">
+                        <div class="badge live" id="modeBadge">Live</div>
+                        <div>
+                            <div class="clock" id="clock">—</div>
+                            <div class="subclock" id="subclock">—</div>
+                        </div>
+                    </div>
+                    <div class="live-summary" id="liveSummary">Showing the current live state.</div>
+                </div>
+
+                <div class="section-label">Metro coverage</div>
+                <div class="metro-coverage" id="metroCoverage"></div>
+
+                <div class="section-label">Controls</div>
+                <div class="controls">
+                    <button class="button active" id="liveBtn">Live now</button>
+                    <button class="button" id="replayBtn">Open replay</button>
+                </div>
+                <div class="controls-secondary">
+                    <button class="subbutton" id="themeBtn">Light mode</button>
+                </div>
+
+                <div class="replay-shell hidden" id="replayShell">
+                    <div class="replay-top">
+                        <div class="replay-title">Replay</div>
+                        <button class="subbutton" id="playBtn">Play</button>
+                    </div>
+                    <input class="range" id="timeline" type="range" min="0" max="86400" value="86400" step="60" />
+                    <div class="range-labels">
+                        <span id="rangeStart">24h ago</span>
+                        <span id="rangeEnd">Now</span>
+                    </div>
+                    <div class="speed-row" id="speedRow"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-column" id="rightColumn">
+            <div class="rail-panel">
+                <div class="rail-panel-head">
+                    <div>
+                        <div class="eyebrow rail-eyebrow">Regional rail</div>
+                        <h2 class="rail-title">Find trains fast</h2>
+                        <div class="rail-count" id="railCount">—</div>
+                    </div>
+                    <div class="shortcut-chip">[ / ]</div>
+                </div>
+
+                <div class="selection hidden rail-selection" id="selection"></div>
+
+                <div class="rail-actions">
+                    <button class="subbutton rail-accent" id="prevTrainBtn">Previous</button>
+                    <button class="subbutton rail-accent" id="nextTrainBtn">Next</button>
+                    <button class="subbutton" id="focusTrainBtn">Focus</button>
+                    <button class="subbutton" id="railOnlyBtn">Only rail</button>
+                </div>
+
+                <div class="rail-status" id="railStatus"></div>
+                <div class="rail-list" id="railList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="./scripts/app.js"></script>
+</body>
+</html>

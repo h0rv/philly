@@ -59,4 +59,15 @@ export const explorations = [
     publishFiles: ['index.html', 'tract_data.json', 'census_tracts.geojson'],
     buildHint: 'Export tract_data.json and census_tracts.geojson before publishing this artifact.',
   },
+  {
+    slug: 'philly-transit',
+    title: 'Philly Transit 3D',
+    summary:
+      'A pitched 3D SEPTA vehicle map with route-clamped animation, click-to-inspect details, and a 24-hour replay control.',
+    tags: ['Transit', '3D', 'GTFS-RT'],
+    featured: true,
+    requiredFiles: ['index.html', 'help.html', 'styles.css', 'scripts', 'data/transit.json'],
+    publishFiles: ['index.html', 'help.html', 'styles.css', 'scripts', 'data/transit.json'],
+    buildHint: 'uv run python explorations/philly-transit/build_data.py',
+  },
 ];

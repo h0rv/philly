@@ -1,0 +1,43 @@
+area_of_interest: Southeastern Pennsylvania (Bucks, Chester, Delaware, Montgomery,
+  Philadelphia counties)
+category:
+- Transportation
+created: '2026-03-23'
+license: License Not Specified
+maintainer: SEPTA Planning Division
+maintainer_email: planning@septa.org
+maintainer_link: https://wwww.septa.org/open-data/
+maintainer_phone: null
+notes: 'SEPTA Metro route-level real-time trips API used by the official SEPTA real-time
+  map. Returns active trips for Metro services and includes latitude/longitude when
+  GPS is available. Known route IDs include L1 (Market-Frankford Line), B1/B2/B3
+  (Broad Street Line local/express/spur), and M1 (Norristown High Speed Line).
+  Some Metro routes may return trips with status NO GPS and null coordinates even
+  when service is active.
+
+  Example: https://www3.septa.org/api/v2/trips/?route_id=L1'
+opendataphilly_rating: null
+organization: SEPTA
+resources:
+- format: json
+  name: Market-Frankford Line Trips API
+  url: https://www3.septa.org/api/v2/trips/?route_id=L1
+- format: json
+  name: Broad Street Line Trips API (All Services)
+  url: https://www3.septa.org/api/v2/trips/?route_id=B
+- format: json
+  name: Broad Street Line Local Trips API
+  url: https://www3.septa.org/api/v2/trips/?route_id=B1
+- format: json
+  name: Broad Street Line Express Trips API
+  url: https://www3.septa.org/api/v2/trips/?route_id=B2
+- format: json
+  name: Broad-Ridge Spur Trips API
+  url: https://www3.septa.org/api/v2/trips/?route_id=B3
+- format: json
+  name: Norristown High Speed Line Trips API
+  url: https://www3.septa.org/api/v2/trips/?route_id=M1
+source: SEPTA
+time_period: Real-time updates
+title: SEPTA Metro Real-time Trips
+usage: Public Use

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Philly Transit 3D — Data guide</title>
+  <link href="./styles.css" rel="stylesheet" />
+  <style>
+    body { overflow: auto; }
+    .guide {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+    .guide-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+    }
+    .guide h1 { margin-bottom: 10px; }
+    .guide h2 { margin: 0 0 10px; font-size: 1.1rem; }
+    .guide p, .guide li { color: var(--muted); line-height: 1.6; }
+    .guide ul { margin: 10px 0 0 18px; }
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .mode-card {
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 14px;
+    }
+    .back-link { color: var(--cyan); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="guide">
+    <div class="guide-card">
+      <div class="eyebrow">Data guide</div>
+      <h1>Philly Transit 3D</h1>
+      <p>This map mixes multiple SEPTA feeds. Buses and trolleys usually have direct GPS positions. Metro service is different: a line can be active even when SEPTA does not publish usable train coordinates.</p>
+      <p><a class="back-link" href="./index.html">← Back to map</a></p>
+    </div>
+
+    <div class="guide-card">
+      <h2>What the transit modes mean</h2>
+      <div class="mode-grid">
+        <div class="mode-card">
+          <strong>Bus</strong>
+          <p>Road vehicles. Flexible routing, street traffic, and the biggest share of the live feed.</p>
+        </div>
+        <div class="mode-card">
+          <strong>Trolley</strong>
+          <p>Street-running rail. Think light rail or streetcars, especially the subway-surface trolley lines.</p>
+        </div>
+        <div class="mode-card">
+          <strong>Subway / Metro</strong>
+          <p>Rapid transit: Market-Frankford Line, Broad Street Line, Broad-Ridge Spur, and Norristown High Speed Line.</p>
+        </div>
+        <div class="mode-card">
+          <strong>Regional Rail</strong>
+          <p>Commuter rail. Longer-distance SEPTA trains with bigger station spacing and a separate operating pattern.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="guide-card">
+      <h2>Why subway trains may be missing</h2>
+      <p><code>NO GPS</code> on SEPTA Metro is not a bug in this app. The Market-Frankford Line and Broad Street Line do not publish public GPS coordinates the way buses and trolleys do.</p>
+      <p>So when this map says a subway line is active but unlocated, it means trains are running, but SEPTA did not publish usable coordinates.</p>
+      <ul>
+        <li><strong>GPS live</strong>: direct coordinate from the feed</li>
+        <li><strong>Stop inferred</strong>: no coordinate, but SEPTA reported a specific stop</li>
+        <li><strong>Estimated</strong>: short projection from a recent usable position</li>
+        <li><strong>Stale estimate</strong>: older projection kept only as a hint</li>
+      </ul>
+    </div>
+
+    <div class="guide-card">
+      <h2>What the map can and cannot know</h2>
+      <p>Buses and trolleys generally behave like a standard vehicle GPS map. Metro does not. The app can show route activity and, in limited cases, stop-based placement or short extrapolation. It does not invent precise subway coordinates.</p>
+      <p>Replay is a client-side visualization built from the latest known report and route geometry. Useful, but not exact history.</p>
+    </div>
+  </div>
+</body>
+</html>

@@ -164,8 +164,12 @@ async def fetch_neighborhoods(phl: Philly, refresh: bool) -> gpd.GeoDataFrame:
         print(f"Saved raw neighborhoods to {raw_path}")
 
     gdf["neighborhood_name"] = clean_text(gdf.get("LISTNAME"))
-    gdf["neighborhood_name"] = gdf["neighborhood_name"].fillna(clean_text(gdf.get("MAPNAME")))
-    gdf["neighborhood_name"] = gdf["neighborhood_name"].fillna(clean_text(gdf.get("NAME")))
+    gdf["neighborhood_name"] = gdf["neighborhood_name"].fillna(
+        clean_text(gdf.get("MAPNAME"))
+    )
+    gdf["neighborhood_name"] = gdf["neighborhood_name"].fillna(
+        clean_text(gdf.get("NAME"))
+    )
     gdf["neighborhood_name"] = gdf["neighborhood_name"].fillna("Unknown")
     gdf["neighborhood_id"] = (
         gdf["neighborhood_name"]
@@ -424,7 +428,9 @@ def assign_blocks_to_neighborhoods(
 
     missing_mask = joined["neighborhood_id"].isna()
     if missing_mask.any():
-        missing_blocks = joined.loc[missing_mask, ["block_id", "tract_id", "geometry"]].copy()
+        missing_blocks = joined.loc[
+            missing_mask, ["block_id", "tract_id", "geometry"]
+        ].copy()
         missing_blocks = missing_blocks.to_crs("EPSG:3857")
         neighborhoods_projected = neighborhoods[
             ["neighborhood_id", "neighborhood_name", "geometry"]
@@ -518,7 +524,9 @@ def build_neighborhood_summary(
     blocks_with_neighborhoods: gpd.GeoDataFrame,
     neighborhoods: gpd.GeoDataFrame,
 ) -> pd.DataFrame:
-    joined = blocks_with_neighborhoods.drop(columns=["geometry"], errors="ignore").merge(
+    joined = blocks_with_neighborhoods.drop(
+        columns=["geometry"], errors="ignore"
+    ).merge(
         block_summary,
         on=["block_id", "tract_id"],
         how="left",
@@ -562,7 +570,9 @@ def build_neighborhood_summary(
     summary = summary.merge(tract_lists, on="neighborhood_id", how="left")
     summary = summary.merge(block_lists, on="neighborhood_id", how="left")
 
-    neighborhoods_summary = neighborhoods[["neighborhood_id", "neighborhood_name"]].merge(
+    neighborhoods_summary = neighborhoods[
+        ["neighborhood_id", "neighborhood_name"]
+    ].merge(
         summary,
         on=["neighborhood_id", "neighborhood_name"],
         how="left",
@@ -576,7 +586,9 @@ def build_neighborhood_summary(
         "service_requests_365d",
         "crime_incidents_365d",
     ]:
-        neighborhoods_summary[column] = neighborhoods_summary[column].fillna(0).astype("int32")
+        neighborhoods_summary[column] = (
+            neighborhoods_summary[column].fillna(0).astype("int32")
+        )
 
     neighborhoods_summary["tract_ids"] = neighborhoods_summary["tract_ids"].apply(
         lambda value: value if isinstance(value, list) else []
@@ -639,8 +651,8 @@ def export_app_data(
         "service_requests_365d",
         "crime_incidents_365d",
     ]:
-        neighborhoods_export[column] = neighborhoods_export[column].fillna(0).astype(
-            "int32"
+        neighborhoods_export[column] = (
+            neighborhoods_export[column].fillna(0).astype("int32")
         )
     neighborhoods_export["last_event_date"] = neighborhoods_export[
         "last_event_date"
@@ -680,7 +692,9 @@ def export_app_data(
     address_lookup_path = APP_DATA_DIR / "address_index.json"
     address_lookup_path.write_text(
         json.dumps(
-            dict(zip(address_lookup["address"], address_lookup["block_id"], strict=False)),
+            dict(
+                zip(address_lookup["address"], address_lookup["block_id"], strict=False)
+            ),
             separators=(",", ":"),
         ),
         encoding="utf-8",
@@ -862,7 +876,9 @@ async def main() -> None:
     print(f"Saved build manifest to {manifest_path}")
 
     if args.export_app_data:
-        export_app_data(block_summary, block_log, blocks, neighborhoods, neighborhood_summary)
+        export_app_data(
+            block_summary, block_log, blocks, neighborhoods, neighborhood_summary
+        )
 
     print("Done.")
 
