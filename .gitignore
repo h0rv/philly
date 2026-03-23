@@ -41,6 +41,16 @@ share/python-wheels/
 *.egg
 MANIFEST
 
+# Astro / static site build output
+.astro/
+node_modules/
+website/.astro/
+website/node_modules/
+website/dist/
+website/public/explorations/
+website/public/logo.png
+website/src/data/explorations.generated.json
+
 # PyInstaller
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.

@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ExplorationCard from '../components/ExplorationCard.astro';
+import explorations from '../data/explorations.generated.json';
+
+const liveExplorations = explorations.filter((item) => item.ready);
+const featuredExplorations = explorations.filter((item) => item.ready && item.featured).slice(0, 3);
+const base = import.meta.env.BASE_URL;
+const withBase = (value) => `${base}${String(value).replace(/^\//, '')}`;
+---
+
+<BaseLayout
+  title="Philly"
+  description="Python library and CLI for OpenDataPhilly datasets."
+>
+  <section>
+    <p><strong>Philly</strong> is a Python library and CLI for OpenDataPhilly datasets.</p>
+    <p>
+      Use it to search Philadelphia public datasets, inspect metadata, load filtered results, and stream large
+      datasets.
+    </p>
+  </section>
+
+  <section>
+    <h1>Get Philadelphia public data with Python or the CLI.</h1>
+    <p class="lede">
+      Search datasets, load rows with server-side filtering, and build simple explorations from the results.
+    </p>
+    <p>
+      <a class="button" href="https://github.com/h0rv/philly" target="_blank" rel="noreferrer">View source on GitHub</a>
+      <a class="button" href={withBase('/explorations/')}>See explorations</a>
+    </p>
+  </section>
+
+  <section>
+    <h2>Install</h2>
+    <pre><code>uv add philly</code></pre>
+  </section>
+
+  <section>
+    <h2>Simple usage</h2>
+    <div class="grid two-col">
+      <div>
+        <h3>Python</h3>
+        <pre><code>from philly import Philly
+
+phl = Philly()
+
+data = await phl.load(
+    "Crime Incidents",
+    where="dispatch_date &gt;= '2024-01-01'",
+    limit=1000,
+)</code></pre>
+      </div>
+      <div>
+        <h3>CLI</h3>
+        <pre><code>phl datasets
+phl search "crime" --fuzzy
+phl info "Crime Incidents"
+phl load "Crime Incidents" --limit 100</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Where the data comes from</h2>
+    <p>
+      Philly uses dataset metadata and resource links from
+      <a href="https://opendataphilly.org" target="_blank" rel="noreferrer">OpenDataPhilly</a>.
+    </p>
+  </section>
+
+  <section>
+    <h2>Explorations</h2>
+    <p>{liveExplorations.length} available now.</p>
+    <div class="grid two-col">
+      {featuredExplorations.map((exploration) => <ExplorationCard exploration={exploration} />)}
+    </div>
+    {
+      liveExplorations.length > featuredExplorations.length && (
+        <p><a href={withBase('/explorations/')}>Browse all explorations</a></p>
+      )
+    }
+  </section>
+</BaseLayout>

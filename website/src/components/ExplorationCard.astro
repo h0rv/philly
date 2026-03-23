@@ -1,0 +1,13 @@
+---
+const { exploration } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const withBase = (value) => `${base}${String(value).replace(/^\//, '')}`;
+---
+
+<article>
+  <h3>
+    <a href={withBase(exploration.href)}>{exploration.title}</a>
+  </h3>
+  <p>{exploration.summary}</p>
+  <p class="tags">{exploration.tags.join(' · ')}</p>
+</article>

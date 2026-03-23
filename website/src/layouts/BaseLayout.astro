@@ -1,0 +1,56 @@
+---
+const {
+  title = 'Philly',
+  description = 'Python library and CLI for OpenDataPhilly datasets.',
+} = Astro.props;
+
+const base = import.meta.env.BASE_URL;
+const withBase = (value) => `${base}${String(value).replace(/^\//, '')}`;
+const currentPath = Astro.url.pathname;
+const nav = [
+  { href: '/', label: 'Home' },
+  { href: '/explorations/', label: 'Explorations' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#17304d" />
+    <link rel="icon" type="image/png" href={withBase('/logo.png')} />
+    <link rel="stylesheet" href="https://unpkg.com/missing.css@1.1.3" />
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href={withBase('/')} class="brand-link">philly</a>
+        {
+          nav.map((item) => {
+            const isActive = item.href === '/'
+              ? currentPath === withBase('/')
+              : currentPath.startsWith(withBase(item.href));
+
+            return (
+              <a class:list={{ active: isActive }} href={withBase(item.href)}>
+                {item.label}
+              </a>
+            );
+          })
+        }
+        <a href="https://github.com/h0rv/philly" target="_blank" rel="noreferrer">GitHub</a>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer>
+      <p>Data source: OpenDataPhilly and other public datasets used by individual explorations.</p>
+    </footer>
+  </body>
+</html>

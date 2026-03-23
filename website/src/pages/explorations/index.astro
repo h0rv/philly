@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ExplorationCard from '../../components/ExplorationCard.astro';
+import explorations from '../../data/explorations.generated.json';
+
+const liveExplorations = explorations.filter((item) => item.ready);
+---
+
+<BaseLayout
+  title="Philly explorations"
+  description="Explorations built with the Philly library."
+>
+  <section>
+    <h1>Explorations</h1>
+    <p class="lede">Examples built with philly.</p>
+    <p>
+      These are published artifacts generated from analysis in this repo.
+    </p>
+  </section>
+
+  <section>
+    <h2>Available</h2>
+    <div class="grid two-col">
+      {liveExplorations.map((exploration) => <ExplorationCard exploration={exploration} />)}
+    </div>
+  </section>
+</BaseLayout>

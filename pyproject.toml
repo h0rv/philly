@@ -72,6 +72,26 @@ test = "uv run pytest tests"
 
 all = ["fmt", "lint", "type-check"]
 
+[tool.poe.tasks.site-install]
+shell = "cd website && bun install"
+help = "Install website dependencies with Bun"
+
+[tool.poe.tasks.site-sync]
+shell = "cd website && bun run sync:explorations"
+help = "Sync publishable exploration artifacts into the website"
+
+[tool.poe.tasks.site-dev]
+shell = "cd website && bun run dev"
+help = "Run the Astro website locally"
+
+[tool.poe.tasks.site-build]
+shell = "cd website && bun run build"
+help = "Build the Astro website for GitHub Pages"
+
+[tool.poe.tasks.site-preview]
+shell = "cd website && bun run preview"
+help = "Preview the built Astro website"
+
 [tool.poe.tasks.eval-ui]
 cmd = "python -m http.server 8800 --directory explorations"
 help = "Serve explorations UI at http://localhost:8800"
