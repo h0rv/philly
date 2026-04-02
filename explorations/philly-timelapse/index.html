@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>City Atlas · 1860–2025</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.css">
+  <script src="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.js"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0d0d0d;
+      color: #fff;
+      font-family: 'Inter', -apple-system, system-ui, sans-serif;
+      overflow: hidden;
+      height: 100dvh;
+      width: 100dvw;
+    }
+
+    #map { position: absolute; inset: 0; }
+
+    /* ── Wordmark (top right) ─────────────────── */
+    #wordmark {
+      position: absolute;
+      top: 24px;
+      right: 28px;
+      z-index: 10;
+      text-align: right;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    #wordmark-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px;
+      letter-spacing: 0.06em;
+      line-height: 1;
+      color: #fff;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.9);
+    }
+
+    #wordmark-sub {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.38);
+      margin-top: 5px;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.9);
+    }
+
+    /* ── Year HUD (top left) ─────────────────── */
+    #hud {
+      position: absolute;
+      top: 24px;
+      left: 28px;
+      z-index: 10;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    #year-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 110px;
+      letter-spacing: 0.02em;
+      line-height: 0.88;
+      color: #fff;
+      text-shadow: 0 2px 48px rgba(0,0,0,0.95);
+      display: block;
+      transition: opacity 0.16s ease, transform 0.16s ease;
+    }
+
+    #year-number.exit {
+      opacity: 0;
+      transform: translateY(-16px);
+    }
+
+    #snapshot-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      margin-top: 10px;
+      text-shadow: 0 1px 10px rgba(0,0,0,0.95);
+      transition: opacity 0.2s ease;
+    }
+
+    #era-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 9px;
+      padding: 3px 9px 3px 7px;
+      border-radius: 3px;
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: 1px solid currentColor;
+      opacity: 0.65;
+      transition: color 0.4s ease, border-color 0.4s ease;
+    }
+
+    #era-badge::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: currentColor;
+      flex-shrink: 0;
+    }
+
+    /* Coverage warning */
+    #coverage-warn {
+      display: none;
+      margin-top: 10px;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      color: rgba(255, 200, 100, 0.65);
+      text-shadow: 0 1px 8px rgba(0,0,0,0.9);
+    }
+
+    #coverage-warn.show { display: block; }
+
+    /* ── Bottom bar ───────────────────────────── */
+    #bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      padding: 0 32px 28px;
+      background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.9)  0%,
+        rgba(0,0,0,0.55) 50%,
+        transparent      100%
+      );
+    }
+
+    #controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    #play-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.07);
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      outline: none;
+      transition: background 0.15s, border-color 0.15s, transform 0.1s;
+      flex-shrink: 0;
+    }
+    #play-btn:hover  { background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.4); }
+    #play-btn:active { transform: scale(0.9); }
+
+    #speed-controls { display: flex; gap: 2px; }
+
+    .speed-btn {
+      padding: 4px 8px;
+      border-radius: 3px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: transparent;
+      color: rgba(255,255,255,0.3);
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.15s;
+    }
+    .speed-btn:hover  { color: rgba(255,255,255,0.65); border-color: rgba(255,255,255,0.28); }
+    .speed-btn.active { color: #fff; border-color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.1); }
+
+    #hint {
+      font-size: 10.5px;
+      color: rgba(255,255,255,0.2);
+      letter-spacing: 0.05em;
+      margin-left: 2px;
+    }
+
+    /* ── Timeline ────────────────────────────── */
+    #timeline {
+      position: relative;
+      height: 50px;
+    }
+
+    #track-bg {
+      position: absolute;
+      top: 15px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: rgba(255,255,255,0.1);
+    }
+
+    #track-fill {
+      position: absolute;
+      top: 15px;
+      left: 0;
+      height: 1px;
+      background: rgba(255,255,255,0.55);
+      pointer-events: none;
+      transition: width 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .tick {
+      position: absolute;
+      top: 8px;
+      transform: translateX(-50%);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.22);
+      border: 1px solid rgba(255,255,255,0.32);
+      transition: transform 0.15s, background 0.15s, box-shadow 0.15s, width 0.15s, height 0.15s;
+      flex-shrink: 0;
+    }
+
+    .tick:hover .dot {
+      background: rgba(255,255,255,0.6);
+      transform: scale(1.7);
+    }
+
+    .tick.active .dot {
+      width: 10px;
+      height: 10px;
+      background: #fff;
+      border-color: #fff;
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.14), 0 0 20px rgba(255,255,255,0.25);
+      transform: none;
+    }
+
+    .tick-lbl {
+      font-family: 'Inter', sans-serif;
+      font-size: 9.5px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.25);
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      margin-top: 10px;
+      transition: color 0.15s;
+    }
+
+    .tick:hover .tick-lbl,
+    .tick.active .tick-lbl { color: rgba(255,255,255,0.82); }
+    .tick-lbl.hide { visibility: hidden; }
+
+    /* Era captions below track */
+    #era-row {
+      position: absolute;
+      top: 34px;
+      left: 0;
+      right: 0;
+      pointer-events: none;
+    }
+
+    .era-tag {
+      position: absolute;
+      transform: translateX(-50%);
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.14);
+      white-space: nowrap;
+    }
+
+    /* MapLibre tweaks */
+    .maplibregl-ctrl-bottom-right { bottom: 108px !important; right: 12px !important; }
+    .maplibregl-ctrl-attrib       { background: rgba(0,0,0,0.4) !important; }
+    .maplibregl-ctrl-attrib-inner,
+    .maplibregl-ctrl-attrib a     { color: rgba(255,255,255,0.35) !important; font-size: 10px !important; }
+  </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<!-- Wordmark -->
+<div id="wordmark">
+  <div id="wordmark-title">City Atlas</div>
+  <div id="wordmark-sub">Philly · 1860 – 2025</div>
+</div>
+
+<!-- Year HUD -->
+<div id="hud">
+  <span id="year-number">2025</span>
+  <div id="snapshot-label">Aerial Photography · 3-inch</div>
+  <div id="era-badge">Modern Aerial</div>
+  <div id="coverage-warn">⚠ Survey coverage incomplete</div>
+</div>
+
+<!-- Timeline + controls -->
+<div id="bottom">
+  <div id="controls">
+    <button id="play-btn" title="Play (Space)">▶</button>
+    <div id="speed-controls">
+      <button class="speed-btn" data-speed="2600">½×</button>
+      <button class="speed-btn active" data-speed="1400">1×</button>
+      <button class="speed-btn" data-speed="700">2×</button>
+      <button class="speed-btn" data-speed="280">4×</button>
+    </div>
+    <span id="hint">← → step &nbsp;·&nbsp; space play &nbsp;·&nbsp; home / end</span>
+  </div>
+
+  <div id="timeline">
+    <div id="track-bg"></div>
+    <div id="track-fill"></div>
+    <div id="era-row"></div>
+  </div>
+</div>
+
+<script>
+// ─── Service Worker ───────────────────────────────────────────
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').catch(() => {});
+}
+
+// ─── Snapshot catalogue ───────────────────────────────────────
+// maxzoom: prevents MapLibre requesting tiles past each source's resolution
+const B = 'https://tiles.arcgis.com/tiles/fLeGjb7u4uXqeF9q/arcgis/rest/services';
+
+const SNAPSHOTS = [
+  { year: 1860, era: 'City Atlas',    label: 'Hexamer Locher City Atlas',   maxzoom: 18, gaps: false, svc: 'HistoricHexamerLocherAtlas_1860'  },
+  { year: 1875, era: 'City Atlas',    label: 'GM Hopkins City Atlas',        maxzoom: 18, gaps: false, svc: 'HistoricGMHopkinsAtlas_1875'      },
+  { year: 1895, era: 'City Atlas',    label: 'Bromley City Atlas',           maxzoom: 18, gaps: false, svc: 'HistoricBromleyAtlas_1895'        },
+  { year: 1910, era: 'City Atlas',    label: 'Bromley City Atlas',           maxzoom: 18, gaps: false, svc: 'HistoricBromleyAtlas_1910'        },
+  { year: 1928, era: 'Early Aerial',  label: 'Historical Aerial Survey',     maxzoom: 18, gaps: false, svc: 'CityImagery_1928_RPF'             },
+  { year: 1942, era: 'Early Aerial',  label: 'WPA Land Use Survey',          maxzoom: 18, gaps: false, svc: 'HistoricLandUse_1942'             },
+  { year: 1959, era: 'Early Aerial',  label: 'DVRPC Aerial Survey',          maxzoom: 17, gaps: true,  svc: 'CityImagery_1959_DVRPC'           },
+  { year: 1962, era: 'Early Aerial',  label: 'WPA Land Use Survey',          maxzoom: 18, gaps: false, svc: 'HistoricLandUse_1962'             },
+  { year: 1975, era: 'Early Aerial',  label: 'DVRPC Aerial Survey',          maxzoom: 17, gaps: true,  svc: 'CityImagery_1975_DVRPC'           },
+  { year: 1996, era: 'Modern Aerial', label: 'Aerial Photography · 6-inch',  maxzoom: 20, gaps: false, svc: 'CityImagery_1996_6in'             },
+  { year: 1999, era: 'Modern Aerial', label: 'USGS Aerial Survey',           maxzoom: 19, gaps: false, svc: 'CityImagery_1999_USGS'            },
+  { year: 2000, era: 'Modern Aerial', label: 'Aerial Photography · 18-inch', maxzoom: 19, gaps: false, svc: 'CityImagery_2000_18in'            },
+  { year: 2004, era: 'Modern Aerial', label: 'Aerial Photography · 6-inch',  maxzoom: 20, gaps: false, svc: 'CityImagery_2004_6in'             },
+  { year: 2005, era: 'Modern Aerial', label: 'Aerial Photography · 16-inch', maxzoom: 19, gaps: false, svc: 'CityImagery_2005_16in'            },
+  { year: 2008, era: 'Modern Aerial', label: 'Aerial Photography · 3-inch',  maxzoom: 21, gaps: false, svc: 'CityImagery_2008_3in'             },
+  { year: 2009, era: 'Modern Aerial', label: 'Aerial Photography · 6-inch',  maxzoom: 20, gaps: false, svc: 'CityImagery_2009_6in'             },
+  { year: 2010, era: 'Modern Aerial', label: 'Aerial Photography · 3-inch',  maxzoom: 21, gaps: false, svc: 'CityImagery_2010_3in'             },
+  { year: 2011, era: 'Modern Aerial', label: 'Aerial Photography · 12-inch', maxzoom: 20, gaps: false, svc: 'CityImagery_2011_12in_LEAFON'      },
+  { year: 2012, era: 'Modern Aerial', label: 'Aerial Photography · 3-inch',  maxzoom: 21, gaps: false, svc: 'CityImagery_2012_3in'             },
+  { year: 2014, era: 'Modern Aerial', label: 'Aerial Photography · 6-inch',  maxzoom: 20, gaps: false, svc: 'CityImagery_2014_6in'             },
+  { year: 2015, era: 'Modern Aerial', label: 'Aerial Photography · 3-inch',  maxzoom: 21, gaps: false, svc: 'CityImagery_2015_3in'             },
+  { year: 2016, era: 'Modern Aerial', label: 'Aerial Photography · 3-inch',  maxzoom: 21, gaps: false, svc: 'CityImagery_2016_3in'             },
+  { year: 2017, era: 'Modern Aerial', label: 'Aerial Photography · 3-inch',  maxzoom: 21, gaps: false, svc: 'CityImagery_2017_3in'             },
+  { year: 2018, era: 'Modern Aerial', label: 'Aerial Photography · 3-inch',  maxzoom: 21, gaps: false, svc: 'CityImagery_2018_3in'             },
+  { year: 2019, era: 'Modern Aerial', label: 'Aerial Photography · 3-inch',  maxzoom: 21, gaps: false, svc: 'CityImagery_2019_3in'             },
+  { year: 2020, era: 'Modern Aerial', label: 'Aerial Photography · 3-inch',  maxzoom: 21, gaps: false, svc: 'CityImagery_2020_3in'             },
+  { year: 2022, era: 'Modern Aerial', label: 'Aerial Photography · 2-inch',  maxzoom: 21, gaps: false, svc: 'CityImagery_2022_2in'             },
+  { year: 2023, era: 'Modern Aerial', label: 'Aerial Photography · 2-inch',  maxzoom: 21, gaps: false, svc: 'CityImagery_2023'                 },
+  { year: 2024, era: 'Modern Aerial', label: 'Aerial Photography · 1-inch',  maxzoom: 21, gaps: false, svc: 'CityImagery_2024_1in'             },
+  { year: 2025, era: 'Modern Aerial', label: 'Aerial Photography · 3-inch',  maxzoom: 21, gaps: false, svc: 'CityImagery_2025_3in'             },
+].map(s => ({ ...s, url: `${B}/${s.svc}/MapServer/tile/{z}/{y}/{x}` }));
+
+const ERA_COLORS = {
+  'City Atlas':    '#d4a855',
+  'Early Aerial':  '#7fa8cc',
+  'Modern Aerial': '#e0e0e0',
+};
+
+const MIN_YEAR = SNAPSHOTS[0].year;   // 1860
+const MAX_YEAR = SNAPSHOTS[SNAPSHOTS.length - 1].year; // 2025
+const SPAN     = MAX_YEAR - MIN_YEAR; // 165
+const PREFETCH = 2;
+
+function pct(year) { return ((year - MIN_YEAR) / SPAN * 100).toFixed(3) + '%'; }
+
+const LABELED = new Set([1860, 1895, 1928, 1942, 1962, 1975, 1996, 2000, 2008, 2015, 2020, 2025]);
+
+// ─── Map ──────────────────────────────────────────────────────
+const map = new maplibregl.Map({
+  container: 'map',
+  style: {
+    version: 8,
+    sources: {},
+    layers: [{ id: 'bg', type: 'background', paint: { 'background-color': '#181818' } }],
+  },
+  center: [-75.1652, 39.9526],
+  zoom: 12,
+  minZoom: 9,
+  maxZoom: 21,
+  hash: true,
+});
+
+map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
+
+// ─── State ────────────────────────────────────────────────────
+let currentIndex = SNAPSHOTS.length - 1;
+let playing = false, playTimer = null, playSpeed = 1400;
+
+// ─── Layer helpers ────────────────────────────────────────────
+const sid = i => `src-${i}`;
+const lid = i => `lyr-${i}`;
+
+function ensureLayer(i) {
+  if (!map.getSource(sid(i))) {
+    map.addSource(sid(i), {
+      type: 'raster',
+      tiles: [SNAPSHOTS[i].url],
+      tileSize: 256,
+      maxzoom: SNAPSHOTS[i].maxzoom,
+      attribution: '© City of Philadelphia / PASDA',
+    });
+  }
+  if (!map.getLayer(lid(i))) {
+    map.addLayer({
+      id: lid(i),
+      type: 'raster',
+      source: sid(i),
+      paint: {
+        'raster-opacity': 0,
+        'raster-opacity-transition': { duration: 500, delay: 0 },
+        'raster-fade-duration': 0,
+      },
+    });
+  }
+}
+
+function showYear(index, animate = true) {
+  if (index < 0 || index >= SNAPSHOTS.length) return;
+
+  const dur      = animate ? 500 : 0;
+  const winStart = Math.max(0, index - PREFETCH);
+  const winEnd   = Math.min(SNAPSHOTS.length - 1, index + PREFETCH);
+
+  for (let i = winStart; i <= winEnd; i++) ensureLayer(i);
+
+  requestAnimationFrame(() => {
+    for (let i = winStart; i <= winEnd; i++) {
+      if (!map.getLayer(lid(i))) continue;
+      map.setPaintProperty(lid(i), 'raster-opacity-transition', { duration: dur, delay: 0 });
+      map.setPaintProperty(lid(i), 'raster-opacity', i === index ? 1 : 0);
+    }
+  });
+
+  // Prune outside window
+  setTimeout(() => {
+    for (let i = 0; i < SNAPSHOTS.length; i++) {
+      if (i >= winStart && i <= winEnd) continue;
+      if (map.getLayer(lid(i))) map.removeLayer(lid(i));
+      if (map.getSource(sid(i))) map.removeSource(sid(i));
+    }
+  }, dur + 100);
+
+  currentIndex = index;
+  updateHUD(animate);
+}
+
+// ─── HUD ─────────────────────────────────────────────────────
+const elYear  = document.getElementById('year-number');
+const elLabel = document.getElementById('snapshot-label');
+const elBadge = document.getElementById('era-badge');
+const elWarn  = document.getElementById('coverage-warn');
+
+function updateHUD(animate) {
+  const snap = SNAPSHOTS[currentIndex];
+
+  if (animate) {
+    elYear.classList.add('exit');
+    setTimeout(() => {
+      elYear.textContent = snap.year;
+      elYear.classList.remove('exit');
+    }, 160);
+  } else {
+    elYear.textContent = snap.year;
+  }
+
+  elLabel.textContent = snap.label;
+
+  const color = ERA_COLORS[snap.era] ?? '#fff';
+  elBadge.textContent = snap.era;
+  elBadge.style.color = color;
+
+  elWarn.classList.toggle('show', snap.gaps === true);
+
+  document.querySelectorAll('.tick').forEach((el, i) =>
+    el.classList.toggle('active', i === currentIndex));
+
+  document.getElementById('track-fill').style.width = pct(snap.year);
+}
+
+// ─── Timeline ────────────────────────────────────────────────
+const timeline = document.getElementById('timeline');
+
+SNAPSHOTS.forEach((snap, i) => {
+  const tick = document.createElement('div');
+  tick.className = 'tick' + (i === currentIndex ? ' active' : '');
+  tick.style.left = pct(snap.year);
+  tick.title = `${snap.year} — ${snap.label}`;
+
+  const dot = document.createElement('div');
+  dot.className = 'dot';
+
+  const lbl = document.createElement('div');
+  lbl.className = 'tick-lbl' + (LABELED.has(snap.year) ? '' : ' hide');
+  lbl.textContent = snap.year;
+
+  tick.append(dot, lbl);
+  tick.addEventListener('click', () => { stopPlay(); showYear(i); });
+  timeline.appendChild(tick);
+});
+
+const eraRow = document.getElementById('era-row');
+[
+  { label: 'City Atlas',   year: 1885 },
+  { label: 'Early Aerial', year: 1953 },
+  { label: 'Modern Aerial Photography', year: 2011 },
+].forEach(({ label, year }) => {
+  const el = document.createElement('div');
+  el.className = 'era-tag';
+  el.style.left = pct(year);
+  el.textContent = label;
+  eraRow.appendChild(el);
+});
+
+// ─── Playback ────────────────────────────────────────────────
+const playBtn = document.getElementById('play-btn');
+
+function stopPlay() {
+  if (!playing) return;
+  playing = false;
+  clearInterval(playTimer);
+  playBtn.textContent = '▶';
+  playBtn.title = 'Play (Space)';
+}
+
+function startPlay() {
+  playing = true;
+  playBtn.textContent = '⏸';
+  playBtn.title = 'Pause (Space)';
+  if (currentIndex >= SNAPSHOTS.length - 1) showYear(0, false);
+  playTimer = setInterval(() => {
+    if (currentIndex >= SNAPSHOTS.length - 1) { stopPlay(); return; }
+    showYear(currentIndex + 1);
+  }, playSpeed);
+}
+
+playBtn.addEventListener('click', () => playing ? stopPlay() : startPlay());
+
+document.querySelectorAll('.speed-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    playSpeed = parseInt(btn.dataset.speed);
+    if (playing) { stopPlay(); startPlay(); }
+  });
+});
+
+// ─── Keyboard ────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if      (e.key === 'ArrowRight') { stopPlay(); showYear(currentIndex + 1); }
+  else if (e.key === 'ArrowLeft')  { stopPlay(); showYear(currentIndex - 1); }
+  else if (e.key === ' ')          { e.preventDefault(); playing ? stopPlay() : startPlay(); }
+  else if (e.key === 'Home')       { stopPlay(); showYear(0); }
+  else if (e.key === 'End')        { stopPlay(); showYear(SNAPSHOTS.length - 1); }
+});
+
+// ─── Boot ────────────────────────────────────────────────────
+map.on('load', () => showYear(currentIndex, false));
+</script>
+</body>
+</html>
