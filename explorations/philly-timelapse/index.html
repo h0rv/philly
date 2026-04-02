@@ -387,7 +387,6 @@ const ERA_COLORS = {
 const MIN_YEAR = SNAPSHOTS[0].year;   // 1860
 const MAX_YEAR = SNAPSHOTS[SNAPSHOTS.length - 1].year; // 2025
 const SPAN     = MAX_YEAR - MIN_YEAR; // 165
-const PREFETCH = 2;
 
 function pct(year) { return ((year - MIN_YEAR) / SPAN * 100).toFixed(3) + '%'; }
 
@@ -445,38 +444,26 @@ function ensureLayer(i) {
 function showYear(index, animate = true) {
   if (index < 0 || index >= SNAPSHOTS.length) return;
 
-  const dur      = animate ? 500 : 0;
-  const winStart = Math.max(0, index - PREFETCH);
-  const winEnd   = Math.min(SNAPSHOTS.length - 1, index + PREFETCH);
-
-  for (let i = winStart; i <= winEnd; i++) ensureLayer(i);
+  const dur = animate ? 500 : 0;
 
   requestAnimationFrame(() => {
-    for (let i = winStart; i <= winEnd; i++) {
+    for (let i = 0; i < SNAPSHOTS.length; i++) {
       if (!map.getLayer(lid(i))) continue;
       map.setPaintProperty(lid(i), 'raster-opacity-transition', { duration: dur, delay: 0 });
       map.setPaintProperty(lid(i), 'raster-opacity', i === index ? 1 : 0);
     }
   });
 
-  // Prune outside window
-  setTimeout(() => {
-    for (let i = 0; i < SNAPSHOTS.length; i++) {
-      if (i >= winStart && i <= winEnd) continue;
-      if (map.getLayer(lid(i))) map.removeLayer(lid(i));
-      if (map.getSource(sid(i))) map.removeSource(sid(i));
-    }
-  }, dur + 100);
-
   currentIndex = index;
   updateHUD(animate);
 }
 
 // ─── HUD ─────────────────────────────────────────────────────
-const elYear  = document.getElementById('year-number');
-const elLabel = document.getElementById('snapshot-label');
-const elBadge = document.getElementById('era-badge');
-const elWarn  = document.getElementById('coverage-warn');
+const elYear      = document.getElementById('year-number');
+const elLabel     = document.getElementById('snapshot-label');
+const elBadge     = document.getElementById('era-badge');
+const elWarn      = document.getElementById('coverage-warn');
+const elTrackFill = document.getElementById('track-fill');
 
 function updateHUD(animate) {
   const snap = SNAPSHOTS[currentIndex];
@@ -497,12 +484,14 @@ function updateHUD(animate) {
   elBadge.textContent = snap.era;
   elBadge.style.color = color;
 
-  elWarn.classList.toggle('show', snap.gaps === true);
+  elWarn.classList.toggle('show', snap.gaps);
 
-  document.querySelectorAll('.tick').forEach((el, i) =>
-    el.classList.toggle('active', i === currentIndex));
+  // O(1) active-dot swap — no querySelectorAll on every tick
+  if (activeTick) activeTick.classList.remove('active');
+  activeTick = ticks[currentIndex];
+  activeTick.classList.add('active');
 
-  document.getElementById('track-fill').style.width = pct(snap.year);
+  elTrackFill.style.width = pct(snap.year);
 }
 
 // ─── Timeline ────────────────────────────────────────────────
@@ -525,6 +514,10 @@ SNAPSHOTS.forEach((snap, i) => {
   tick.addEventListener('click', () => { stopPlay(); showYear(i); });
   timeline.appendChild(tick);
 });
+
+// Cache tick elements once — updateHUD does O(1) class swaps instead of querySelectorAll
+const ticks = [...document.querySelectorAll('.tick')];
+let activeTick = ticks[currentIndex];
 
 const eraRow = document.getElementById('era-row');
 [
@@ -581,8 +574,84 @@ document.addEventListener('keydown', e => {
   else if (e.key === 'End')        { stopPlay(); showYear(SNAPSHOTS.length - 1); }
 });
 
-// ─── Boot ────────────────────────────────────────────────────
-map.on('load', () => showYear(currentIndex, false));
+// ─── Tile prefetch ────────────────────────────────────────────
+// Philadelphia city bounds (tight fit)
+const PHILLY = { n: 40.1379, s: 39.8670, w: -75.2803, e: -74.9558 };
+
+function lngLatToTile(lat, lng, z) {
+  const n = 1 << z;
+  const r = lat * Math.PI / 180;
+  return {
+    x: Math.floor((lng + 180) / 360 * n),
+    y: Math.floor((1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2 * n),
+  };
+}
+
+// Build every tile URL for all snapshots within a bounding box + zoom range.
+function buildUrls(north, south, west, east, minZ, maxZ) {
+  const urls = [];
+  for (let z = minZ; z <= maxZ; z++) {
+    const nw = lngLatToTile(north, west, z);
+    const se = lngLatToTile(south, east, z);
+    for (let ty = nw.y; ty <= se.y; ty++)
+      for (let tx = nw.x; tx <= se.x; tx++)
+        for (const s of SNAPSHOTS)
+          if (z <= s.maxzoom)
+            urls.push(`${B}/${s.svc}/MapServer/tile/${z}/${ty}/${tx}`);
+  }
+  return urls;
+}
+
+// Drive a URL list through the SW cache with controlled concurrency.
+function pump(urls, concurrency, signal) {
+  let i = 0;
+  const next = () => {
+    if (signal.aborted || i >= urls.length) return;
+    fetch(urls[i++], { signal, cache: 'default' }).then(next, next);
+  };
+  for (let c = 0; c < concurrency; c++) next();
+}
+
+// Tier 1 — viewport: re-runs on every pan/zoom, high priority (8 workers).
+// Covers current view ± padding at current zoom so scrubbing is instant.
+let viewCtrl = null;
+function prefetchViewport() {
+  if (viewCtrl) viewCtrl.abort();
+  viewCtrl = new AbortController();
+  const b = map.getBounds(), PAD = 0.05;
+  const z = Math.min(Math.floor(map.getZoom()), 16);
+  pump(
+    buildUrls(
+      Math.min(85,  b.getNorth() + PAD), Math.max(-85, b.getSouth() - PAD),
+      b.getWest() - PAD, b.getEast() + PAD,
+      Math.max(9, z - 1), z,
+    ),
+    8, viewCtrl.signal,
+  );
+}
+
+// Tier 2 — full city: runs once after load, 3 background workers.
+// Z9–Z13 for all of Philadelphia across all 30 years ≈ ~8k tiles — completes
+// in a few minutes. Deeper zooms (Z14+) are handled by the viewport prefetch
+// the moment the user navigates there.
+let cityCtrl = null;
+function prefetchCity() {
+  if (cityCtrl) return; // only ever run once
+  cityCtrl = new AbortController();
+  pump(buildUrls(PHILLY.n, PHILLY.s, PHILLY.w, PHILLY.e, 9, 13), 3, cityCtrl.signal);
+}
+
+// ─── Boot ─────────────────────────────────────────────────────
+map.on('load', () => {
+  for (let i = 0; i < SNAPSHOTS.length; i++) ensureLayer(i);
+  showYear(currentIndex, false);
+  prefetchViewport();                          // immediate hot zone
+  setTimeout(prefetchCity, 2000);             // full city after UI settles
+});
+
+let moveDebounce;
+map.on('moveend', () => { clearTimeout(moveDebounce); moveDebounce = setTimeout(prefetchViewport, 200); });
+map.on('zoomend', () => { clearTimeout(moveDebounce); moveDebounce = setTimeout(prefetchViewport, 200); });
 </script>
 </body>
 </html>
