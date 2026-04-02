@@ -3,6 +3,9 @@
   "private": true,
   "type": "module",
   "packageManager": "bun@1.3.11",
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "sync:explorations": "node scripts/build-explorations.mjs",
     "predev": "bun run sync:explorations",
@@ -12,6 +15,6 @@
     "preview": "astro preview"
   },
   "devDependencies": {
-    "astro": "6.0.8"
+    "astro": "6.1.3"
   }
 }

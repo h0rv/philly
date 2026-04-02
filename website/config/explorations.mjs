@@ -1,5 +1,16 @@
 export const explorations = [
   {
+    slug: 'philly-timelapse',
+    title: 'City Atlas',
+    summary:
+      'A full-screen timelapse that scrubs Philadelphia from 1860 atlas plates to modern aerial imagery while holding the same camera over the city.',
+    tags: ['Maps', 'History', 'Aerial'],
+    featured: true,
+    requiredFiles: ['index.html', 'sw.js'],
+    publishFiles: ['index.html', 'sw.js'],
+    buildHint: 'Static artifact already checked in under explorations/philly-timelapse.',
+  },
+  {
     slug: 'block-report-card',
     title: "Your Block's Report Card",
     summary:
