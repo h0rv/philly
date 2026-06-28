@@ -10,9 +10,8 @@ import json
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
 import sqlparse
-from sqlparse.keywords import KEYWORDS as SQL_KEYWORDS
 from sqlparse.sql import Function, Identifier, IdentifierList
-from sqlparse.tokens import Keyword
+from sqlparse.tokens import Keyword as KW
 
 
 class BackendType(Enum):
@@ -89,8 +88,11 @@ def validate_where_clause(where: str) -> str:
 
 
 def quote_identifier(name: str) -> str:
-    """Wrap identifier in double quotes if it matches a SQL reserved word."""
-    return f'"{name}"' if name.upper() in SQL_KEYWORDS else name
+    """Wrap identifier in double quotes if sqlparse tokenizes it as a keyword."""
+    for token in sqlparse.parse(name)[0].flatten():
+        if token.ttype in KW:
+            return f'"{name}"'
+    return name
 
 
 def extract_computed_columns(sql_query: str) -> dict[str, str]:
@@ -106,13 +108,21 @@ def extract_computed_columns(sql_query: str) -> dict[str, str]:
         for token in tokens:
             if isinstance(token, IdentifierList):
                 for item in token.get_identifiers():
+                    if not isinstance(item, Identifier):
+                        continue
                     alias = item.get_alias()
-                    if alias and any(isinstance(t, Function) for t in item.tokens):
-                        result[alias] = item.get_real_name() or alias
+                    if alias:
+                        for t in item.tokens:
+                            if isinstance(t, Function):
+                                result[alias] = str(t)
+                                break
             elif isinstance(token, Identifier):
                 alias = token.get_alias()
-                if alias and any(isinstance(t, Function) for t in token.tokens):
-                    result[alias] = token.get_real_name() or alias
+                if alias:
+                    for t in token.tokens:
+                        if isinstance(t, Function):
+                            result[alias] = str(t)
+                            break
             if hasattr(token, "tokens"):
                 _walk(token.tokens)
 
@@ -137,13 +147,13 @@ def _extract_table_name(query: str) -> str:
     parsed = sqlparse.parse(query)[0]
     tokens = list(parsed.flatten())
     for i, token in enumerate(tokens):
-        if token.ttype is Keyword and token.normalized == "FROM":
+        if token.ttype in KW and token.normalized == "FROM":
             parts: list[str] = []
             for j in range(i + 1, len(tokens)):
                 t = tokens[j]
                 if t.is_whitespace:
                     continue
-                if t.ttype is Keyword:
+                if t.ttype in KW:
                     break
                 parts.append(t.value)
             if parts:
@@ -298,8 +308,9 @@ def build_carto_agg_query(
     table_name = _extract_table_name(existing_query)
 
     if by:
-        select_expr = f"{by}, {metric}"
-        group_clause = f" GROUP BY {by}"
+        by_q = quote_identifier(by.strip())
+        select_expr = f"{by_q}, {metric}"
+        group_clause = f" GROUP BY {by_q}"
     else:
         select_expr = metric
         group_clause = ""

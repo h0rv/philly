@@ -5,9 +5,17 @@ import pytest
 from philly.filtering import (
     BackendType,
     _extract_table_name,
+    _parse_metric,
+    build_arcgis_agg_query,
+    build_arcgis_distinct_query,
     build_arcgis_query,
+    build_carto_agg_query,
+    build_carto_distinct_query,
     build_carto_query,
+    check_computed_columns,
     detect_backend,
+    extract_computed_columns,
+    quote_identifier,
     validate_where_clause,
 )
 
@@ -438,3 +446,256 @@ class TestCartoQueryBuildingEdgeCases:
         result = build_carto_query(base_url, columns=[])
         # Empty list is falsy, so implementation falls back to *
         assert "%2A" in result or "*" in result  # %2A is URL-encoded *
+
+
+class TestQuoteIdentifier:
+    """Test SQL identifier quoting for reserved words."""
+
+    def test_plain_identifier(self):
+        assert quote_identifier("district") == "district"
+
+    def test_reserved_word(self):
+        assert quote_identifier("rows") == '"rows"'
+
+    def test_reserved_word_upper(self):
+        assert quote_identifier("ORDER") == '"ORDER"'
+
+    def test_table_name(self):
+        assert quote_identifier("my_table") == "my_table"
+
+
+class TestExtractComputedColumns:
+    """Test extraction of computed column aliases from SELECT queries."""
+
+    def test_simple_function_alias(self):
+        sql = "SELECT ST_Y(the_geom) AS lat FROM my_table"
+        assert extract_computed_columns(sql) == {"lat": "ST_Y(the_geom)"}
+
+    def test_multiple_function_aliases(self):
+        sql = "SELECT ST_Y(the_geom) AS lat, ST_X(the_geom) AS lng FROM my_table"
+        assert extract_computed_columns(sql) == {
+            "lat": "ST_Y(the_geom)",
+            "lng": "ST_X(the_geom)",
+        }
+
+    def test_no_computed_columns(self):
+        assert extract_computed_columns("SELECT col1, col2 FROM my_table") == {}
+
+    def test_mixed_columns(self):
+        sql = "SELECT id, ST_Y(the_geom) AS lat, name FROM my_table"
+        assert extract_computed_columns(sql) == {"lat": "ST_Y(the_geom)"}
+
+    def test_alias_without_function(self):
+        assert extract_computed_columns("SELECT col1 AS alias1 FROM my_table") == {}
+
+    def test_nested_function(self):
+        sql = "SELECT ROUND(score, 2) AS rounded FROM my_table"
+        assert extract_computed_columns(sql) == {"rounded": "ROUND(score, 2)"}
+
+    def test_no_alias(self):
+        assert extract_computed_columns("SELECT COUNT(*) FROM my_table") == {}
+
+
+class TestCheckComputedColumns:
+    """Test checking WHERE clauses against computed columns."""
+
+    def test_no_conflict(self):
+        assert (
+            check_computed_columns("status = 'Active'", {"lat": "ST_Y(the_geom)"}) == []
+        )
+
+    def test_detects_conflict(self):
+        warnings = check_computed_columns("lat > 39.9", {"lat": "ST_Y(the_geom)"})
+        assert len(warnings) == 1
+        assert "ST_Y(the_geom)" in warnings[0]
+        assert "lat" in warnings[0]
+
+    def test_multiple_conflicts(self):
+        computed = {"lat": "ST_Y(the_geom)", "lng": "ST_X(the_geom)"}
+        warnings = check_computed_columns("lat > 39.9 AND lng < -75.1", computed)
+        assert len(warnings) == 2
+
+    def test_empty_computed(self):
+        assert check_computed_columns("x = 1", {}) == []
+
+    def test_empty_where(self):
+        assert check_computed_columns("", {"lat": "ST_Y(the_geom)"}) == []
+
+
+class TestBuildCartoAggQuery:
+    """Test Carto aggregation query building."""
+
+    BASE = (
+        "https://phl.carto.com/api/v2/sql?q=SELECT * FROM business_licenses&format=csv"
+    )
+
+    def test_group_by_default_count(self):
+        result = build_carto_agg_query(self.BASE, by="licensetype")
+        assert "GROUP%20BY" in result
+        assert "licensetype" in result
+        assert "COUNT%28%2A%29" in result
+
+    def test_with_where(self):
+        result = build_carto_agg_query(
+            self.BASE, by="status", where="status = 'Active'"
+        )
+        assert "WHERE" in result
+        assert "GROUP%20BY" in result
+
+    def test_with_custom_metric(self):
+        result = build_carto_agg_query(self.BASE, by="district", metric="SUM(amount)")
+        assert "SUM%28amount%29" in result
+        assert "GROUP%20BY" in result
+
+    def test_with_limit(self):
+        result = build_carto_agg_query(self.BASE, by="licensetype", limit=10)
+        assert "LIMIT%2010" in result
+
+    def test_no_group_by(self):
+        result = build_carto_agg_query(self.BASE, metric="COUNT(*)")
+        assert "COUNT%28%2A%29" in result
+        assert "GROUP%20BY" not in result
+
+    def test_reserved_word_by(self):
+        result = build_carto_agg_query(self.BASE, by="rows")
+        assert "%22rows%22" in result
+
+    def test_preserves_format(self):
+        result = build_carto_agg_query(self.BASE, by="licensetype")
+        assert "format=csv" in result
+
+    def test_invalid_where(self):
+        with pytest.raises(ValueError, match="DROP"):
+            build_carto_agg_query(
+                self.BASE, by="licensetype", where="x = 1; DROP TABLE users"
+            )
+
+
+class TestBuildCartoDistinctQuery:
+    """Test Carto distinct query building."""
+
+    BASE = (
+        "https://phl.carto.com/api/v2/sql?q=SELECT * FROM business_licenses&format=csv"
+    )
+
+    def test_distinct_simple(self):
+        result = build_carto_distinct_query(self.BASE, column="licensetype")
+        assert "SELECT%20DISTINCT" in result
+        assert "licensetype" in result
+
+    def test_with_where(self):
+        result = build_carto_distinct_query(
+            self.BASE, column="status", where="status IS NOT NULL"
+        )
+        assert "WHERE" in result
+
+    def test_with_limit(self):
+        result = build_carto_distinct_query(self.BASE, column="district", limit=10)
+        assert "LIMIT%2010" in result
+
+    def test_reserved_word_column(self):
+        result = build_carto_distinct_query(self.BASE, column="rows")
+        assert "%22rows%22" in result
+
+    def test_invalid_where(self):
+        with pytest.raises(ValueError, match="DROP"):
+            build_carto_distinct_query(
+                self.BASE, column="status", where="DROP TABLE users"
+            )
+
+    def test_missing_query_param(self):
+        url = "https://phl.carto.com/api/v2/sql?format=csv"
+        with pytest.raises(ValueError, match="must contain a 'q' parameter"):
+            build_carto_distinct_query(url, column="status")
+
+
+class TestParseMetric:
+    """Test _parse_metric function."""
+
+    def test_count_star(self):
+        assert _parse_metric("COUNT(*)") == ("COUNT", "*")
+
+    def test_sum_field(self):
+        assert _parse_metric("SUM(amount)") == ("SUM", "amount")
+
+    def test_avg_field(self):
+        assert _parse_metric("AVG(score)") == ("AVG", "score")
+
+    def test_min_field(self):
+        assert _parse_metric("MIN(age)") == ("MIN", "age")
+
+    def test_max_field(self):
+        assert _parse_metric("MAX(salary)") == ("MAX", "salary")
+
+    def test_case_insensitive(self):
+        assert _parse_metric("count(*)") == ("COUNT", "*")
+
+    def test_whitespace_in_parens(self):
+        assert _parse_metric("SUM( amount )") == ("SUM", "amount")
+
+    def test_no_parentheses(self):
+        assert _parse_metric("count") == ("COUNT", "*")
+
+
+class TestBuildArcGISAggQuery:
+    """Test ArcGIS aggregation query building."""
+
+    BASE = "https://services.arcgis.com/.../FeatureServer/0/query?where=1%3D1&outFields=*&f=json"
+
+    def test_group_by_default_count(self):
+        result = build_arcgis_agg_query(self.BASE, by="licensetype")
+        assert "groupByFieldsForStatistics" in result
+        assert "outStatistics" in result
+
+    def test_with_where(self):
+        result = build_arcgis_agg_query(self.BASE, by="status", where="status='Active'")
+        assert "where=status" in result.lower()
+
+    def test_with_limit(self):
+        result = build_arcgis_agg_query(self.BASE, by="status", limit=10)
+        assert "resultRecordCount=10" in result
+
+    def test_no_group_by(self):
+        result = build_arcgis_agg_query(self.BASE, metric="COUNT(*)")
+        assert "outStatistics" in result
+        assert "groupByFieldsForStatistics" not in result
+
+    def test_preserves_format(self):
+        result = build_arcgis_agg_query(self.BASE, by="status")
+        assert "f=json" in result
+
+    def test_return_geometry_false(self):
+        result = build_arcgis_agg_query(self.BASE, by="status")
+        assert "returnGeometry=false" in result or "returnGeometry%3Dfalse" in result
+
+
+class TestBuildArcGISDistinctQuery:
+    """Test ArcGIS distinct query building."""
+
+    BASE = "https://services.arcgis.com/.../FeatureServer/0/query?where=1%3D1&outFields=*&f=json"
+
+    def test_distinct_column(self):
+        result = build_arcgis_distinct_query(self.BASE, column="status")
+        assert (
+            "returnDistinctValues=true" in result
+            or "returnDistinctValues%3Dtrue" in result
+        )
+        assert "outFields=status" in result
+
+    def test_with_where(self):
+        result = build_arcgis_distinct_query(
+            self.BASE, column="status", where="status='Active'"
+        )
+        assert "where=status" in result.lower()
+
+    def test_with_limit(self):
+        result = build_arcgis_distinct_query(self.BASE, column="status", limit=10)
+        assert "resultRecordCount=10" in result
+
+    def test_return_geometry_false(self):
+        result = build_arcgis_distinct_query(self.BASE, column="status")
+        assert "returnGeometry=false" in result or "returnGeometry%3Dfalse" in result
+
+    def test_preserves_format(self):
+        result = build_arcgis_distinct_query(self.BASE, column="status")
+        assert "f=json" in result
