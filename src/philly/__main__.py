@@ -641,6 +641,109 @@ class PhillyCLI:
             self._progress.error(str(e))
             sys.exit(1)
 
+    def query(
+        self,
+        dataset: str,
+        sql: str,
+        resource: str | None = None,
+    ) -> None:
+        """Run a raw SQL query against a Carto dataset. Useful for GROUP BY, DISTINCT, and other aggregations.
+
+        Args:
+            dataset: Name of the dataset
+            sql: Raw SQL query to execute
+            resource: Optional resource name (auto-selected if not provided)
+
+        Examples:
+            phl query "Crime Incidents" "SELECT district, COUNT(*) as cnt FROM business_licenses GROUP BY district ORDER BY cnt DESC LIMIT 10"
+            phl query "Crime Incidents" "SELECT DISTINCT category FROM crimes"
+        """
+        self._progress.progress(f"Running query on '{dataset}'...")
+
+        async def _query():
+            return await self._philly.query(dataset, sql=sql, resource_name=resource)
+
+        try:
+            data = asyncio.run(_query())
+            self._progress.success("Query completed")
+            print(self._formatter.format_output(data))
+        except Exception as e:
+            self._progress.error(str(e))
+            sys.exit(1)
+
+    def agg(
+        self,
+        dataset: str,
+        by: str | None = None,
+        metric: str = "COUNT(*)",
+        where: str | None = None,
+        resource: str | None = None,
+    ) -> None:
+        """Aggregate data with GROUP BY. Groups by ``--by`` column and computes ``--metric`` (default: COUNT(*)).
+
+        Args:
+            dataset: Name of the dataset
+            by: Column to group by (if omitted, computes aggregate over the whole table)
+            metric: Aggregate expression (default: COUNT(*))
+            where: SQL WHERE clause for filtering
+            resource: Optional resource name (auto-selected if not provided)
+
+        Examples:
+            phl agg "Crime Incidents" --by district
+            phl agg "Crime Incidents" --by licensetype --metric "COUNT(*)" --where "status = 'Active'"
+            phl agg "Crime Incidents" --metric "COUNT(*)" --where "dispatch_date >= '2024-01-01'"
+        """
+        self._progress.progress(f"Aggregating data from '{dataset}'...")
+
+        async def _agg():
+            return await self._philly.agg(
+                dataset, by=by, metric=metric, where=where, resource_name=resource
+            )
+
+        try:
+            data = asyncio.run(_agg())
+            self._progress.success("Aggregation completed")
+            print(self._formatter.format_output(data))
+        except Exception as e:
+            self._progress.error(str(e))
+            sys.exit(1)
+
+    def values(
+        self,
+        dataset: str,
+        column: str,
+        where: str | None = None,
+        resource: str | None = None,
+    ) -> None:
+        """Get distinct values for a column. Useful for exploring what values exist in a categorical column.
+
+        Args:
+            dataset: Name of the dataset
+            column: Column name to get distinct values for
+            where: SQL WHERE clause for filtering
+            resource: Optional resource name (auto-selected if not provided)
+
+        Examples:
+            phl values "Crime Incidents" licensetype
+            phl values "Crime Incidents" status --where "licensetype = 'Eating Establishment'"
+        """
+        self._progress.progress(
+            f"Getting distinct values for '{column}' in '{dataset}'..."
+        )
+
+        async def _values():
+            return await self._philly.distinct(
+                dataset, column=column, where=where, resource_name=resource
+            )
+
+        try:
+            data = asyncio.run(_values())
+            self._progress.success(f"Found {len(data)} distinct values")
+            print(self._formatter.format_output(data))
+        except Exception as e:
+            self._progress.error(str(e))
+            sys.exit(1)
+
 
 def main() -> None:
     """Entry point for the phl command."""
