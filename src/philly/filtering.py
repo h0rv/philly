@@ -9,6 +9,11 @@ from enum import Enum
 import json
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
+import sqlparse
+from sqlparse.keywords import KEYWORDS as SQL_KEYWORDS
+from sqlparse.sql import Function, Identifier, IdentifierList
+from sqlparse.tokens import Keyword
+
 
 class BackendType(Enum):
     """Supported backend types for datasets."""
@@ -83,143 +88,35 @@ def validate_where_clause(where: str) -> str:
     return where
 
 
-CARTO_RESERVED_WORDS: set[str] = {
-    "SELECT",
-    "FROM",
-    "WHERE",
-    "AND",
-    "OR",
-    "NOT",
-    "IN",
-    "IS",
-    "NULL",
-    "LIKE",
-    "BETWEEN",
-    "ORDER",
-    "BY",
-    "GROUP",
-    "HAVING",
-    "LIMIT",
-    "OFFSET",
-    "AS",
-    "ON",
-    "JOIN",
-    "LEFT",
-    "RIGHT",
-    "INNER",
-    "OUTER",
-    "FULL",
-    "CROSS",
-    "UNION",
-    "ALL",
-    "DISTINCT",
-    "COUNT",
-    "SUM",
-    "AVG",
-    "MIN",
-    "MAX",
-    "CASE",
-    "WHEN",
-    "THEN",
-    "ELSE",
-    "END",
-    "DESC",
-    "ASC",
-    "TRUE",
-    "FALSE",
-    "TABLE",
-    "CREATE",
-    "ALTER",
-    "DROP",
-    "DELETE",
-    "INSERT",
-    "UPDATE",
-    "SET",
-    "VALUES",
-    "INTO",
-    "WITH",
-    "EXISTS",
-    "UNIQUE",
-    "PRIMARY",
-    "KEY",
-    "FOREIGN",
-    "REFERENCES",
-    "INDEX",
-    "VIEW",
-    "CAST",
-    "CONVERT",
-    "COALESCE",
-    "NULLIF",
-    "ROW",
-    "ROWS",
-    "TYPE",
-    "DATE",
-    "TIME",
-    "TIMESTAMP",
-    "VARCHAR",
-    "INTEGER",
-    "NUMERIC",
-    "FLOAT",
-    "DOUBLE",
-    "PRECISION",
-    "BOOLEAN",
-    "CHAR",
-    "TEXT",
-    "BIGINT",
-    "INT",
-    "SMALLINT",
-    "DECIMAL",
-    "REAL",
-    "SERIAL",
-    "BLOB",
-}
-
-
 def quote_identifier(name: str) -> str:
-    """Wrap an identifier in double quotes if it matches a SQL reserved word."""
-    return f'"{name}"' if name.upper() in CARTO_RESERVED_WORDS else name
+    """Wrap identifier in double quotes if it matches a SQL reserved word."""
+    return f'"{name}"' if name.upper() in SQL_KEYWORDS else name
 
 
 def extract_computed_columns(sql_query: str) -> dict[str, str]:
     """Return {alias: expression} for computed columns in a SELECT query.
 
-    A column is "computed" if it has an AS alias and the expression before AS
-    is not a bare identifier (contains function calls, operators, etc.).
+    A column is "computed" if it has an AS alias where the expression
+    before AS is a function call (e.g. ST_Y(the_geom) AS lat).
     """
-    match = re.search(r"SELECT\s+(.*?)\s+FROM\s", sql_query, re.IGNORECASE | re.DOTALL)
-    if not match:
-        return {}
-
-    col_list_str = match.group(1).strip()
-
-    # Split column list by commas, respecting parentheses depth
-    cols: list[str] = []
-    current = ""
-    depth = 0
-    for char in col_list_str:
-        if char == "(":
-            depth += 1
-            current += char
-        elif char == ")":
-            depth -= 1
-            current += char
-        elif char == "," and depth == 0:
-            cols.append(current.strip())
-            current = ""
-        else:
-            current += char
-    if current.strip():
-        cols.append(current.strip())
-
+    parsed = sqlparse.parse(sql_query)[0]
     result: dict[str, str] = {}
-    for col in cols:
-        m = re.search(r"\bAS\s+([a-zA-Z_]\w*)\s*$", col, re.IGNORECASE)
-        if m:
-            alias = m.group(1)
-            expr = col[: m.start()].strip()
-            if not re.match(r"^[a-zA-Z_]\w*$", expr):
-                result[alias] = expr
 
+    def _walk(tokens):
+        for token in tokens:
+            if isinstance(token, IdentifierList):
+                for item in token.get_identifiers():
+                    alias = item.get_alias()
+                    if alias and any(isinstance(t, Function) for t in item.tokens):
+                        result[alias] = item.get_real_name() or alias
+            elif isinstance(token, Identifier):
+                alias = token.get_alias()
+                if alias and any(isinstance(t, Function) for t in token.tokens):
+                    result[alias] = token.get_real_name() or alias
+            if hasattr(token, "tokens"):
+                _walk(token.tokens)
+
+    _walk(parsed.tokens)
     return result
 
 
@@ -236,32 +133,23 @@ def check_computed_columns(where: str, computed_columns: dict[str, str]) -> list
 
 
 def _extract_table_name(query: str) -> str:
-    """Extract table name from a SELECT query.
-
-    Args:
-        query: SQL query string like "SELECT * FROM table_name"
-
-    Returns:
-        The extracted table name
-
-    Raises:
-        ValueError: If table name cannot be extracted
-
-    Examples:
-        >>> _extract_table_name("SELECT * FROM my_table")
-        'my_table'
-
-        >>> _extract_table_name("SELECT col1, col2 FROM schema.table")
-        'schema.table'
-    """
-    # Match: SELECT ... FROM table_name (with optional schema)
-    # Handle various whitespace and case variations
-    match = re.search(r"\bFROM\s+([a-zA-Z0-9_\.]+)", query, re.IGNORECASE)
-
-    if not match:
-        raise ValueError(f"Could not extract table name from query: {query}")
-
-    return match.group(1)
+    """Extract table name from a SELECT query using sqlparse."""
+    parsed = sqlparse.parse(query)[0]
+    tokens = list(parsed.flatten())
+    for i, token in enumerate(tokens):
+        if token.ttype is Keyword and token.normalized == "FROM":
+            parts: list[str] = []
+            for j in range(i + 1, len(tokens)):
+                t = tokens[j]
+                if t.is_whitespace:
+                    continue
+                if t.ttype is Keyword:
+                    break
+                parts.append(t.value)
+            if parts:
+                return "".join(parts)
+            break
+    raise ValueError(f"Could not extract table name from query: {query}")
 
 
 def build_carto_query(
