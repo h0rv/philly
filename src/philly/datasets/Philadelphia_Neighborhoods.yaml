@@ -16,16 +16,16 @@ organization: OpenDataPhilly
 resources:
 - format: shp
   name: Philadelphia Neighborhoods Shapefile
-  url: https://github.com/opendataphilly/open-geo-data/blob/master/philadelphia-neighborhoods/philadelphia-neighborhoods.zip
+  url: https://github.com/opendataphilly/odp-data-storage/blob/master/philadelphia-neighborhoods/philadelphia-neighborhoods.zip
 - format: geojson
   name: Philadelphia Neighborhoods GeoJSON
-  url: https://github.com/opendataphilly/open-geo-data/blob/master/philadelphia-neighborhoods/philadelphia-neighborhoods.geojson
+  url: https://github.com/opendataphilly/odp-data-storage/blob/master/philadelphia-neighborhoods/philadelphia-neighborhoods.geojson
 - format: geojson
   name: Philadelphia Neighborhoods GeoPackage
-  url: https://github.com/opendataphilly/open-geo-data/blob/master/philadelphia-neighborhoods/philadelphia-neighborhoods.gpkg
+  url: https://github.com/opendataphilly/odp-data-storage/blob/master/philadelphia-neighborhoods/philadelphia-neighborhoods.gpkg
 - format: geoparquet
   name: Philadelphia Neighborhoods GeoParquet
-  url: https://github.com/opendataphilly/open-geo-data/blob/master/philadelphia-neighborhoods/philadelphia-neighborhoods.parquet
+  url: https://github.com/opendataphilly/odp-data-storage/blob/master/philadelphia-neighborhoods/philadelphia-neighborhoods.parquet
 source: Robert Cheetham
 time_period: 1997 - 2024
 title: Philadelphia Neighborhoods

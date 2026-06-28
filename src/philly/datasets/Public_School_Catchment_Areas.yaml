@@ -1,0 +1,61 @@
+area_of_interest: City of Philadelphia
+category:
+- Education
+created: '2018-05-16'
+license: License Not Specified
+maintainer: ''
+maintainer_email: opendata@philasd.org
+maintainer_link: https://www.philasd.org/research/#opendata
+maintainer_phone: null
+notes: Shapefiles that include the catchment areas for Elementary, Middle, and High
+  Schools. The shapefiles require a Geographic Information System (GIS) software to
+  properly display the school catchment areas.
+opendataphilly_rating: null
+organization: School District of Philadelphia
+resources:
+- format: shp
+  name: Public School Catchment Areas - SY 2024-2025
+  url: https://cdn.philasd.org/offices/performance/Open_Data/School_Information/School_Catchment/SDP_Catchment_2425.zip
+- format: shp
+  name: Public School Catchment Areas - SY 2023-2024
+  url: https://cdn.philasd.org/offices/performance/Open_Data/School_Information/School_Catchment/SDP_Catchment_2324.zip
+- format: shp
+  name: Public School Catchment Areas - SY 2022-2023
+  url: https://cdn.philasd.org/offices/performance/Open_Data/School_Information/School_Catchment/SDP_Catchment_2223.zip
+- format: shp
+  name: Public School Catchment Areas - SY 2021-2022
+  url: https://cdn.philasd.org/offices/performance/Open_Data/School_Information/School_Catchment/SDP_Catchment_2122.zip
+- format: shp
+  name: Public School Catchment Areas - SY 2020-2021
+  url: https://cdn.philasd.org/offices/performance/Open_Data/School_Information/School_Catchment/SDP_Catchment_2021.zip
+- format: shp
+  name: Public School Catchment Areas - SY 2019-2020
+  url: https://cdn.philasd.org/offices/performance/Open_Data/School_Information/School_Catchment/SDP_Catchment_1920.zip
+- format: shp
+  name: Public School Catchment Areas - SY 2018-2019
+  url: https://cdn.philasd.org/offices/performance/Open_Data/School_Information/School_Catchment/SDP_Catchment_1819.zip
+- format: shp
+  name: Public School Catchment Areas - SY 2017-2018
+  url: https://cdn.philasd.org/offices/performance/Open_Data/School_Information/School_Catchment/SDP_Catchment_1718.zip
+- format: shp
+  name: Public School Catchment Areas - SY 2016-2017
+  url: https://cdn.philasd.org/offices/performance/Open_Data/School_Information/School_Catchment/SDP_Catchment_1617.zip
+- format: shp
+  name: Public School Catchment Areas - SY 2015-2016
+  url: https://cdn.philasd.org/offices/performance/Open_Data/School_Information/School_Catchment/SDP_Catchment_1516.zip
+- format: shp
+  name: Public School Catchment Areas - SY 2014-2015
+  url: https://cdn.philasd.org/offices/performance/Open_Data/School_Information/School_Catchment/SDP_Catchment_1415.zip
+- format: shp
+  name: Public School Catchment Areas - SY 2013-2014
+  url: https://cdn.philasd.org/offices/performance/Open_Data/School_Information/School_Catchment/SDP_Catchment_1314.zip
+- format: shp
+  name: Public School Catchment Areas - SY 2012-2013
+  url: https://cdn.philasd.org/offices/performance/Open_Data/School_Information/School_Catchment/SDP_Catchment_1213.zip
+- format: shp
+  name: Public School Catchment Areas - All Available Years
+  url: https://cdn.philasd.org/offices/performance/Open_Data/School_Information/School_Catchment/SDP_Catchment_All_Years.zip
+source: School District of Philadelphia
+time_period: null
+title: Public School Catchment Areas
+usage: null

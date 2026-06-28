@@ -1,0 +1,20 @@
+area_of_interest: City of Philadelphia
+category:
+- Education
+created: '2014-12-08'
+license: License Not Specified
+maintainer: School District of Philadelphia
+maintainer_email: webmaster@philasd.org
+maintainer_link: null
+maintainer_phone: null
+notes: Enter an address to find the nearest schools
+opendataphilly_rating: null
+organization: School District of Philadelphia
+resources:
+- format: html
+  name: School Finder
+  url: https://philasd.explore.avela.org/
+source: null
+time_period: null
+title: School District School Finder
+usage: Public Use; Free

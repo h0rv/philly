@@ -1,6 +1,7 @@
 area_of_interest: null
 category:
 - Elections / Politics
+- Boundaries
 created: '2016-07-27'
 license: License Not Specified
 maintainer: Robert Cheetham
@@ -19,7 +20,7 @@ organization: OpenDataPhilly
 resources:
 - format: shp
   name: Historic Political Wards and Ward Divisions Shapefiles
-  url: https://github.com/azavea/geo-data/tree/master/philadelphia-wards-divisions
+  url: https://github.com/opendataphilly/odp-data-storage/tree/master/philadelphia-wards-divisions
 source: City of Philadelphia
 time_period: null
 title: Historic Political Wards & Divisions

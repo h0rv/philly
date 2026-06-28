@@ -2,7 +2,7 @@ area_of_interest: null
 category:
 - Parks / Recreation
 - Environment
-created: '2016-12-01T22:09:27.452175'
+created: '2016-12-01'
 license: License Not Specified
 maintainer: ''
 maintainer_email: info@opendataphilly.org
@@ -18,13 +18,13 @@ organization: Volunteer
 resources:
 - format: shp
   name: Pennypack Park Trails Map shapefile
-  url: https://github.com/opendataphilly/open-geo-data/blob/master/pennypack-trails/pennypack-trails.zip
+  url: https://github.com/opendataphilly/odp-data-storage/blob/master/pennypack-trails/pennypack-trails.zip
 - format: geojson
   name: Pennypack Park Trails Map GeoJSON
-  url: https://github.com/opendataphilly/open-geo-data/blob/master/pennypack-trails/pennypack-trails.geojson
+  url: https://github.com/opendataphilly/odp-data-storage/blob/master/pennypack-trails/pennypack-trails.geojson
 - format: geoparquet
   name: Pennypack Park Trails Web GeoParquet
-  url: https://github.com/opendataphilly/open-geo-data/blob/master/pennypack-trails/pennypack-trails.parquet
+  url: https://github.com/opendataphilly/odp-data-storage/blob/master/pennypack-trails/pennypack-trails.parquet
 source: ''
 time_period: null
 title: Pennypack Park Trail Map

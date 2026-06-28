@@ -1,0 +1,29 @@
+area_of_interest: Chester County, PA
+category:
+- Boundaries
+created: '2013-01-23'
+license: null
+maintainer: Chester County GIS
+maintainer_email: gis@chesco.org
+maintainer_link: https://chester-county-s-gis-hub-chesco.hub.arcgis.com/
+maintainer_phone: null
+notes: Chester County townships and boroughs
+opendataphilly_rating: null
+organization: Chester County GIS
+resources:
+- format: csv
+  name: Chester County Municipalities (CSV)
+  url: https://hub.arcgis.com/api/v3/datasets/be0c841def474edc8b0ed4a1a688ad4f_0/downloads/data?format=csv&spatialRefId=4326&where=1%3D1
+- format: geojson
+  name: Chester County Municipalities (GeoJSON)
+  url: https://hub.arcgis.com/api/v3/datasets/be0c841def474edc8b0ed4a1a688ad4f_0/downloads/data?format=geojson&spatialRefId=4326&where=1%3D1
+- format: shp
+  name: Chester County Municipalities (SHP)
+  url: https://hub.arcgis.com/api/v3/datasets/be0c841def474edc8b0ed4a1a688ad4f_0/downloads/data?format=shp&spatialRefId=4326&where=1%3D1
+- format: html
+  name: Chester County Municipalities (Metadata)
+  url: https://chester-county-s-gis-hub-chesco.hub.arcgis.com/datasets/be0c841def474edc8b0ed4a1a688ad4f_0/about
+source: Chester County GIS
+time_period: null
+title: Chester County Municipalities
+usage: null

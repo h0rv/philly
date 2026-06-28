@@ -1,0 +1,37 @@
+area_of_interest: Southeastern Pennsylvania (Bucks, Chester, Delaware, Montgomery,
+  Philadelphia counties)
+category:
+- Transportation
+created: '2020-01-01'
+license: License Not Specified
+maintainer: SEPTA Planning Division
+maintainer_email: planning@septa.org
+maintainer_link: https://wwww.septa.org/open-data/
+maintainer_phone: null
+notes: "Trip data, stop lists, schedules, and KML geometry for SEPTA Metro routes.\
+  \ Rail lines (L1, B1, M1) have no onboard GPS \u2014 expect null coordinates. Trolley\
+  \ routes (T1-T5, G1, D1/D2) have partial GPS on surface segments.\nStop and Route\
+  \ IDs can be found at: https://opendataphilly.org/datasets/septa-routes-stops-locations/\n\
+  Example: https://www3.septa.org/api/v2/trips/?route_id=L1"
+opendataphilly_rating: null
+organization: SEPTA
+resources:
+- format: json
+  name: Metro Trips by Route API
+  url: https://www3.septa.org/api/v2/trips/?route_id=L1
+- format: json
+  name: Metro Trip Update API
+  url: https://www3.septa.org/api/v2/trip-update/?trip_id=705003
+- format: json
+  name: Metro Stops by Route API
+  url: https://www3.septa.org/api/v2/stops/?route_id=L1
+- format: json
+  name: Metro Stop Schedule API
+  url: https://www3.septa.org/api/v2/stop-schedule/?route_id=L1&stop_id=32158
+- format: kml
+  name: Metro Route KML API
+  url: https://www3.septa.org/api/v2/kml/?route=L1&type=route
+source: SEPTA
+time_period: Real-time updates
+title: SEPTA Metro APIs
+usage: Public Use

@@ -1,0 +1,30 @@
+area_of_interest: Chester County, PA
+category:
+- Boundaries
+- Elections / Politics
+created: '2021-11-10'
+license: null
+maintainer: Chester County GIS
+maintainer_email: gis@chesco.org
+maintainer_link: https://chester-county-s-gis-hub-chesco.hub.arcgis.com/
+maintainer_phone: null
+notes: ''
+opendataphilly_rating: null
+organization: Chester County GIS
+resources:
+- format: csv
+  name: State House Districts (CSV)
+  url: https://hub.arcgis.com/api/v3/datasets/27e6abbc8e7d4c249da815c477393e39_0/downloads/data?format=csv&spatialRefId=4326&where=1%3D1
+- format: geojson
+  name: State House Districts (GeoJSON)
+  url: https://hub.arcgis.com/api/v3/datasets/27e6abbc8e7d4c249da815c477393e39_0/downloads/data?format=geojson&spatialRefId=4326&where=1%3D1
+- format: shp
+  name: State House Districts (SHP)
+  url: https://hub.arcgis.com/api/v3/datasets/27e6abbc8e7d4c249da815c477393e39_0/downloads/data?format=shp&spatialRefId=4326&where=1%3D1
+- format: html
+  name: State House Districts (Metadata)
+  url: https://chester-county-s-gis-hub-chesco.hub.arcgis.com/datasets/27e6abbc8e7d4c249da815c477393e39_0/about
+source: Chester County GIS
+time_period: null
+title: Chester County State House Districts
+usage: null
