@@ -3,7 +3,7 @@ import hashlib
 import json
 import logging
 import time
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Sized
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -440,8 +440,8 @@ class Philly:
             else:
                 # Fall back to loading and counting
                 data = await self.load(dataset_name, resource_name, where=where)
-                if data is not None and hasattr(data, "__len__"):
-                    return len(data)  # pyright: ignore[reportArgumentType]
+                if data is not None and isinstance(data, Sized):
+                    return len(data)
                 return 0
 
     def cache_clear(self, dataset_name: str | None = None) -> None:

@@ -2,7 +2,7 @@
 
 import json
 import sys
-from typing import Any
+from typing import Any, cast
 from io import StringIO
 
 
@@ -139,12 +139,11 @@ class OutputFormatter:
         if not isinstance(data[0], dict):
             return "\n".join(str(item) for item in data)
 
-        headers = list(data[0].keys())
+        headers = list(cast(dict[str, Any], data[0]).keys())
         lines = [",".join(headers)]
 
         for item in data:
             values = [str(item.get(h, "")) for h in headers]
-            # Basic CSV escaping - wrap in quotes if contains comma
             escaped = [f'"{v}"' if "," in v or '"' in v else v for v in values]
             lines.append(",".join(escaped))
 
@@ -204,7 +203,7 @@ class OutputFormatter:
         if not isinstance(data[0], dict):
             return "\n".join(str(item) for item in data)
 
-        headers = list(data[0].keys())
+        headers = list(cast(dict[str, Any], data[0]).keys())
         lines = ["\t".join(headers)]
 
         for item in data:

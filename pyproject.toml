@@ -30,7 +30,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "ruff>0",
-    "basedpyright>0",
+    "ty>0",
     "poethepoet>=0.37.0",
     "scipy>=1.16.3",
 ]
@@ -67,7 +67,7 @@ where = ["src"]
 [tool.poe.tasks]
 fmt = "uv run ruff format"
 lint = "uv run ruff check --fix"
-type-check = "uv run basedpyright --level error"
+type-check = "uv run ty check src"
 test = "uv run pytest tests"
 
 all = ["fmt", "lint", "type-check"]
