@@ -170,7 +170,7 @@ async def load_gtfs(resource: Resource) -> str:
 
 
 async def load_gtfs_rt(resource: Resource) -> Any:
-    feed_cls: Any = getattr(gtfs_rt, "FeedMessage")
+    feed_cls = getattr(gtfs_rt, "FeedMessage")
     feed = feed_cls()
     content = await _get_content(resource.url)
     feed.ParseFromString(content)
@@ -179,7 +179,7 @@ async def load_gtfs_rt(resource: Resource) -> Any:
 
 async def load_geoparquet(resource: Resource) -> gpd.GeoDataFrame:
     content = await _get_content(resource.url)
-    buffer: Any = BytesIO(content)
+    buffer = BytesIO(content)
     return gpd.read_parquet(buffer)
 
 

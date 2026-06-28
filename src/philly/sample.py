@@ -177,7 +177,9 @@ async def sample_geojson(url: str, n: int) -> list[dict[str, Any]]:
             return []
 
 
-def format_chunk(data: list[dict[str, Any]], format: str) -> Any:
+def format_chunk(
+    data: list[dict[str, Any]], format: str
+) -> list[dict[str, Any]] | pd.DataFrame:
     """Convert sample data to requested format.
 
     Args:

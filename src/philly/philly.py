@@ -6,7 +6,9 @@ import time
 from collections.abc import AsyncIterator, Sized
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal, overload
+
+import pandas as pd
 
 import httpx
 from tqdm import tqdm
@@ -719,13 +721,31 @@ class Philly:
     # Sample/Preview Methods
     # ============================================================================
 
+    @overload
+    async def sample(
+        self,
+        dataset_name: str,
+        resource_name: str | None = None,
+        n: int = 10,
+        output_format: Literal["records"] = "records",
+    ) -> list[dict[str, Any]]: ...
+
+    @overload
+    async def sample(
+        self,
+        dataset_name: str,
+        resource_name: str | None = None,
+        n: int = 10,
+        output_format: Literal["dataframe"] = "dataframe",
+    ) -> pd.DataFrame: ...
+
     async def sample(
         self,
         dataset_name: str,
         resource_name: str | None = None,
         n: int = 10,
         output_format: str = "records",
-    ) -> Any:
+    ) -> list[dict[str, Any]] | pd.DataFrame:
         """Preview data without downloading the entire file.
 
         Args:
