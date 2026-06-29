@@ -7,7 +7,6 @@ from collections.abc import AsyncIterator, Sized
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Literal, overload
-from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
 import pandas as pd
 
@@ -24,7 +23,9 @@ from philly.filtering import (
     build_carto_agg_query,
     build_carto_distinct_query,
     build_carto_query,
+    build_carto_raw_query,
     detect_backend,
+    _parse_metric,
 )
 from philly.format_selection import (
     find_resource_by_format,
@@ -131,6 +132,20 @@ class Philly:
             raise ValueError(f"dataset '{dataset_name}' does not exist")
 
         return dataset
+
+    def _resolve_resource(
+        self, dataset_name: str, resource_name: str | None
+    ) -> "Resource":
+        dataset = self._get_dataset(dataset_name)
+        if resource_name is None:
+            for fmt in self.config.defaults.format_preference:
+                resource = find_resource_by_format(dataset, fmt)
+                if resource:
+                    return resource
+            raise ValueError(
+                f"No resource found for dataset '{dataset_name}' with preferred formats"
+            )
+        return dataset.get_resource(resource_name)
 
     def _generate_cache_key(
         self,
@@ -476,21 +491,7 @@ class Philly:
             >>> phl = Philly()
             >>> rows = await phl.query("Crime Incidents", sql="SELECT * FROM crimes LIMIT 5")
         """
-        dataset = self._get_dataset(dataset_name)
-
-        if resource_name is None:
-            format_preference = self.config.defaults.format_preference
-            resource = None
-            for preferred_format in format_preference:
-                resource = find_resource_by_format(dataset, preferred_format)
-                if resource:
-                    break
-            if not resource:
-                raise ValueError(
-                    f"No resource found for dataset '{dataset_name}' with preferred formats"
-                )
-        else:
-            resource = dataset.get_resource(resource_name)
+        resource = self._resolve_resource(dataset_name, resource_name)
 
         if not resource.url:
             raise ValueError(f"Resource '{resource.name}' has no URL")
@@ -502,14 +503,7 @@ class Philly:
             if not sql:
                 raise ValueError("SQL query is required for Carto backend")
 
-            # Replace the existing q parameter with the raw SQL and force JSON
-            parsed = urlparse(url)
-            params = parse_qs(parsed.query, keep_blank_values=True)
-            params["q"] = [sql]
-            params["format"] = ["json"]
-            new_query_string = urlencode(params, doseq=True)
-            new_parsed = parsed._replace(query=new_query_string)
-            carto_url = urlunparse(new_parsed)
+            carto_url = build_carto_raw_query(url, sql)
 
             async with httpx.AsyncClient(timeout=120) as client:
                 resp = await client.get(carto_url)
@@ -554,21 +548,7 @@ class Philly:
             >>> result = await phl.agg("Crime Incidents", by="district")
             >>> result = await phl.agg("Crime Incidents", metric="SUM(amount)")
         """
-        dataset = self._get_dataset(dataset_name)
-
-        if resource_name is None:
-            format_preference = self.config.defaults.format_preference
-            resource = None
-            for preferred_format in format_preference:
-                resource = find_resource_by_format(dataset, preferred_format)
-                if resource:
-                    break
-            if not resource:
-                raise ValueError(
-                    f"No resource found for dataset '{dataset_name}' with preferred formats"
-                )
-        else:
-            resource = dataset.get_resource(resource_name)
+        resource = self._resolve_resource(dataset_name, resource_name)
 
         if not resource.url:
             raise ValueError(f"Resource '{resource.name}' has no URL")
@@ -606,21 +586,14 @@ class Philly:
 
             df = pd.DataFrame(data)
 
-            metric_stripped = metric.strip()
-            metric_upper = metric_stripped.upper()
-
-            if metric_upper.startswith("COUNT("):
-                pandas_agg = "count"
-            elif metric_upper.startswith("SUM("):
-                pandas_agg = "sum"
-            elif metric_upper.startswith("AVG("):
-                pandas_agg = "mean"
-            elif metric_upper.startswith("MIN("):
-                pandas_agg = "min"
-            elif metric_upper.startswith("MAX("):
-                pandas_agg = "max"
-            else:
-                pandas_agg = metric
+            stat_type, _ = _parse_metric(metric)
+            pandas_agg = {
+                "COUNT": "count",
+                "SUM": "sum",
+                "AVG": "mean",
+                "MIN": "min",
+                "MAX": "max",
+            }.get(stat_type, metric)
 
             if by:
                 result = df.groupby(by).agg(pandas_agg).reset_index()
@@ -657,21 +630,7 @@ class Philly:
             >>> phl = Philly()
             >>> districts = await phl.distinct("Crime Incidents", "district")
         """
-        dataset = self._get_dataset(dataset_name)
-
-        if resource_name is None:
-            format_preference = self.config.defaults.format_preference
-            resource = None
-            for preferred_format in format_preference:
-                resource = find_resource_by_format(dataset, preferred_format)
-                if resource:
-                    break
-            if not resource:
-                raise ValueError(
-                    f"No resource found for dataset '{dataset_name}' with preferred formats"
-                )
-        else:
-            resource = dataset.get_resource(resource_name)
+        resource = self._resolve_resource(dataset_name, resource_name)
 
         if not resource.url:
             raise ValueError(f"Resource '{resource.name}' has no URL")

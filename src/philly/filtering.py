@@ -88,7 +88,13 @@ def validate_where_clause(where: str) -> str:
 
 
 def quote_identifier(name: str) -> str:
-    """Wrap identifier in double quotes if sqlparse tokenizes it as a keyword."""
+    """Wrap a simple column/table identifier in double quotes if it is a SQL reserved word.
+
+    Only acts on bare identifiers (word chars only). Expressions like
+    ``COUNT(*) as count`` are returned unchanged so callers can pass them safely.
+    """
+    if not re.match(r"^[a-zA-Z_][a-zA-Z0-9_]*$", name):
+        return name
     for token in sqlparse.parse(name)[0].flatten():
         if token.ttype in KW:
             return f'"{name}"'
@@ -386,6 +392,17 @@ def build_carto_distinct_query(
     return urlunparse(new_parsed)
 
 
+def build_carto_raw_query(base_url: str, sql: str) -> str:
+    """Replace the q= parameter of a Carto URL with raw SQL and force JSON format."""
+    parsed = urlparse(base_url)
+    params = parse_qs(parsed.query, keep_blank_values=True)
+    params["q"] = [sql]
+    params["format"] = ["json"]
+    new_query_string = urlencode(params, doseq=True)
+    new_parsed = parsed._replace(query=new_query_string)
+    return urlunparse(new_parsed)
+
+
 def _parse_metric(metric: str) -> tuple[str, str]:
     """Parse an aggregate expression into (statistic_type, field_name).
 
@@ -434,7 +451,7 @@ def build_arcgis_agg_query(
             [
                 {
                     "statisticType": stat_type,
-                    "onStatisticField": stat_field if stat_field != "*" else by or "1",
+                    "onStatisticField": stat_field if stat_field != "*" else "OBJECTID",
                     "outStatisticFieldName": "count",
                 }
             ]

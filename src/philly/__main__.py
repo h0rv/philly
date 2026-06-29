@@ -655,7 +655,7 @@ class PhillyCLI:
             resource: Optional resource name (auto-selected if not provided)
 
         Examples:
-            phl query "Crime Incidents" "SELECT district, COUNT(*) as cnt FROM business_licenses GROUP BY district ORDER BY cnt DESC LIMIT 10"
+            phl query "Crime Incidents" "SELECT district, COUNT(*) as cnt FROM incidents GROUP BY district ORDER BY cnt DESC LIMIT 10"
             phl query "Crime Incidents" "SELECT DISTINCT category FROM crimes"
         """
         self._progress.progress(f"Running query on '{dataset}'...")
