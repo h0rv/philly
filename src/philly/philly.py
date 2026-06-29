@@ -17,9 +17,15 @@ from philly.cache import CacheEntry, FileCache
 from philly.config import PhillyConfig, load_config
 from philly.filtering import (
     BackendType,
+    build_arcgis_agg_query,
+    build_arcgis_distinct_query,
     build_arcgis_query,
+    build_carto_agg_query,
+    build_carto_distinct_query,
     build_carto_query,
+    build_carto_raw_query,
     detect_backend,
+    _parse_metric,
 )
 from philly.format_selection import (
     find_resource_by_format,
@@ -126,6 +132,20 @@ class Philly:
             raise ValueError(f"dataset '{dataset_name}' does not exist")
 
         return dataset
+
+    def _resolve_resource(
+        self, dataset_name: str, resource_name: str | None
+    ) -> "Resource":
+        dataset = self._get_dataset(dataset_name)
+        if resource_name is None:
+            for fmt in self.config.defaults.format_preference:
+                resource = find_resource_by_format(dataset, fmt)
+                if resource:
+                    return resource
+            raise ValueError(
+                f"No resource found for dataset '{dataset_name}' with preferred formats"
+            )
+        return dataset.get_resource(resource_name)
 
     def _generate_cache_key(
         self,
@@ -445,6 +465,210 @@ class Philly:
                 if data is not None and isinstance(data, Sized):
                     return len(data)
                 return 0
+
+    async def query(
+        self,
+        dataset_name: str,
+        resource_name: str | None = None,
+        sql: str | None = None,
+        format: str | None = None,
+    ) -> list[dict[str, Any]]:
+        """Execute a raw SQL query against a Carto backend.
+
+        Args:
+            dataset_name: Name of the dataset
+            resource_name: Optional resource name (auto-selected if not provided)
+            sql: Raw SQL query string (for Carto backends)
+            format: Ignored (response is always JSON)
+
+        Returns:
+            List of dicts representing result rows
+
+        Raises:
+            ValueError: If the backend is not Carto, or if sql is not provided
+
+        Examples:
+            >>> phl = Philly()
+            >>> rows = await phl.query("Crime Incidents", sql="SELECT * FROM crimes LIMIT 5")
+        """
+        resource = self._resolve_resource(dataset_name, resource_name)
+
+        if not resource.url:
+            raise ValueError(f"Resource '{resource.name}' has no URL")
+
+        url = resource.url
+        backend = detect_backend(url)
+
+        if backend == BackendType.CARTO:
+            if not sql:
+                raise ValueError("SQL query is required for Carto backend")
+
+            carto_url = build_carto_raw_query(url, sql)
+
+            async with httpx.AsyncClient(timeout=120) as client:
+                resp = await client.get(carto_url)
+                resp.raise_for_status()
+                data = resp.json()
+                return data.get("rows", [])
+
+        elif backend == BackendType.ARCGIS:
+            raise ValueError(
+                "Raw SQL not supported for ArcGIS backends. Use phl agg with --by instead."
+            )
+
+        else:
+            raise ValueError("Raw SQL not supported for static/unknown backends.")
+
+    async def agg(
+        self,
+        dataset_name: str,
+        by: str | None = None,
+        metric: str = "COUNT(*)",
+        where: str | None = None,
+        resource_name: str | None = None,
+    ) -> list[dict[str, Any]]:
+        """Run a structured aggregation (GROUP BY) against a dataset.
+
+        Uses server-side aggregation for Carto/ArcGIS backends when possible.
+        Falls back to pandas for static/unknown backends.
+
+        Args:
+            dataset_name: Name of the dataset
+            by: Optional column name to group by
+            metric: Aggregate expression (default: "COUNT(*)"). Supports
+                    COUNT, SUM, AVG, MIN, MAX functions.
+            where: Optional SQL WHERE clause for filtering
+            resource_name: Optional resource name (auto-selected if not provided)
+
+        Returns:
+            List of dicts with group columns and aggregate values
+
+        Examples:
+            >>> phl = Philly()
+            >>> result = await phl.agg("Crime Incidents", by="district")
+            >>> result = await phl.agg("Crime Incidents", metric="SUM(amount)")
+        """
+        resource = self._resolve_resource(dataset_name, resource_name)
+
+        if not resource.url:
+            raise ValueError(f"Resource '{resource.name}' has no URL")
+
+        url = resource.url
+        backend = detect_backend(url)
+
+        if backend == BackendType.CARTO:
+            agg_url = build_carto_agg_query(url, by, metric, where)
+            agg_url = agg_url.replace("format=csv", "format=json")
+            agg_url = agg_url.replace("format=geojson", "format=json")
+
+            async with httpx.AsyncClient(timeout=120) as client:
+                resp = await client.get(agg_url)
+                resp.raise_for_status()
+                data = resp.json()
+                return data.get("rows", [])
+
+        elif backend == BackendType.ARCGIS:
+            agg_url = build_arcgis_agg_query(url, by, metric, where)
+
+            async with httpx.AsyncClient(timeout=120) as client:
+                resp = await client.get(agg_url)
+                resp.raise_for_status()
+                data = resp.json()
+                return [
+                    feature.get("attributes", {})
+                    for feature in data.get("features", [])
+                ]
+
+        else:
+            data = await self.load(dataset_name, resource_name, where=where)
+            if data is None:
+                return []
+
+            df = pd.DataFrame(data)
+
+            stat_type, _ = _parse_metric(metric)
+            pandas_agg = {
+                "COUNT": "count",
+                "SUM": "sum",
+                "AVG": "mean",
+                "MIN": "min",
+                "MAX": "max",
+            }.get(stat_type, metric)
+
+            if by:
+                result = df.groupby(by).agg(pandas_agg).reset_index()
+            else:
+                if pandas_agg == "count":
+                    result = pd.DataFrame({"count": [len(df)]})
+                else:
+                    result = df.agg(pandas_agg).to_frame().T
+
+            return result.to_dict(orient="records")
+
+    async def distinct(
+        self,
+        dataset_name: str,
+        column: str,
+        where: str | None = None,
+        resource_name: str | None = None,
+    ) -> list[dict[str, Any]]:
+        """Get distinct values for a column in a dataset.
+
+        Uses server-side SELECT DISTINCT for Carto/ArcGIS backends when possible.
+        Falls back to pandas for static/unknown backends.
+
+        Args:
+            dataset_name: Name of the dataset
+            column: Column name to get distinct values for
+            where: Optional SQL WHERE clause for filtering
+            resource_name: Optional resource name (auto-selected if not provided)
+
+        Returns:
+            List of dicts in the form [{column: value}, ...]
+
+        Examples:
+            >>> phl = Philly()
+            >>> districts = await phl.distinct("Crime Incidents", "district")
+        """
+        resource = self._resolve_resource(dataset_name, resource_name)
+
+        if not resource.url:
+            raise ValueError(f"Resource '{resource.name}' has no URL")
+
+        url = resource.url
+        backend = detect_backend(url)
+
+        if backend == BackendType.CARTO:
+            distinct_url = build_carto_distinct_query(url, column=column, where=where)
+            distinct_url = distinct_url.replace("format=csv", "format=json")
+            distinct_url = distinct_url.replace("format=geojson", "format=json")
+
+            async with httpx.AsyncClient(timeout=120) as client:
+                resp = await client.get(distinct_url)
+                resp.raise_for_status()
+                data = resp.json()
+                return data.get("rows", [])
+
+        elif backend == BackendType.ARCGIS:
+            distinct_url = build_arcgis_distinct_query(url, column=column, where=where)
+
+            async with httpx.AsyncClient(timeout=120) as client:
+                resp = await client.get(distinct_url)
+                resp.raise_for_status()
+                data = resp.json()
+                return [
+                    feature.get("attributes", {})
+                    for feature in data.get("features", [])
+                ]
+
+        else:
+            data = await self.load(dataset_name, resource_name, where=where)
+            if data is None:
+                return []
+
+            df = pd.DataFrame(data)
+            distinct_values = df[column].drop_duplicates()
+            return [{column: val} for val in distinct_values]
 
     def cache_clear(self, dataset_name: str | None = None) -> None:
         """Clear cache entries. If dataset_name is provided, only clear that dataset."""

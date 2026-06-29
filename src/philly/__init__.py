@@ -9,8 +9,13 @@ from philly.config import (
 )
 from philly.filtering import (
     BackendType,
+    build_arcgis_agg_query,
+    build_arcgis_distinct_query,
     build_arcgis_query,
+    build_carto_agg_query,
+    build_carto_distinct_query,
     build_carto_query,
+    build_carto_raw_query,
     detect_backend,
 )
 from philly.philly import Philly
@@ -37,8 +42,13 @@ __all__ = [
     "NetworkConfig",
     "Philly",
     "PhillyConfig",
+    "build_arcgis_agg_query",
+    "build_arcgis_distinct_query",
     "build_arcgis_query",
+    "build_carto_agg_query",
+    "build_carto_distinct_query",
     "build_carto_query",
+    "build_carto_raw_query",
     "detect_backend",
     "find_config_file",
     "format_chunk",

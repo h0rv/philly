@@ -6,7 +6,12 @@ limiting, and column selection for data sources that support it (Carto, ArcGIS R
 
 import re
 from enum import Enum
+import json
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
+
+import sqlparse
+from sqlparse.sql import Function, Identifier, IdentifierList
+from sqlparse.tokens import Keyword as KW
 
 
 class BackendType(Enum):
@@ -82,33 +87,85 @@ def validate_where_clause(where: str) -> str:
     return where
 
 
-def _extract_table_name(query: str) -> str:
-    """Extract table name from a SELECT query.
+def quote_identifier(name: str) -> str:
+    """Wrap a simple column/table identifier in double quotes if it is a SQL reserved word.
 
-    Args:
-        query: SQL query string like "SELECT * FROM table_name"
-
-    Returns:
-        The extracted table name
-
-    Raises:
-        ValueError: If table name cannot be extracted
-
-    Examples:
-        >>> _extract_table_name("SELECT * FROM my_table")
-        'my_table'
-
-        >>> _extract_table_name("SELECT col1, col2 FROM schema.table")
-        'schema.table'
+    Only acts on bare identifiers (word chars only). Expressions like
+    ``COUNT(*) as count`` are returned unchanged so callers can pass them safely.
     """
-    # Match: SELECT ... FROM table_name (with optional schema)
-    # Handle various whitespace and case variations
-    match = re.search(r"\bFROM\s+([a-zA-Z0-9_\.]+)", query, re.IGNORECASE)
+    if not re.match(r"^[a-zA-Z_][a-zA-Z0-9_]*$", name):
+        return name
+    for token in sqlparse.parse(name)[0].flatten():
+        if token.ttype in KW:
+            return f'"{name}"'
+    return name
 
-    if not match:
-        raise ValueError(f"Could not extract table name from query: {query}")
 
-    return match.group(1)
+def extract_computed_columns(sql_query: str) -> dict[str, str]:
+    """Return {alias: expression} for computed columns in a SELECT query.
+
+    A column is "computed" if it has an AS alias where the expression
+    before AS is a function call (e.g. ST_Y(the_geom) AS lat).
+    """
+    parsed = sqlparse.parse(sql_query)[0]
+    result: dict[str, str] = {}
+
+    def _walk(tokens):
+        for token in tokens:
+            if isinstance(token, IdentifierList):
+                for item in token.get_identifiers():
+                    if not isinstance(item, Identifier):
+                        continue
+                    alias = item.get_alias()
+                    if alias:
+                        for t in item.tokens:
+                            if isinstance(t, Function):
+                                result[alias] = str(t)
+                                break
+            elif isinstance(token, Identifier):
+                alias = token.get_alias()
+                if alias:
+                    for t in token.tokens:
+                        if isinstance(t, Function):
+                            result[alias] = str(t)
+                            break
+            if hasattr(token, "tokens"):
+                _walk(token.tokens)
+
+    _walk(parsed.tokens)
+    return result
+
+
+def check_computed_columns(where: str, computed_columns: dict[str, str]) -> list[str]:
+    """Check if WHERE clause references computed column aliases."""
+    warnings: list[str] = []
+    for alias, expr in computed_columns.items():
+        if re.search(rf"\b{re.escape(alias)}\b", where):
+            warnings.append(
+                f"WHERE clause references computed column '{alias}' ({expr}). "
+                f"Use the expression directly: '{expr}' instead of '{alias}'."
+            )
+    return warnings
+
+
+def _extract_table_name(query: str) -> str:
+    """Extract table name from a SELECT query using sqlparse."""
+    parsed = sqlparse.parse(query)[0]
+    tokens = list(parsed.flatten())
+    for i, token in enumerate(tokens):
+        if token.ttype in KW and token.normalized == "FROM":
+            parts: list[str] = []
+            for j in range(i + 1, len(tokens)):
+                t = tokens[j]
+                if t.is_whitespace:
+                    continue
+                if t.ttype in KW:
+                    break
+                parts.append(t.value)
+            if parts:
+                return "".join(parts)
+            break
+    raise ValueError(f"Could not extract table name from query: {query}")
 
 
 def build_carto_query(
@@ -140,7 +197,7 @@ def build_carto_query(
     """
     # Validate WHERE clause if provided
     if where:
-        _ = validate_where_clause(where)
+        validate_where_clause(where)
 
     # Parse the URL
     parsed = urlparse(base_url)
@@ -153,9 +210,19 @@ def build_carto_query(
 
     table_name = _extract_table_name(existing_query)
 
+    # Check if WHERE clause references computed columns
+    if where:
+        computed = extract_computed_columns(existing_query)
+        conflicts = check_computed_columns(where, computed)
+        if conflicts:
+            raise ValueError("; ".join(conflicts))
+
     # Build new query
-    select_cols = ", ".join(columns) if columns else "*"
-    query = f"SELECT {select_cols} FROM {table_name}"
+    if columns:
+        select_cols = ", ".join(quote_identifier(col.strip()) for col in columns)
+    else:
+        select_cols = "*"
+    query = f"SELECT {select_cols} FROM {quote_identifier(table_name)}"
 
     if where:
         query += f" WHERE {where}"
@@ -220,6 +287,223 @@ def build_arcgis_query(
         params["resultOffset"] = [str(offset)]
 
     # Rebuild URL
+    new_query_string = urlencode(params, doseq=True)
+    new_parsed = parsed._replace(query=new_query_string)
+
+    return urlunparse(new_parsed)
+
+
+def build_carto_agg_query(
+    base_url: str,
+    by: str | None = None,
+    metric: str = "COUNT(*)",
+    where: str | None = None,
+    limit: int | None = None,
+) -> str:
+    """Build a Carto aggregation query URL with GROUP BY."""
+    if where:
+        validate_where_clause(where)
+
+    parsed = urlparse(base_url)
+    params = parse_qs(parsed.query, keep_blank_values=True)
+
+    existing_query = params.get("q", [""])[0]
+    if not existing_query:
+        raise ValueError("Carto URL must contain a 'q' parameter with SQL query")
+
+    table_name = _extract_table_name(existing_query)
+
+    if by:
+        by_q = quote_identifier(by.strip())
+        select_expr = f"{by_q}, {metric}"
+        group_clause = f" GROUP BY {by_q}"
+    else:
+        select_expr = metric
+        group_clause = ""
+
+    query = f"SELECT {select_expr} FROM {quote_identifier(table_name)}"
+
+    if where:
+        query += f" WHERE {where}"
+
+    query += group_clause
+
+    if limit is not None:
+        query += f" LIMIT {limit}"
+
+    params["q"] = [query]
+
+    new_query_string = urlencode(params, doseq=True)
+    new_query_string = new_query_string.replace("+", "%20")
+    new_parsed = parsed._replace(query=new_query_string)
+
+    return urlunparse(new_parsed)
+
+
+def build_carto_distinct_query(
+    base_url: str,
+    column: str,
+    where: str | None = None,
+    limit: int | None = None,
+) -> str:
+    """Build a Carto SELECT DISTINCT query URL.
+
+    Args:
+        base_url: The base Carto API URL with a 'q' parameter.
+        column: The column to select distinct values from.
+        where: SQL WHERE clause (without the WHERE keyword).
+        limit: Maximum number of rows to return.
+
+    Returns:
+        Modified URL with the DISTINCT query.
+
+    Raises:
+        ValueError: If the WHERE clause is invalid or table name cannot be extracted.
+    """
+    if where:
+        validate_where_clause(where)
+
+    parsed = urlparse(base_url)
+    params = parse_qs(parsed.query, keep_blank_values=True)
+
+    existing_query = params.get("q", [""])[0]
+    if not existing_query:
+        raise ValueError("Carto URL must contain a 'q' parameter with SQL query")
+
+    table_name = _extract_table_name(existing_query)
+
+    query = (
+        f"SELECT DISTINCT {quote_identifier(column.strip())}"
+        f" FROM {quote_identifier(table_name)}"
+    )
+
+    if where:
+        query += f" WHERE {where}"
+
+    if limit is not None:
+        query += f" LIMIT {limit}"
+
+    params["q"] = [query]
+
+    new_query_string = urlencode(params, doseq=True)
+    new_query_string = new_query_string.replace("+", "%20")
+    new_parsed = parsed._replace(query=new_query_string)
+
+    return urlunparse(new_parsed)
+
+
+def build_carto_raw_query(base_url: str, sql: str) -> str:
+    """Replace the q= parameter of a Carto URL with raw SQL and force JSON format."""
+    parsed = urlparse(base_url)
+    params = parse_qs(parsed.query, keep_blank_values=True)
+    params["q"] = [sql]
+    params["format"] = ["json"]
+    new_query_string = urlencode(params, doseq=True)
+    new_parsed = parsed._replace(query=new_query_string)
+    return urlunparse(new_parsed)
+
+
+def _parse_metric(metric: str) -> tuple[str, str]:
+    """Parse an aggregate expression into (statistic_type, field_name).
+
+    >>> _parse_metric("COUNT(*)")
+    ("COUNT", "*")
+    >>> _parse_metric("SUM(amount)")
+    ("SUM", "amount")
+    >>> _parse_metric("count")
+    ("COUNT", "*")
+    """
+    m = re.match(r"(\w+)\s*\((.+?)\)", metric.strip(), re.IGNORECASE)
+    if m:
+        return m.group(1).upper(), m.group(2).strip()
+    return metric.strip().upper(), "*"
+
+
+def build_arcgis_agg_query(
+    base_url: str,
+    by: str | None = None,
+    metric: str | None = None,
+    where: str | None = None,
+    limit: int | None = None,
+) -> str:
+    """Build an ArcGIS aggregation query URL.
+
+    Uses groupByFieldsForStatistics and outStatistics parameters.
+    """
+    parsed = urlparse(base_url)
+    params = parse_qs(parsed.query, keep_blank_values=True)
+
+    stat_type, stat_field = _parse_metric(metric or "COUNT(*)")
+    if by:
+        params["groupByFieldsForStatistics"] = [by]
+        out_statistics = json.dumps(
+            [
+                {
+                    "statisticType": stat_type,
+                    "onStatisticField": by if stat_field == "*" else stat_field,
+                    "outStatisticFieldName": "count",
+                }
+            ]
+        )
+        params["outStatistics"] = [out_statistics]
+    else:
+        out_statistics = json.dumps(
+            [
+                {
+                    "statisticType": stat_type,
+                    "onStatisticField": stat_field if stat_field != "*" else "OBJECTID",
+                    "outStatisticFieldName": "count",
+                }
+            ]
+        )
+        params["outStatistics"] = [out_statistics]
+
+    if where:
+        params["where"] = [where]
+
+    if limit is not None:
+        params["resultRecordCount"] = [str(limit)]
+
+    params["returnGeometry"] = ["false"]
+
+    new_query_string = urlencode(params, doseq=True)
+    new_parsed = parsed._replace(query=new_query_string)
+
+    return urlunparse(new_parsed)
+
+
+def build_arcgis_distinct_query(
+    base_url: str,
+    column: str,
+    where: str | None = None,
+    limit: int | None = None,
+) -> str:
+    """Build an ArcGIS distinct values query URL.
+
+    Uses outFields, returnDistinctValues, and resultRecordCount parameters.
+
+    Args:
+        base_url: The base ArcGIS FeatureServer URL.
+        column: The column to get distinct values from.
+        where: SQL WHERE clause (without the WHERE keyword).
+        limit: Maximum number of features to return.
+
+    Returns:
+        Modified URL with distinct query parameters.
+    """
+    parsed = urlparse(base_url)
+    params = parse_qs(parsed.query, keep_blank_values=True)
+
+    params["outFields"] = [column]
+    params["returnDistinctValues"] = ["true"]
+    params["returnGeometry"] = ["false"]
+
+    if where:
+        params["where"] = [where]
+
+    if limit is not None:
+        params["resultRecordCount"] = [str(limit)]
+
     new_query_string = urlencode(params, doseq=True)
     new_parsed = parsed._replace(query=new_query_string)
 
