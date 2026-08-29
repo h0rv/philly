@@ -27,7 +27,7 @@ organization: Reinvestment Fund
 resources:
 - format: html
   name: Childcare Map
-  url: https://www.childcaremap.org/newmaps/e/childcaremap
+  url: https://www.policymap.com/newmaps/e/childcaremap/
 source: null
 time_period: Varies by dataset
 title: Childcare Map
