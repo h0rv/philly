@@ -1,56 +1,49 @@
 ---
-const {
-  title = 'Philly',
-  description = 'Python library and CLI for OpenDataPhilly datasets.',
-} = Astro.props;
-
+const { title = 'Philly — Philadelphia, programmable.', description = 'Philadelphia open data for your terminal, Python notebooks, and AI tools.' } = Astro.props;
 const base = import.meta.env.BASE_URL;
-const withBase = (value) => `${base}${String(value).replace(/^\//, '')}`;
-const currentPath = Astro.url.pathname;
-const nav = [
-  { href: '/', label: 'Home' },
-  { href: '/explorations/', label: 'Explorations' },
-];
 ---
-
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#17304d" />
-    <link rel="icon" type="image/png" href={withBase('/logo.png')} />
-    <link rel="stylesheet" href="https://unpkg.com/missing.css@1.2.0" />
+    <meta name="theme-color" content="#0d0e10" />
+    <title>{title}</title>
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
   </head>
   <body>
+    <a class="skip" href="#main">Skip to content</a>
     <header>
-      <nav>
-        <a href={withBase('/')} class="brand-link">philly</a>
-        {
-          nav.map((item) => {
-            const isActive = item.href === '/'
-              ? currentPath === withBase('/')
-              : currentPath.startsWith(withBase(item.href));
-
-            return (
-              <a class:list={{ active: isActive }} href={withBase(item.href)}>
-                {item.label}
-              </a>
-            );
-          })
-        }
-        <a href="https://github.com/h0rv/philly" target="_blank" rel="noreferrer">GitHub</a>
+      <a href={base} aria-label="Philly home" class="brand">philly<span aria-hidden="true">▗</span></a>
+      <nav aria-label="Main navigation">
+        <a href={`${base}connect/`}>Connect</a>
+        <a href={`${base}explorations/`}>Explore</a>
+        <a href="https://github.com/h0rv/philly">Source ↗</a>
       </nav>
     </header>
-
-    <main>
-      <slot />
-    </main>
-
-    <footer>
-      <p>Data source: OpenDataPhilly and other public datasets used by individual explorations.</p>
-    </footer>
+    <main id="main"><slot /></main>
+    <footer><span>Made for a city worth understanding.</span><div><a href="https://opendataphilly.org">OpenDataPhilly ↗</a><span> / </span><a href="https://github.com/h0rv/philly/blob/main/LICENSE">MIT code</a></div><p>Independent project. Dataset licenses belong to their publishers.</p></footer>
   </body>
 </html>
+<style is:global>
+  :root { color-scheme: dark light; --bg:#0d0e10; --fg:#f4f1e8; --muted:#a5a79f; --line:#30332e; --green:#b2ed87; --panel:#171a16; font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace; }
+  * { box-sizing:border-box; } body { margin:0; background:var(--bg); color:var(--fg); font-size:14px; line-height:1.75; }
+  header,main,footer { width:min(640px,calc(100% - 40px)); margin-inline:auto; }
+  header { display:flex; justify-content:space-between; align-items:center; padding:28px 0; border-bottom:1px solid var(--line); gap:20px; }
+  nav { display:flex; gap:22px; font-size:12px; } a { color:var(--green); text-underline-offset:4px; } nav a,.brand { text-decoration:none; } a:hover { text-decoration:underline; }
+  .brand { font-size:17px; font-weight:bold; color:var(--fg); } .brand span { color:var(--green); margin-left:4px; }
+  main { padding:42px 0 60px; } h1,h2,h3 { line-height:1.25; letter-spacing:-.04em; } h1 { font-size:clamp(28px,6vw,42px); font-weight:500; } h2 { font-size:21px; font-weight:500; } h3 { font-size:16px; }
+  p { margin:14px 0; } .muted,.lede { color:var(--muted); } .eyebrow { font-size:11px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); }
+  section+section { margin-top:42px; padding-top:28px; border-top:1px solid var(--line); }
+  pre { background:var(--panel); border:1px solid var(--line); padding:20px; white-space:pre-wrap; overflow-wrap:anywhere; font-size:12px; line-height:1.9; } code { font-family:inherit; } button { font:inherit; cursor:pointer; } button:disabled { cursor:default; }
+  button { color:var(--fg); background:transparent; border:1px solid var(--line); padding:8px 14px; min-height:44px; }
+  button:hover { border-color:var(--green); } :focus-visible { outline:2px solid var(--green); outline-offset:4px; }
+  .tabs { display:flex; gap:6px; margin-top:22px; } [role=tab] { border:0; border-bottom:2px solid transparent; color:var(--muted); } [role=tab][aria-selected=true] { color:var(--green); border-color:var(--green); }
+  [hidden] { display:none !important; } .codebox { position:relative; } .codebox pre { padding-top:56px; margin-top:0; } .copy { position:absolute; right:8px; top:8px; font-size:11px; min-height:32px; padding:4px 10px; }
+  footer { border-top:1px solid var(--line); padding:24px 0 36px; color:var(--muted); font-size:11px; } footer div { margin-top:12px; } footer p { margin:6px 0; }
+  .skip { position:absolute; left:20px; top:-100px; background:var(--bg); padding:10px; z-index:20; } .skip:focus { top:4px; }
+  .grid { display:grid; gap:18px; } .two-col { grid-template-columns:1fr 1fr; } .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+  @media(max-width:480px) { nav { gap:14px; font-size:11px; } header { padding:22px 0; } main { padding-top:32px; } .two-col { grid-template-columns:1fr; } }
+  @media(prefers-color-scheme:light) { :root { --bg:#f4f1e8; --fg:#151812; --muted:#5a6056; --line:#cdd0c3; --green:#356323; --panel:#eaeade; } }
+</style>

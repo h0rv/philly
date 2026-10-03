@@ -200,3 +200,12 @@ cython_debug/
 .python-version
 philly.yml
 .playwright-mcp
+
+# MCP build/local state
+mcp/dist/
+mcp/.wrangler/
+
+mcp/test-results/
+mcp/playwright-report/
+
+/test-results/

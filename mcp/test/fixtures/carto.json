@@ -1,0 +1,1 @@
+{"fields":{"cartodb_id":{"type":"number"},"text_general_code":{"type":"string"},"dispatch_date_time":{"type":"date"},"hour":{"type":"number"},"the_geom":{"type":"geometry"}},"rows":[{"cartodb_id":1,"text_general_code":"Theft","hour":14},{"cartodb_id":2,"text_general_code":"Theft","hour":15},{"cartodb_id":3,"text_general_code":"Burglary","hour":16}]}

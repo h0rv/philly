@@ -1,0 +1,32 @@
+<div class="install" data-tabs>
+  <div role="tablist" aria-label="Choose an installation method" class="tabs">
+    <button role="tab" id="tab-cli" aria-controls="panel-cli" aria-selected="true">Terminal</button>
+    <button role="tab" id="tab-python" aria-controls="panel-python" aria-selected="false" tabindex="-1">Python</button>
+    <button role="tab" id="tab-mcp" aria-controls="panel-mcp" aria-selected="false" tabindex="-1">MCP</button>
+  </div>
+  <div role="tabpanel" id="panel-cli" aria-labelledby="tab-cli" tabindex="0">
+    <div class="codebox"><button class="copy" aria-label="Copy terminal install command">Copy</button><pre><code>uv tool install philly
+phl search "crime"
+phl sample "Crime Incidents" --limit 5</code></pre></div>
+    <p class="muted">Python 3.11+ · <a href="https://docs.astral.sh/uv/getting-started/installation/">Get uv ↗</a></p>
+  </div>
+  <div role="tabpanel" id="panel-python" aria-labelledby="tab-python" tabindex="0" hidden>
+    <div class="codebox"><button class="copy" aria-label="Copy Python install command">Copy</button><pre><code>uv add philly</code></pre></div>
+    <pre><code>from philly import Philly
+
+phl = Philly()
+data = await phl.sample("Crime Incidents", limit=5)</code></pre>
+    <p class="muted">Use <code>await</code> in a notebook or an async function.</p>
+  </div>
+  <div role="tabpanel" id="panel-mcp" aria-labelledby="tab-mcp" tabindex="0" hidden>
+    <div class="codebox"><button class="copy" aria-label="Copy local MCP setup">Copy</button><pre><code>git clone https://github.com/h0rv/philly.git
+cd philly/mcp
+npm ci
+npm run stdio</code></pre></div>
+    <p class="muted">Node 24+ · Local MCP from source. <a href={`${import.meta.env.BASE_URL}connect/`}>Client setup →</a></p>
+  </div>
+  <p role="status" aria-live="polite" class="sr-only" data-copy-status></p>
+</div>
+<script>
+  import '../scripts/interactions';
+</script>
