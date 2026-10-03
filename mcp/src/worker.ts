@@ -33,7 +33,7 @@ export function createWorker(service = new DataService()) {
       )
         return new Response("Invalid host.", { status: 403 });
       const origin = request.headers.get("origin");
-      if (origin && origin !== allowed.origin)
+      if (origin !== null && origin !== allowed.origin)
         return new Response("Origin not allowed.", { status: 403 });
       if (url.pathname === "/mcp/health" && request.method === "GET")
         return Response.json({
@@ -84,6 +84,22 @@ export function createWorker(service = new DataService()) {
           LIMITS.requestBytes,
           signal,
         );
+        // One request, one operation: the SDK's legacy batch fallback otherwise
+        // multiplies CPU/subrequest work behind a single admission slot.
+        if (text.trimStart().startsWith("[")) {
+          return Response.json(
+            {
+              jsonrpc: "2.0",
+              id: null,
+              error: {
+                code: -32600,
+                message:
+                  "Batch requests are unsupported; send one MCP operation per HTTP request.",
+              },
+            },
+            { status: 400 },
+          );
+        }
         // The SDK parses once; no user JSON is passed as parsedBody, bypassing SDK bounds.
         const headers = new Headers(request.headers);
         headers.delete("content-length");

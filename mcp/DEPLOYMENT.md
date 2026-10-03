@@ -8,15 +8,23 @@ One stateless Worker + static Astro assets. No Durable Objects, D1, KV, R2, sche
 
 Cloudflare documents Free limits of 100,000 Worker requests/day accountwide, 10 ms CPU per request, 128 MB memory, 50 subrequests and 6 simultaneous outgoing connections. Static asset requests are free. Network wait is not CPU, but JSON parsing, catalog search and SDK validation are. Current service caps are substantially lower than outgoing/request-byte limits; **actual free-plan CPU and traffic fit remains unproven until an approved deployment is measured**.
 
-Local baseline on Node v24.19.0, 2026-10-03 (500 samples; HTTP 200 samples after warmup):
+Local baseline after engineering-review fixes on Node v24.19.0, 2026-10-03 (500 samples; HTTP 200 samples after warmup):
 
 | Operation | p50 wall ms | p95 wall ms | mean process CPU ms |
 | --- | ---: | ---: | ---: |
-| Catalog search | 0.048 | 0.115 | 0.081 |
-| Bounded decode + parse, 120 KiB | 0.144 | 0.324 | 0.231 |
-| Full legacy HTTP search | 0.564 | 1.304 | 0.894 |
+| Catalog search | 0.047 | 0.076 | 0.068 |
+| Bounded decode + parse, 120 KiB | 0.163 | 0.335 | 0.267 |
+| Full legacy HTTP search | 0.474 | 0.815 | 0.717 |
 
 These are local microbenchmarks, not Cloudflare request billing measurements. They exclude cold startup, live schema/query responses and network. Wrangler dry-run initially reported about 2.33 MiB uncompressed / 406 KiB gzip, below the Free compressed Worker size limit. Local workerd successfully serves current and legacy protocol discovery/search. Browser page builds stay static. Re-run measurements after dependency or catalog changes.
+
+## Authentication preflight (read-only)
+
+The saved environment has no recognized Cloudflare credential/account variables, no default Wrangler auth file in the standard or task-specific config locations, and no project credential file. No token values were printed and no Cloudflare API authentication, refresh, login or credential generation was attempted. This does not inspect an external account or another computer's keychain.
+
+The installed Wrangler 4.147.0 supports device OAuth, verified with `wrangler login --help`. After **explicit approval to create/persist OAuth credentials**, the suitable remote/mobile flow is `cd mcp && npx --no-install wrangler login --device --browser=false`. The user opens the official Cloudflare verification page and enters the short-lived device code in their own browser; no API token should be pasted into chat. Credential storage must be approved before starting (the CLI can use `--use-keyring` when a supported OS keychain is available). The device flow does not require opening a callback port or widening inbound network access.
+
+The sign-in flow uses `dash.cloudflare.com`; subsequent account inspection uses `api.cloudflare.com`. These network destinations are not enabled by this implementation. After sign-in, run `wrangler whoami` and choose the intended existing Free account explicitly. Do not select a paid plan, register a domain, alter DNS, or deploy as part of authentication. No login was started here.
 
 ## Remaining approval and validation gates
 

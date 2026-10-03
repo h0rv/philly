@@ -46,6 +46,11 @@ for (const modern of [true, false]) {
         arguments: { query: "crime" },
       });
       assert.ok(JSON.stringify(result).includes("Crime_Incidents"));
+      const content = result.content;
+      assert.ok(Array.isArray(content));
+      const text = content.find((item) => item.type === "text");
+      assert.ok(text && text.type === "text");
+      assert.deepEqual(JSON.parse(text.text), result.structuredContent);
       const bad = await client.callTool({
         name: "query_dataset",
         arguments: { datasetId: "Crime_Incidents", limit: 999999 },
@@ -68,6 +73,22 @@ test("HTTP perimeter allows originless clients, rejects spoofed origins/hosts an
   const req = (path: string, init?: RequestInit) =>
     worker.fetch(new Request(origin + path, init), env);
   assert.equal((await req("/mcp/health")).status, 200);
+  for (const invalidOrigin of [
+    "",
+    "null",
+    origin + "/",
+    "https://evil.test",
+    origin + ", https://evil.test",
+  ]) {
+    assert.equal(
+      (await req("/mcp/health", { headers: { Origin: invalidOrigin } })).status,
+      403,
+    );
+  }
+  assert.equal(
+    (await req("/mcp/health", { headers: { Origin: origin } })).status,
+    200,
+  );
   assert.equal(
     (await req("/mcp/health", { headers: { Origin: "https://evil.test" } }))
       .status,
@@ -148,4 +169,30 @@ test("concurrent HTTP body reads have a bounded admission gate and release after
     ).status,
     429,
   );
+});
+test("legacy batches cannot amplify work behind one HTTP admission slot", async () => {
+  const { worker, network } = setup();
+  const request = {
+    jsonrpc: "2.0",
+    id: 1,
+    method: "tools/call",
+    params: {
+      name: "query_dataset",
+      arguments: { datasetId: "Crime_Incidents" },
+    },
+  };
+  const response = await worker.fetch(
+    new Request(origin + "/mcp", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        accept: "application/json,text/event-stream",
+      },
+      body: " \n" + JSON.stringify([request, { ...request, id: 2 }]),
+    }),
+    env,
+  );
+  assert.equal(response.status, 400);
+  assert.equal((await response.json()).error.code, -32600);
+  assert.equal(network(), 0);
 });

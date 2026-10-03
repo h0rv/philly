@@ -1,7 +1,8 @@
 export const LIMITS = Object.freeze({
   requestBytes: 16_384,
   upstreamBytes: 131_072,
-  resultBytes: 98_304,
+  // Reserve room for both JSON text and structured content plus the protocol envelope.
+  resultBytes: 61_440,
   responseBytes: 196_608,
   rows: 100,
   offset: 10_000,
@@ -51,16 +52,14 @@ export async function readBounded(
   }
 }
 export function boundedResult(value: Record<string, unknown>) {
-  if (
-    new TextEncoder().encode(JSON.stringify(value)).byteLength >
-    LIMITS.resultBytes
-  )
+  const text = JSON.stringify(value);
+  if (new TextEncoder().encode(text).byteLength > LIMITS.resultBytes)
     throw new Error("Result limit exceeded; request a smaller page.");
   return {
     content: [
       {
         type: "text" as const,
-        text: "Result includes source attribution and limits in structuredContent.",
+        text,
       },
     ],
     structuredContent: value,

@@ -86,3 +86,17 @@ test("clipboard denial gives selectable fallback; atlas and gallery routes survi
   expect(atlas.ok()).toBe(true);
   expect(await atlas.text()).toContain("City Atlas | Philly");
 });
+test("City Atlas service worker controls the preserved page route", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const scope = await page.evaluate(async () => {
+    const registration = await navigator.serviceWorker.register(
+      "/explorations/city-atlas/sw.js",
+    );
+    const scope = registration.scope;
+    await registration.unregister();
+    return scope;
+  });
+  expect(scope).toBe("http://127.0.0.1:4321/explorations/city-atlas/");
+});

@@ -128,13 +128,17 @@ export class DataService {
     if (
       !response.ok ||
       response.redirected ||
-      !response.headers.get("content-type")?.includes("application/json")
+      response.headers
+        .get("content-type")
+        ?.split(";", 1)[0]
+        .trim()
+        .toLowerCase() !== "application/json"
     ) {
-      void response.body?.cancel();
+      void response.body?.cancel().catch(() => {});
       throw new Error("Upstream unavailable or returned a non-JSON response.");
     }
     if (Number(response.headers.get("content-length")) > LIMITS.upstreamBytes) {
-      void response.body?.cancel();
+      void response.body?.cancel().catch(() => {});
       throw new Error("Upstream byte limit exceeded.");
     }
     const text = await readBounded(response.body, LIMITS.upstreamBytes, signal);
@@ -163,6 +167,10 @@ export class DataService {
     );
     if (
       !data.fields ||
+      typeof data.fields !== "object" ||
+      Array.isArray(data.fields) ||
+      data.rows.length !== 0 ||
+      Object.keys(data.fields).length === 0 ||
       Object.keys(data.fields).length > 200 ||
       Object.values(data.fields).some((f) => typeof f?.type !== "string")
     )
@@ -174,8 +182,9 @@ export class DataService {
     cancellation?: AbortSignal,
   ) {
     const { dataset, resource } = lookup(input.datasetId, input.resourceId);
-    return this.run(
-      async (signal) => ({
+    return this.run(async (signal) => {
+      const fields = await this.fields(resource.query!, signal);
+      return {
         datasetId: dataset.id,
         resourceId: resource.id,
         sourceUrl: resource.url,
@@ -185,10 +194,9 @@ export class DataService {
         truncated: false,
         nextOffset: null,
         schemaSource: "CARTO query metadata (LIMIT 0), not sample inference",
-        fields: await this.fields(resource.query!, signal),
-      }),
-      cancellation,
-    );
+        fields,
+      };
+    }, cancellation);
   }
   async query(input: z.infer<typeof querySchema>, cancellation?: AbortSignal) {
     const { dataset, resource } = lookup(input.datasetId, input.resourceId);
@@ -264,7 +272,7 @@ export class DataService {
         );
       const expression = `${input.operation.toUpperCase()}(${input.column ? quote(input.column) : "*"}) AS value`;
       const group = input.groupBy ? quote(input.groupBy) : null;
-      const sql = `SELECT ${group ? `${group} AS group_value,` : ""}${expression} FROM (${resource.query}) AS source${where(input.filters, fields)}${group ? ` GROUP BY ${group} ORDER BY ${group}` : ""} LIMIT ${input.limit + 1}`;
+      const sql = `SELECT ${group ? `${group} AS group_value,` : ""}${expression} FROM (${resource.query}) AS source${where(input.filters, fields)}${group ? ` GROUP BY ${group} ORDER BY group_value` : ""} LIMIT ${input.limit + 1}`;
       const data = await this.request(sql, signal);
       return {
         datasetId: dataset.id,

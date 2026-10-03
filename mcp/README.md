@@ -59,7 +59,7 @@ Use **http://127.0.0.1:8787/mcp** in a local Streamable HTTP client. `GET /mcp/h
 | `query_dataset` | IDs, `columns`, `filters`, `orderBy`, `limit`, `offset` | Live rows, applied filters, attribution and pagination |
 | `aggregate_dataset` | IDs, `operation`, `column`, `groupBy`, `filters`, `limit` | Full-source count or numeric sum/avg/min/max; bounded groups |
 
-`philly://usage` describes operational limits. Call `tools/list` for exact input schemas. Tool results use `structuredContent`, with a short text companion. On failure `isError` is true; upstream bodies are not echoed.
+`philly://usage` describes operational limits. Call `tools/list` for exact input schemas. Tool results include identical JSON in `structuredContent` and a text block so clients that only read text receive the data too. On failure `isError` is true; upstream bodies are not echoed.
 
 Example tool arguments, after discovering the dataset and resource IDs:
 
@@ -90,7 +90,7 @@ Every successful data response identifies the dataset/resource, original source 
 
 - HTTP body / stdio buffer: 16 KiB. HTTP streamed bytes bounded before SDK JSON parsing; encoded requests rejected.
 - Upstream: 128 KiB decoded bytes, checked on the stream before JSON parsing, regardless of Content-Length. Oversized/non-JSON/error/redirect responses fail; no retries.
-- Tool structured result: 96 KiB. HTTP output: 192 KiB including protocol envelope. Legacy SSE replies are buffered with the same cap; modern exchanges use JSON. No subscriptions, progress streams or sessions.
+- Tool structured result: 60 KiB, with room reserved for the matching JSON text fallback. HTTP output: 192 KiB including protocol envelope. Legacy SSE replies are buffered with the same cap; modern exchanges use JSON. No subscriptions, progress streams, sessions or HTTP batches. Send one MCP operation per request.
 - Query: 100 rows + one lookahead, 20 selected columns, 8 filters, offset ≤10,000. Default columns omit geometry and indicate omissions.
 - Operations: 8 seconds across schema + data calls, at most two sequential subrequests, no parallel fanout. Four admitted HTTP requests and four data operations per isolate; excess work gets HTTP 429 or an MCP busy error. Slow request reading/output has a 9-second deadline. Cancellation propagates to upstream fetch/stream reads.
 - Only the fixed approved origin/path is fetched; redirects use `redirect: error`. Query and columns are built from validated structured arguments and backend fields.

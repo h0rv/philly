@@ -240,3 +240,62 @@ test("operation cancellation aborts the upstream request", async () => {
   await assert.rejects(pending, /aborted/);
   assert.equal(observed, true);
 });
+test("schema rejects malformed containers and servers that ignore LIMIT 0", async () => {
+  for (const data of [
+    { rows: [], fields: [] },
+    { rows: [], fields: {} },
+    { rows: [], fields: "" },
+    { rows: [{}], fields: fixture.fields },
+  ]) {
+    await assert.rejects(
+      new DataService(async () => Response.json(data)).schema({ datasetId }),
+      /schema unavailable/,
+    );
+  }
+});
+test("aggregate group ordering cannot collide with the aggregate's value alias", async () => {
+  const calls: string[] = [];
+  const service = new DataService(async (url) => {
+    const sql = new URL(url).searchParams.get("q")!;
+    calls.push(sql);
+    return Response.json({
+      fields: { value: { type: "number" } },
+      rows: sql.endsWith("LIMIT 0") ? [] : [{ group_value: 2, value: 1 }],
+    });
+  });
+  await service.aggregate(
+    aggregateSchema.parse({ datasetId, groupBy: "value" }),
+  );
+  assert.match(calls[1], /GROUP BY "value" ORDER BY group_value LIMIT/);
+});
+test("JSON text fallback is identical and leaves room for the full response even with escaping", async () => {
+  const { boundedResult } = await import("../src/bounds.ts");
+  const value = { text: '"\\\n'.repeat(9000) };
+  const result = boundedResult(value);
+  assert.deepEqual(
+    JSON.parse(result.content[0].text),
+    result.structuredContent,
+  );
+  assert.ok(
+    new TextEncoder().encode(JSON.stringify({ jsonrpc: "2.0", id: 1, result }))
+      .byteLength < LIMITS.responseBytes,
+  );
+});
+test("upstream JSON media type is exact and case-insensitive", async () => {
+  const body = JSON.stringify({ ...fixture, rows: [] });
+  await new DataService(
+    async () =>
+      new Response(body, {
+        headers: { "content-type": "APPLICATION/JSON; charset=utf-8" },
+      }),
+  ).schema({ datasetId });
+  await assert.rejects(
+    new DataService(
+      async () =>
+        new Response(body, {
+          headers: { "content-type": "text/html; fake=application/json" },
+        }),
+    ).schema({ datasetId }),
+    /non-JSON/,
+  );
+});
