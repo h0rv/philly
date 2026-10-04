@@ -1,9 +1,10 @@
 [project]
 name = "philly"
-version = "0.1.0"
+version = "1.1.0"
 description = "Python library and CLI for OpenDataPhilly datasets"
 readme = "README.md"
-license = {text = "MIT"}
+license = "MIT"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES", "assets/NOTICE"]
 requires-python = ">=3.11"
 keywords = ["philadelphia", "open-data", "civic-data", "geospatial", "pandas"]
 classifiers = [
@@ -57,7 +58,7 @@ notebook = [
 phl = "philly.__main__:main"
 
 [build-system]
-requires = ["setuptools>=75"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
@@ -67,7 +68,7 @@ package-dir = { "" = "src" }
 where = ["src"]
 
 [tool.setuptools.package-data]
-"philly" = ["datasets/*.yaml"]
+"philly" = ["datasets/*.yaml", "catalog-source.json"]
 
 [tool.pytest.ini_options]
 asyncio_default_fixture_loop_scope = "function"

@@ -1,0 +1,46 @@
+---
+const url = 'https://YOUR-PHILLY-MCP-HOST/mcp';
+const prompt = 'Use the philly MCP server to find building-permit datasets and show five sample records with source links.';
+const agents = [
+  { id: 'claude', name: 'Claude Code', note: 'Connection for this run only.', command: `claude "${prompt}" --strict-mcp-config --mcp-config '${JSON.stringify({mcpServers:{philly:{type:'http',url}}})}'`, docs: 'https://code.claude.com/docs/en/mcp' },
+  { id: 'codex', name: 'Codex', note: 'Connection for this run only.', command: `codex -c 'mcp_servers.philly.url="${url}"' "${prompt}"`, docs: 'https://developers.openai.com/codex/mcp/' },
+  { id: 'pi', name: 'Pi', note: 'Saves or replaces the philly connection in Pi.', command: `pi mcp add philly --url ${url} && pi --print "${prompt}"`, docs: 'https://pi.dev/docs/latest/mcp' },
+];
+---
+<h2 id="agent-heading">Or ask an agent</h2>
+<p><small>Agent installed and signed in · replace the URL with your deployed MCP endpoint.</small></p>
+<div data-agent-tabs>
+  <div role="tablist" aria-labelledby="agent-heading" hidden>
+    {agents.map(agent => <button type="button" role="tab" id={`tab-${agent.id}`} aria-controls={`panel-${agent.id}`} aria-selected="false" tabindex="-1">{agent.name}</button>)}
+  </div>
+  {agents.map(agent => <div id={`panel-${agent.id}`} role="tabpanel" aria-labelledby={`tab-${agent.id}`} tabindex="0">
+    <h3 data-agent-fallback>{agent.name}</h3>
+    <figure><button data-copy aria-label={`Copy ${agent.name} agent command`}>Copy</button><pre><code>{agent.command}</code></pre></figure>
+    <p><small>{agent.note} <a href={agent.docs}>Setup docs</a></small></p>
+  </div>)}
+</div>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-agent-tabs]').forEach(group => {
+    const tabs = Array.from(group.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+    const panels = Array.from(group.querySelectorAll<HTMLElement>('[role="tabpanel"]'));
+    const select = (index: number, focus = false) => {
+      tabs.forEach((tab, i) => { tab.setAttribute('aria-selected', String(i === index)); tab.tabIndex = i === index ? 0 : -1; panels[i].hidden = i !== index; });
+      if (focus) tabs[index].focus();
+    };
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => select(index));
+      tab.addEventListener('keydown', event => {
+        const next = event.key === 'ArrowRight' ? (index + 1) % tabs.length : event.key === 'ArrowLeft' ? (index + tabs.length - 1) % tabs.length : event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : null;
+        if (next !== null) { event.preventDefault(); select(next, true); }
+      });
+    });
+    group.querySelectorAll<HTMLElement>('[data-agent-fallback]').forEach(heading => heading.hidden = true);
+    select(0);
+    group.querySelector<HTMLElement>('[role="tablist"]')!.hidden = false;
+  });
+</script>
+<style>
+  [role="tablist"]:not([hidden]) { display: flex; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid var(--rule); }
+  [role="tab"] { min-height: 40px; padding: 8px 12px; text-decoration: none; border-bottom: 2px solid transparent; }
+  [role="tab"][aria-selected="true"] { color: var(--ink); border-bottom-color: currentColor; }
+</style>

@@ -19,7 +19,7 @@ export const catalog = raw as Dataset[];
 export const datasets = new Map(catalog.map((d) => [d.id, d]));
 const index = catalog.map((d) => ({
   d,
-  text: `${d.title} ${d.description} ${d.categories.join(" ")}`.toLowerCase(),
+  text: `${d.title} ${d.description} ${d.categories.join(" ")} ${d.resources.map((r) => r.name).join(" ")}`.toLowerCase(),
 }));
 export function search(query: string, offset: number, limit: number) {
   const words = query.toLowerCase().trim().split(/\s+/).filter(Boolean);

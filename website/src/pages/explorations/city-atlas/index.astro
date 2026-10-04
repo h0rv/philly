@@ -1,4 +1,5 @@
 ---
+import Wordmark from '../../../components/Wordmark.astro';
 const base = import.meta.env.BASE_URL;
 const withBase = (value) => `${base}${String(value).replace(/^\//, '')}`;
 
@@ -732,7 +733,7 @@ const serviceWorkerUrl = withBase('/explorations/city-atlas/sw.js');
 
     <div id="utility-actions">
       <button class="ghost-button" id="help-toggle-btn" type="button">About The Data</button>
-      <a class="ghost-button" href={withBase('/')}>Philly</a>
+      <a class="ghost-button" href={withBase('/')} aria-label="Philly home"><span style="display:inline-block;width:76px"><Wordmark /></span></a>
       <a class="ghost-button" href="https://github.com/h0rv/philly" target="_blank" rel="noreferrer">GitHub</a>
     </div>
 

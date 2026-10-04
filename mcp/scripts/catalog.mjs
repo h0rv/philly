@@ -30,14 +30,19 @@ for (const file of (await readdir(new URL("src/philly/datasets/", root)))
     } catch {
       /* Non-web metadata links are discovery-only. */
     }
+    if (r.id !== undefined && !/^[a-f0-9]{16}$/.test(r.id)) {
+      throw new Error(`Invalid resource ID in ${file}`);
+    }
     return {
-      id: hash(
-        String(r.url ?? "") +
-          "\n" +
-          String(r.name ?? "") +
-          "\n" +
-          String(r.format ?? "unknown"),
-      ),
+      id:
+        r.id ??
+        hash(
+          String(r.url ?? "") +
+            "\n" +
+            String(r.name ?? "") +
+            "\n" +
+            String(r.format ?? "unknown"),
+        ),
       name: String(r.name ?? "").slice(0, 300),
       format: r.format ?? "unknown",
       url: r.url ?? "",
@@ -54,21 +59,16 @@ for (const file of (await readdir(new URL("src/philly/datasets/", root)))
     resources,
   });
 }
-await mkdir(new URL("mcp/src/generated/", root), { recursive: true });
-await mkdir(new URL("website/src/data/", root), { recursive: true });
-const content = JSON.stringify(catalog);
-await writeFile(
-  new URL("mcp/src/generated/catalog.json", root),
-  content + "\n",
-);
-const stats = {
-  datasets: catalog.length,
-  queryableDatasets: catalog.filter((d) => d.resources.some((r) => r.query))
-    .length,
-  revision: hash(content),
-};
-await writeFile(
-  new URL("website/src/data/catalog.generated.json", root),
-  JSON.stringify(stats, null, 2) + "\n",
-);
-console.log(stats);
+const content = JSON.stringify(catalog) + "\n";
+const output = new URL("mcp/src/generated/catalog.json", root);
+if (process.argv.includes("--check")) {
+  if ((await readFile(output, "utf8")) !== content) {
+    throw new Error(
+      "Catalog is stale. Run npm run catalog and commit the result.",
+    );
+  }
+} else {
+  await mkdir(new URL("mcp/src/generated/", root), { recursive: true });
+  await writeFile(output, content);
+}
+console.log({ datasets: catalog.length, revision: hash(content) });

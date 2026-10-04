@@ -1,5 +1,8 @@
 # Philly MCP
 
+<img src="../assets/philly.svg" width="240" alt="Philly">
+
+
 Read-only Philadelphia open data, using the official TypeScript MCP SDK **2.3.0** and protocol **2026-07-28**. `createMcpHandler` creates a fresh server per request, with default legacy stateless Streamable HTTP compatibility. Local stdio serves both eras too. The Python `phl` CLI and library remain independent and unchanged.
 
 **Status: prepared and locally tested, not deployed.** No public MCP URL exists yet. The existing GitHub Pages production site is not changed by this branch. See [deployment readiness](DEPLOYMENT.md).
@@ -80,7 +83,7 @@ Resource selection defaults to the first approved resource **in catalog order**.
 
 `npm run catalog` deterministically generates the Worker catalog and website counts from all checked-in Python YAML files. No network is used. Dataset IDs are YAML filenames without `.yaml`; resource IDs hash URL + name + format, so resource reordering does not change IDs. Metadata is a snapshot, not a freshness guarantee. CI fails if generated content drifts.
 
-Only HTTPS `phl.carto.com/api/v2/sql` resources with a narrow, generator-validated SELECT grammar are enabled. The grammar permits a single table, optional known lat/lng projections, and simple date comparisons. It rejects arbitrary expressions, joins and other catalog SQL. Reviewed source queries are compiled into the service; clients cannot supply source SQL. The generated catalog currently enables 67 datasets out of 491. Descriptions paginate resources; default 10, maximum 20.
+Only HTTPS `phl.carto.com/api/v2/sql` resources with a narrow, generator-validated SELECT grammar are enabled. The grammar permits a single table, optional known lat/lng projections, and simple date comparisons. It rejects arbitrary expressions, joins and other catalog SQL. Reviewed source queries are compiled into the service; clients cannot supply source SQL. Use discovery to inspect current resource capabilities. Descriptions paginate resources; default 10, maximum 20.
 
 ArcGIS, static files, unrecognized CARTO queries and other hosts remain **discovery-only**. These return source links and explicit unsupported errors for remote operations. They are not passed through the Python static loaders, which can download entire resources. Use the local Python library for broader format support. Add a new adapter only with backend capability checks, limits and fixtures.
 
@@ -114,3 +117,5 @@ npm run test:browser  # install Chromium first; or set CHROMIUM_PATH
 From the root also run `uv run pytest tests -n 4` and `uv run poe all` (which does **not** run tests). Shared YAML/JSON contract tests ensure the Worker retains Python dataset/resource identities and licenses. Fixtures cover preserved resource predicates, schema, structured filters, count/aggregate, output caps, unsupported operations, malformed upstream data, cancellation and concurrency. Tests include real SDK v2 and v1 Streamable HTTP clients plus both stdio eras. Browser tests cover mobile/desktop, keyboard navigation, light/dark layout and copy fallback.
 
 SDK references: [2.3.0 release](https://github.com/modelcontextprotocol/typescript-sdk/releases/tag/v2.3.0), [v2 documentation](https://ts.sdk.modelcontextprotocol.io/v2/), [current protocol](https://modelcontextprotocol.io/specification/2026-07-28).
+
+See [workflow evidence](EFFECTIVENESS.md) for tested questions and limitations. Row queries accept `orderDirection`; grouped aggregates accept `orderBy: "value"` and `orderDirection: "desc"` for ranked totals. Defaults remain ascending.

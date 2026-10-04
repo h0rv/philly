@@ -1,5 +1,7 @@
 """Command-line interface for Philly library with proper formatting and progress tracking."""
 
+from importlib.metadata import version
+
 import asyncio
 import sys
 from pathlib import Path
@@ -94,7 +96,7 @@ class ConfigCommands:
         print(value)
 
 
-__version__ = "0.1.0"
+__version__ = version("philly")
 
 
 class PhillyCLI:
