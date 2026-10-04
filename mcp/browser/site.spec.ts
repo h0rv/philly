@@ -16,12 +16,26 @@ test("all setup options are visible with compact keyboard-accessible copy contro
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
+  await expect(page.locator("body > header")).toHaveCount(0);
+  await expect(page.locator("main")).not.toContainText(
+    /\d[\d,+]*\s+(?:Philadelphia\s+)?datasets/i,
+  );
+  await expect(
+    page.getByRole("heading", { name: "Examples", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Or ask an agent", exact: true }),
+  ).toBeVisible();
   await expect(
     page.getByRole("button", { name: "Copy terminal install command" }),
   ).toBeInViewport();
   expect(
     await page.locator("main [class], [role=tab], details, [hidden]").count(),
   ).toBe(0);
+  await expect(page.locator("main")).toContainText(
+    "pi mcp add philly --url https://YOUR-PHILLY-MCP-HOST/mcp",
+  );
+  await expect(page.locator("main")).toContainText("pi --print");
   for (const text of [
     "uv tool install philly",
     "uv add philly",
@@ -49,7 +63,13 @@ test("all setup options are visible with compact keyboard-accessible copy contro
     path: `${info.project.outputDir}/philly-${info.project.name}-dark.png`,
     fullPage: true,
   });
+  const logo = await page.request.get("/philly.svg");
+  expect(logo.ok()).toBe(true);
+  expect(await logo.text()).toContain('viewBox="0 0 190 50"');
+  const favicon = await page.request.get("/favicon.svg");
+  expect(await favicon.text()).toContain('viewBox="-10 0 50 60"');
   await page.getByRole("link", { name: "Client setup", exact: true }).click();
+  await expect(page.getByRole("link", { name: "Philly home" })).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "Connect Philly" }),
   ).toBeVisible();

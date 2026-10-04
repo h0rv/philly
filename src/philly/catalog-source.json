@@ -1,0 +1,1926 @@
+{
+  "issues": [
+    {
+      "error": "1 validation error for Dataset\ntitle\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/string_type",
+      "path": "creal-program.md"
+    },
+    {
+      "error": "1 validation error for Dataset\nresources.50.format\n  Input should be 'api', 'app', 'application', 'csv', 'ecw', 'gdb', 'geojson', 'geopackage', 'geoparquet', 'geoservice', 'gtfs', 'gtfs_rt', 'html', 'img', 'jpeg', 'json', 'kml', 'kmz', 'las', 'pdf', 'png', 'png_24', 'rss', 'shp', 'txt', 'tif', 'tiff', 'xlsx', 'xml', 'xslx' or 'zip' [type=enum, input_value='HT ML', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.11/v/enum",
+      "path": "large-building-energy-benchmarking-data.md"
+    },
+    {
+      "error": "Duplicate dataset ID: Philadelphia_Basemaps.yaml",
+      "paths": [
+        "hex-grids.md",
+        "philadelphia-basemaps.md"
+      ]
+    }
+  ],
+  "records": {
+    "2009-2012_Police_Advisory_Commission_Complaints.yaml": {
+      "path": "_datasets/2009-2012-police-advisory-commission-complaints.md",
+      "sha256": "2a6fcb267ee941389b9dc512d1e4dbebc268cf3f43eb12816715a3a14e4f7c3b"
+    },
+    "2010UrbanizedAreasAroundChesterCountyPA.yaml": {
+      "path": "_datasets/chester-cty-2010urbanizedareasaroundchestercountypa.md",
+      "sha256": "0bee2231342929aecd7c8f5b6c7101ef5873a283f403f88bab7759155d277584"
+    },
+    "2015_Parking_Meter___Kiosk_Inventory.yaml": {
+      "path": "_datasets/parking-meter-kiosk-inventory.md",
+      "sha256": "c2ebfe17ccfc66b0bc3dd99f11bbe34952a5eaf55051141dab03f39b532e3c05"
+    },
+    "2020_Census_to_Police_District_Crosswalk.yaml": {
+      "path": "_datasets/2020-census-police-district-crosswalk.md",
+      "sha256": "6b79955ae49cf0c63cf835d64441668beb9e923945c98e43d38a5d8874b5452d"
+    },
+    "311_Abandoned_Vehicles_by_Hex_Bins.yaml": {
+      "path": "_datasets/311-abandoned-vehicles-by-hex-bin.md",
+      "sha256": "f9f0b68dc9fbaa45c118e134b630621d0b912443fe101e23e3451c9a8f48c784"
+    },
+    "311_Service_and_Information_Requests.yaml": {
+      "path": "_datasets/311-service-and-information-requests.md",
+      "sha256": "0d0821ec39abf2b3da6a2d4dc2441b543997f5cdb269a42e00f054310a759275"
+    },
+    "911_Emergency_Calls_by_Hex_Bins.yaml": {
+      "path": "_datasets/911-calls-by-hex-bin.md",
+      "sha256": "dee8b1ffb1eff1a44d0e1b0c34b6ebcd602644613b21c462159f778dfe052546"
+    },
+    "AMS_Latest_Air_Quality_Sensor_Readings.yaml": {
+      "path": "_datasets/ams-latest-air-quality-sensor-readings.md",
+      "sha256": "81f59c2a5ec888b925e68547a3d42c2fa0e195b2ac68f965e9b6286014484fd3"
+    },
+    "ARCHIVED__2007-2015_Litter_Index.yaml": {
+      "path": "_datasets/archived-2007-2015-litter-index.md",
+      "sha256": "9c31d2523d7e61277663a23cbebb115a2345946d813890f24a83c3e0e1742e43"
+    },
+    "ARCHIVED__Greenworks_Metrics.yaml": {
+      "path": "_datasets/archived-greenworks-metrics.md",
+      "sha256": "168157cc93383147530234d539d89d3a51b58951b1b295e2b5665fe837fcd683"
+    },
+    "ARCHIVED__Healthy_Chinese_Takeout.yaml": {
+      "path": "_datasets/healthy-chinese-takeout.md",
+      "sha256": "b3728110ead78c397961681105154f8a878c9bfaa862f51c7c322be8fc7e88f2"
+    },
+    "ARCHIVED__Philadelphia_Food_Access.yaml": {
+      "path": "_datasets/archived-philadelphia-food-access.md",
+      "sha256": "89d7c36e66207c17be3a56b85ce01949b5ea0703b530e34b17d454d38d6df791"
+    },
+    "ARCHIVED__Valet_Parking_Locations.yaml": {
+      "path": "_datasets/archived-valet-parking-locations.md",
+      "sha256": "91d29d542b543ce3181ee75ab6efb198dc87c7c78ac95bafbc459535baf81f39"
+    },
+    "Active_Residential_Parking_Permits_by_District.yaml": {
+      "path": "_datasets/active-residential-parking-permits-by-district.md",
+      "sha256": "4ba791c8ef73a8de4dd799f26e9d9e62859d4f09bb278318e4fde94a1cc5e956"
+    },
+    "Aerial_Photography__imagery_.yaml": {
+      "path": "_datasets/aerial-photography.md",
+      "sha256": "8f1f3d3f320712a98b985c776e0cd34d13739cc2bdd73e4dd590ad5a58ae1f25"
+    },
+    "Affordable_Housing_Production.yaml": {
+      "path": "_datasets/affordable-housing-production.md",
+      "sha256": "98a3746e44faa4bd3ece2a3c1971beaa346f13956fd4d09fdce3be0f4273aed0"
+    },
+    "Air_Monitoring_Stations.yaml": {
+      "path": "_datasets/air-monitoring-stations.md",
+      "sha256": "2a24e0bca3c4cb162613b2cee19bb6d23ab98afcdacff9625d1658c9689511d9"
+    },
+    "Air_Quality_Index_Days.yaml": {
+      "path": "_datasets/air-quality-index-days.md",
+      "sha256": "aa8d0fc4b73fa86480deb7ab7b4419a9bdb33692c8d8b3b1970939c512ae5839"
+    },
+    "Arterial_Streets.yaml": {
+      "path": "_datasets/arterial-streets.md",
+      "sha256": "d950a55c81c8cb8974a6cf92508ec6f30f8aa354960ab19804e5a80f80cc5a28"
+    },
+    "Big_Belly_Trash_Bin_Usage.yaml": {
+      "path": "_datasets/big-belly-trash-bin-usage.md",
+      "sha256": "d69efeb8f812b5a38e2dd2dbce26f19b26e6afdfeead670e5f3a2a7de404ba05"
+    },
+    "Big_Belly_Waste_Baskets__Trash_Bins_.yaml": {
+      "path": "_datasets/big-belly-waste-baskets-trash-bins.md",
+      "sha256": "e85ffb6ca610fd7080e223032e3f82a7fce009623a6dcbff87d78bdc33f77ff4"
+    },
+    "Bike_Network.yaml": {
+      "path": "_datasets/bike-network.md",
+      "sha256": "cb53654ff993a1e00400d84e4ca17010c9daac1ac4f0934195d8e6d230033188"
+    },
+    "Bike_Network_-_Supporting_Datasets.yaml": {
+      "path": "_datasets/bike-network-supporting-datasets.md",
+      "sha256": "6af7f20048c597ba7a2471edcb7d8a3990bbd4dfdff282ab1bedbbda4d975099"
+    },
+    "Boost_Your_Business_Program.yaml": {
+      "path": "_datasets/boost_business.md",
+      "sha256": "2ec0d5b45365d3c39adec8a39abe3315227c8d1b6ed6cfbd47841f4652541d98"
+    },
+    "Bridge_Locations.yaml": {
+      "path": "_datasets/bridge-locations.md",
+      "sha256": "d8e367ac08e7ed094ac59a4a1380ce10c3858835499b86519610d25808dd7c90"
+    },
+    "Building_Demolitions.yaml": {
+      "path": "_datasets/building-demolitions.md",
+      "sha256": "459d1cceff191669eabe23a9a06cab4820a120cb4014837852cb29b84a834426"
+    },
+    "Building_Footprints.yaml": {
+      "path": "_datasets/building-footprints.md",
+      "sha256": "cb7de6f258edc1a6913717a17e2966f68e149a2466b9135042779c452f7878fb"
+    },
+    "Bullet_Voting_2015.yaml": {
+      "path": "_datasets/bullet-voting-2015.md",
+      "sha256": "1a03b3c51f72addebbba3b1a7bdb1c37c7f754372c439655f1e22a21717c04a3"
+    },
+    "Bus_Shelters.yaml": {
+      "path": "_datasets/bus-shelters.md",
+      "sha256": "3356374a350e6c81bdb6fb8e95889f28df66a6175c7ebe092e005d3f83ca00fc"
+    },
+    "Business_Improvement_Districts__BID_.yaml": {
+      "path": "_datasets/business-improvement-districts.md",
+      "sha256": "063aefd18246b759b947f838318c72e7992ab9ea5100611d91c4bef14b789a45"
+    },
+    "Business_Technical_Support_Resources.yaml": {
+      "path": "_datasets/business-technical-support-resources.md",
+      "sha256": "484cf4da68d698d16460159b1544816525595979ed6e76bf5f1d37df73ad136d"
+    },
+    "COVID-19_Test_Sites.yaml": {
+      "path": "_datasets/covid-19-test-sites.md",
+      "sha256": "202d793d3a035e9320b7506c49223796b49d6d26f72b2631a82af2cb48896334"
+    },
+    "COVID-19_Vaccinations.yaml": {
+      "path": "_datasets/covid-19-vaccinations.md",
+      "sha256": "1e841326ba428b5231151ab91d11d57f31aceb8db468fe81add7bd49fa2af980"
+    },
+    "COVID_Cumulative_Historical_Snapshots.yaml": {
+      "path": "_datasets/covid-cumulative-historical-snapshots.md",
+      "sha256": "30da48ba6c71272e1c1184fc6754b86c230666d365a7426002fca2aa53f395b9"
+    },
+    "COVID_Deaths.yaml": {
+      "path": "_datasets/covid-deaths.md",
+      "sha256": "376f50bd7b8d1f0e7c7124aadd30de62be5b9d727daec52f47aa62cba40e4b9d"
+    },
+    "COVID_Hospitalizations.yaml": {
+      "path": "_datasets/covid-hospitalizations.md",
+      "sha256": "8692a7f0977fbe93b4f977bcae0f9d791705efdff7b3c9f3e1f8534b103a7715"
+    },
+    "COVID_Tests_and_Cases.yaml": {
+      "path": "_datasets/covid-tests-and-cases.md",
+      "sha256": "279d5cfe877f9166e46ce1a1b95f2a1f15601ac27943b512887c34ccfb22a165"
+    },
+    "Campaign_Finance_Reports.yaml": {
+      "path": "_datasets/campaign-finance-reports.md",
+      "sha256": "d406b6699a23aa6afac72d2376302acf41b7206da32bdd7bbccf49be4ba9446b"
+    },
+    "Candidates_for_Elected_Office.yaml": {
+      "path": "_datasets/candidates-for-elected-office.md",
+      "sha256": "6bba5cf3268414c2bd15ea3c82eb487e5f8fe9b8db569060dbafe1d51765b66e"
+    },
+    "Catalyst_Fund_Grants.yaml": {
+      "path": "_datasets/catalyst-fund-grants.md",
+      "sha256": "a70237dac4fb04244e236e5de464862040231c2a94d10a955849bf0e9fcc946b"
+    },
+    "Census_ACS_5-Year_Estimates_-_Philadelphia.yaml": {
+      "path": "_datasets/census-acs-philadelphia.md",
+      "sha256": "3f2f7b6cc3200f296b2852ad37e5411e80756de6ec2fd7ba39296cc9911afc81"
+    },
+    "Census_Block_Groups.yaml": {
+      "path": "_datasets/census-block-groups.md",
+      "sha256": "e190df19cf67837539838f8768ede1a8f519cd3821ed686bb6586b5d1a03fa20"
+    },
+    "Census_Blocks.yaml": {
+      "path": "_datasets/census-blocks.md",
+      "sha256": "057cb2b4ccdd8c30f78f378fd9b87c3c06774f81d749198b5c04452770567416"
+    },
+    "Census_Tracts.yaml": {
+      "path": "_datasets/census-tracts.md",
+      "sha256": "0299561e5f09747e5827578d4de16a17ee5df99b94e0847b73fe4563a2eb15b7"
+    },
+    "Center_City_District_Boundary__Business_Improvement_District_.yaml": {
+      "path": "_datasets/center-city-district-boundary-business-improvement-district.md",
+      "sha256": "4bce848c7a853885b378f01aafa61961272a45d0b3a9c345c4dfaf912d8c3224"
+    },
+    "Center_City_District_Police_Boundary.yaml": {
+      "path": "_datasets/center-city-district-police-boundary.md",
+      "sha256": "9eaba5114bf6140e6eafefed12692ddeb96086de39331a94c3d8d7f3ef6d70aa"
+    },
+    "Certified_for_Rental_Suitability.yaml": {
+      "path": "_datasets/certified-for-rental-suitability.md",
+      "sha256": "87793ccdb3419d62d52232c3c8e3557c912bc37a2716cd6bd9b577c5c0e2b846"
+    },
+    "Chester_County_ALS_Response_Territory.yaml": {
+      "path": "_datasets/chester-cty-als-response-territory.md",
+      "sha256": "b9ab5b06e99907f84e8fdad42c322852092d6b101d55ebe5a730f35889db28b7"
+    },
+    "Chester_County_Ambulance_Stations.yaml": {
+      "path": "_datasets/chester-cty-ambulance-stations.md",
+      "sha256": "b53f3d03d963574fe9f68b751be121aab67494d8e2ccdc1f8263f843fcc2895d"
+    },
+    "Chester_County_BLS_Response_Territory.yaml": {
+      "path": "_datasets/chester-cty-bls-response-territory.md",
+      "sha256": "32d4898afc83d5fcb45ec87ef495a041112272957b077bf412b62a5bd87f52c0"
+    },
+    "Chester_County_Bridges.yaml": {
+      "path": "_datasets/chester-cty-bridges.md",
+      "sha256": "b130b2938f5ae19dc4e32440af9f24d5cb2ee39f287aa5b30c07180af690e5c3"
+    },
+    "Chester_County_BuildingFootprints2015.yaml": {
+      "path": "_datasets/chester-cty-buildingfootprints2015.md",
+      "sha256": "aa93698ccaf770138ace367a9b628d3ca8d800eb43074d38060381136ff25159"
+    },
+    "Chester_County_County_Boundary.yaml": {
+      "path": "_datasets/chester-cty-county-boundary.md",
+      "sha256": "2ff270816b9949ad15612a4f7676a203a159f0279fa784de79296d76c4d4b2b6"
+    },
+    "Chester_County_District_Court_Locations.yaml": {
+      "path": "_datasets/chester-cty-district-court-locations.md",
+      "sha256": "1743c5a7c5fb0f41da43260f340bd59e433d98fd66fe105ede4bbaa559d454e9"
+    },
+    "Chester_County_EMS_Response_Territories.yaml": {
+      "path": "_datasets/chester-cty-ems-response-territories.md",
+      "sha256": "3efd2890095aa346116dd2e258abd5207eeb70d71c94ad3ca4e0e3ab68286f4e"
+    },
+    "Chester_County_EMS_Response_Territory_Combined.yaml": {
+      "path": "_datasets/chester-cty-ems-response-territory-combined.md",
+      "sha256": "e6b0b86b68950aea067c6c1fb8ca3be35abb5edaee7978e1b6862f2d0c8a5abc"
+    },
+    "Chester_County_Existing_Surfaced_Trails.yaml": {
+      "path": "_datasets/chester-cty-existing-surfaced-trails.md",
+      "sha256": "896f76850a9b5db10fc7b2940551636f3bcd28a0924d0809299f7520f313f86d"
+    },
+    "Chester_County_FEMA_100_Year_Flood_Zones.yaml": {
+      "path": "_datasets/chester-cty-fema-100-year-flood-zones.md",
+      "sha256": "e43ccfcfc612559b3177b35a12a3a20c158e7d41692ceaeb169aec2b2954982b"
+    },
+    "Chester_County_Fire_ESZ.yaml": {
+      "path": "_datasets/chester-cty-fire-esz.md",
+      "sha256": "043d7b8de7b481f8c1e4cce48c464aa3dda518ef96a2206a787b10ba9ea66bc4"
+    },
+    "Chester_County_Fire_Emergency_Service_Zones.yaml": {
+      "path": "_datasets/chester-cty-fire-emergency-service-zones.md",
+      "sha256": "f2151539af524c6b0de809dab5cd104b997b33614d4b73e905755854143e4dd3"
+    },
+    "Chester_County_Fire_Hydrants.yaml": {
+      "path": "_datasets/chester-cty-fire-hydrants.md",
+      "sha256": "7ef9d08c5e4768b5c619d844aa5124f56c22c5c83a776da9aeb8f8f0f05937e4"
+    },
+    "Chester_County_Fire_Response_Territory.yaml": {
+      "path": "_datasets/chester-cty-fire-response-territory.md",
+      "sha256": "4a87e962fe1d15231baf2323c2f3e21293140796f7563ca40a6a94a966c5891e"
+    },
+    "Chester_County_Fire_Stations.yaml": {
+      "path": "_datasets/chester-cty-fire-stations.md",
+      "sha256": "d2615cbde305b5f8e214e4a8839637a94e6cc5c47629fc413aca1fdd7242075b"
+    },
+    "Chester_County_Hospitals.yaml": {
+      "path": "_datasets/chester-cty-hospitals.md",
+      "sha256": "3479a8693c0b52a9eb84c18737e92f30003d717e9f756c80a372af5ece5c453d"
+    },
+    "Chester_County_Impervious_Surface_2015.yaml": {
+      "path": "_datasets/chester-cty-impervious-surface-2015.md",
+      "sha256": "8aae575693baa9d11d32efdd7292666d42e7c00cbbe6cea5abd49c31d85194b6"
+    },
+    "Chester_County_MagesterialDistrictsAndCourts.yaml": {
+      "path": "_datasets/chester-cty-magesterialdistrictsandcourts.md",
+      "sha256": "88bfb213f5de3ca4c8c644937bd43ca3ba9080ea23a948022633f7a0ea1b224e"
+    },
+    "Chester_County_Magisterial_Districts_as_of_Dec__1__2022.yaml": {
+      "path": "_datasets/chester-cty-magisterial-districts-as-of-dec-1-2022.md",
+      "sha256": "9ff879d333213978348cd462de86049d4d754e61c70f4a9b573a3f5168524266"
+    },
+    "Chester_County_Municipal_Boundary.yaml": {
+      "path": "_datasets/chester-cty-municipal-boundary.md",
+      "sha256": "7ec9020dc4ade257da5526349b915a9d7214e09c4e0050221c40c5d24a9fc95f"
+    },
+    "Chester_County_Municipal_Recreation.yaml": {
+      "path": "_datasets/chester-cty-municipal-recreation.md",
+      "sha256": "1e251c0bb8c4f9bbab8d18c5ef38e564de587f305e725c15ca982d13358d8b55"
+    },
+    "Chester_County_Municipalities.yaml": {
+      "path": "_datasets/chester-cty-chester-county-municipalities.md",
+      "sha256": "8b804ea7a05cc8fe77605226d0c4fbf2ab8d37884b3a3339e6a7f842f3ac09a5"
+    },
+    "Chester_County_PSAP_Boundary.yaml": {
+      "path": "_datasets/chester-cty-psap-boundary.md",
+      "sha256": "1b780ed84ef04b90dc221e3ce619804ab948a8c545bde34dafeed4a8cd903243"
+    },
+    "Chester_County_ParcelFrontageDimensions.yaml": {
+      "path": "_datasets/chester-cty-parcelfrontagedimensions.md",
+      "sha256": "438594af314dbbf8cbde2b9d9d5dd060f5f888e642aec71deecdc4077ca9a19d"
+    },
+    "Chester_County_Parcels.yaml": {
+      "path": "_datasets/chester-cty-parcels.md",
+      "sha256": "4ad17e23c6b0e93ca363e82b71a96762ce75685b455f32520aa22123aaddd9ef"
+    },
+    "Chester_County_Police_Emergency_Service_Zones.yaml": {
+      "path": "_datasets/chester-cty-police-emergency-service-zones.md",
+      "sha256": "01197e65df4f1d2bcac5ab986b42dfb1085ab1f1220e9fdd9751495776e40857"
+    },
+    "Chester_County_Police_Response_Territory.yaml": {
+      "path": "_datasets/chester-cty-police-response-territory.md",
+      "sha256": "4aad4bf7625dd44f6b12b11d5f371aa06955a7566b812ec6ca57bc5dcff9dc31"
+    },
+    "Chester_County_Police_Stations.yaml": {
+      "path": "_datasets/chester-cty-police-stations.md",
+      "sha256": "7cbfe6758fe993e5cd9cf289f43ae9a1c3e6861f648e64b9669cab5415c5d046"
+    },
+    "Chester_County_Proposed_Land_Development_Plans.yaml": {
+      "path": "_datasets/chester-cty-proposed-land-development-plans.md",
+      "sha256": "0b506fe1555b0b3c9acb8f9b2fc70961a36805398308e235e22cedc603d78e89"
+    },
+    "Chester_County_Railroad_Lines.yaml": {
+      "path": "_datasets/chester-cty-railroad-lines.md",
+      "sha256": "0a228ca41e305d88645668d341a1fb5c93303037fb8f712a7e26f77c5e5f1e02"
+    },
+    "Chester_County_Road_Centerlines.yaml": {
+      "path": "_datasets/chester-cty-road-centerlines.md",
+      "sha256": "ede03d2bb3289781cdffa950ace8eef163a8891d3eea53439e3dbb6cbb82a60d"
+    },
+    "Chester_County_Site_Address_Points.yaml": {
+      "path": "_datasets/chester-cty-site-address-points.md",
+      "sha256": "ad408c2e0a7c774b977b63c84a19cb98c0628ebb598e2442f92bded61d295497"
+    },
+    "Chester_County_State_House_Districts.yaml": {
+      "path": "_datasets/chester-cty-state-house-districts.md",
+      "sha256": "1ba449e43951d0c3cec2376bacef08480586ca085d173a83fb96572aaecb6f00"
+    },
+    "Chester_County_State_Senate_Districts.yaml": {
+      "path": "_datasets/chester-cty-state-senate-districts.md",
+      "sha256": "d7cb9e8b9c6efac616fc19d12ff5e404f835229cb407cdfa115897637b2508c0"
+    },
+    "Chester_County_US_Congressional_Districts.yaml": {
+      "path": "_datasets/chester-cty-us-congressional-districts.md",
+      "sha256": "507b52c604cedd9fff0d5b0e6f836f0199dfb9a04e35a0b0bb9178abde8e04b9"
+    },
+    "Chester_County_ZipCodes.yaml": {
+      "path": "_datasets/chester-cty-zipcodes.md",
+      "sha256": "9f20713205e431946eb41fcb59bed41cab4f8a2cd4bc05499f5a57c689b8ae32"
+    },
+    "Child_Care_Search.yaml": {
+      "path": "_datasets/child-care-search.md",
+      "sha256": "586d067073bb5cc5a0ea41e562b8b88c9718e4cdad4764aa2587ee8c37ece05a"
+    },
+    "Childcare_Map.yaml": {
+      "path": "_datasets/reinvestment-fund-childcare-map.md",
+      "sha256": "5cde695496edd2514fc0acf2235f985f0c22f5106c4a47cf6c646b564af4e5f8"
+    },
+    "Choice_Neighborhoods.yaml": {
+      "path": "_datasets/choice-neighborhoods.md",
+      "sha256": "b45f475b91dbeeb72dcc78b01f3b2a6a4c61674df81fa47e62274c37ecc39d45"
+    },
+    "Circuit_Map.yaml": {
+      "path": "_datasets/circuit-map.md",
+      "sha256": "22c1ece077b080cd62af82fdbc1886621b1a2836cdc9b3f3f8ed7de54d946d5c"
+    },
+    "City-Owned_Public_Lactation_Spaces.yaml": {
+      "path": "_datasets/lactation-spaces.md",
+      "sha256": "3c621cba21d10e52b7c920d536ae3b1c08bac6a1f1da90efa69615a4fb11814a"
+    },
+    "City-Registered_Local_Businesses.yaml": {
+      "path": "_datasets/city-registered-local-businesses.md",
+      "sha256": "f84fadf104d0a4458d089c2fb704009f57f1113b1ce83ad05f1817116d8a84ab"
+    },
+    "City_Council_Districts.yaml": {
+      "path": "_datasets/city-council-districts.md",
+      "sha256": "81f06728e51438866be8579ef9740fc68fc66bc6c6def2b9ebbc710789249973"
+    },
+    "City_Employee_Earnings.yaml": {
+      "path": "_datasets/city-employee-earnings.md",
+      "sha256": "020ac00760c304c87220e469b1ee50c803970880dd67cbaf205d27bf0b9c74d8"
+    },
+    "City_Facilities__Master_Facilities_Database_.yaml": {
+      "path": "_datasets/city-facilities-master-facilities-database.md",
+      "sha256": "37ca79ef55206c2fed5c56fd7efece07bca549da7321cb57f2d56117d7d5a671"
+    },
+    "City_Landmarks.yaml": {
+      "path": "_datasets/city-landmarks.md",
+      "sha256": "c477247ab712fc4e04118f56b215b43ebfda7419e0d4b91f47b7766ee40b582b"
+    },
+    "City_Limits.yaml": {
+      "path": "_datasets/city-limits.md",
+      "sha256": "0d383a6ffcb2ed5e1da759d5f6ac29bfa08b2df2b902aadc501ada934d7f8b58"
+    },
+    "City_Operating_Budget.yaml": {
+      "path": "_datasets/city-operating-budget.md",
+      "sha256": "2c0faadc6b1e882398310fd0589121da43f30adb07ce463c9f03e4066d7f24dc"
+    },
+    "City_Owned_Bridges.yaml": {
+      "path": "_datasets/city-owned-bridges.md",
+      "sha256": "f0af7282e0990590fc6fd7c2585775dbb53709ae69fa384ad551dcd58261478a"
+    },
+    "City_Owned_Properties.yaml": {
+      "path": "_datasets/city-owned-properties.md",
+      "sha256": "a32c3604dd66ad5c8e91fae977a830d1b0bc12a66d5b6705c4d0176050afc3f2"
+    },
+    "City_Payments.yaml": {
+      "path": "_datasets/city-payments.md",
+      "sha256": "44caf7ec8d9d3f824c94f65a2e55bfdd6ba1ee19a32c9934ab549cba8a8445c4"
+    },
+    "City_Plan_Boundary.yaml": {
+      "path": "_datasets/city-plan-boundary.md",
+      "sha256": "67705ee0fefcef78556f5ce16a66ecc96637f14528997bec4bd20462edab9c72"
+    },
+    "Citywide_Cleaning_Program_Tasks.yaml": {
+      "path": "_datasets/citywide-cleaning-program.md",
+      "sha256": "9886387299620f7ef3d4372b70a161cf4226cd4ee35d27317ba02075aab9b032"
+    },
+    "Civil_Service_Positions_Details.yaml": {
+      "path": "_datasets/civil-service-positions-details.md",
+      "sha256": "c2f83f4317cc80f98522b98cccf51c0d3d39386547061fe9f6610948dbedda44"
+    },
+    "Cleaned_Water_Inlets_by_Hex_Bin.yaml": {
+      "path": "_datasets/pwd-inlets-cleaned.md",
+      "sha256": "a55d9ab70053597c2b7e69c6b3dabb8aac8e4c6b1110154d1dd83dadf0a67b74"
+    },
+    "Combined_Sewer_Service_Area.yaml": {
+      "path": "_datasets/combined-sewer-service-area.md",
+      "sha256": "342529e21323b99969cdf7a54826c061b4b0732942addc39449dd1782ec9879e"
+    },
+    "Commerce_Grants_by_Hex_Bin.yaml": {
+      "path": "_datasets/commerce-grants-by-hex-bin.md",
+      "sha256": "8ea453d714462318615db9970bb5e62f8ad8841d881dbf1c41148ad088bed5ed"
+    },
+    "Commerce_Safety_and_Emergency_Grants_by_Hex_Bin.yaml": {
+      "path": "_datasets/community-safety-grants-hex.md",
+      "sha256": "fcbecb4b8ec2fd1a3687da95966e196039e33e6ce9947858b5b7021b63bd0bb6"
+    },
+    "Commercial_Corridors_of_Philadelphia.yaml": {
+      "path": "_datasets/commercial-corridors-of-philadelphia.md",
+      "sha256": "c4ce5c9314d285bf7794499ad6f24e3b81a14eb3966bc05fcb1c92e49c576f72"
+    },
+    "Commodities_Contracts.yaml": {
+      "path": "_datasets/commodities-contracts.md",
+      "sha256": "9dc2fb018beff1b891b538ac1a4622c5261de2c897a2b7f40d16a1b7930842c0"
+    },
+    "Community_Compost_Network_Site.yaml": {
+      "path": "_datasets/community-compost-network-site.md",
+      "sha256": "3361cc95f92be841606272dd953f3e15d60af0f53f17239fdbb4b40bbcd19ae5"
+    },
+    "Community_Engagement_Hex_Bins.yaml": {
+      "path": "_datasets/community-engagement-by-hex-bin.md",
+      "sha256": "7aeb81e25541359ed7c0b12c5dacd2f6aa34d9fc8d1e5218ca73f83d2163ca77"
+    },
+    "Community_Health_Assessment__Philadelphia_Department_of_Public_Health.yaml": {
+      "path": "_datasets/community-health-assessment-philadelphia-department-of-public-health.md",
+      "sha256": "101426c83063b93867fa56d7a73ea294d1c33bc8127eaea19779a88c3debd766"
+    },
+    "Community_Services.yaml": {
+      "path": "_datasets/community-services.md",
+      "sha256": "f3b234ffc5bd68f88a6d082ecc2296b52287b45397da306302d409de7bb0a969"
+    },
+    "Complaints_Against_Police.yaml": {
+      "path": "_datasets/complaints-against-police.md",
+      "sha256": "03471c6353d27069bad287bb61843fe5fc1d767a42d0d5d799927062d129de8c"
+    },
+    "Complete_Streets.yaml": {
+      "path": "_datasets/complete-streets.md",
+      "sha256": "240a35801970832ca5cd7eea75c41ec69744473d704c6ee22f402c092a0eb4ec"
+    },
+    "Condom_Distribution_Sites.yaml": {
+      "path": "_datasets/condom-distribution-sites.md",
+      "sha256": "b8cd9f7ba6cc49a25494034cf0fa2736ba944dd15daf30dce6faf8020b9316dc"
+    },
+    "Correctional_Facilities_Locations.yaml": {
+      "path": "_datasets/correctional-facilities-locations.md",
+      "sha256": "c56874f499da97ebfab8078370c5c3e83d581742538ec69518dbc5edc93ad45a"
+    },
+    "Courts.yaml": {
+      "path": "_datasets/courts.md",
+      "sha256": "ba7c95268dfe659cfb16ca6327835fd704e3e28c057125986c3646e37b9bb6c3"
+    },
+    "Crashes_data.yaml": {
+      "path": "_datasets/crashes.md",
+      "sha256": "1f55e91a791417d56c45abccb390ca61eb55a9d76eeecbefacf4c55c83e58684"
+    },
+    "Crime_Incidents.yaml": {
+      "path": "_datasets/crime-incidents.md",
+      "sha256": "0244ad7c640fa5b72e5e6aeb6e8e6552b3e813478726969790a64e7141304341"
+    },
+    "Curbs.yaml": {
+      "path": "_datasets/curbs.md",
+      "sha256": "bbb8d0e91d55dba0fa22c8c912dd8b6fc7f587509df136c13bd001c6daf9ebc1"
+    },
+    "DVRPC_Traffic_Count_Viewer.yaml": {
+      "path": "_datasets/dvrpc-traffic-count-viewer.md",
+      "sha256": "05e7aee3adbd0e0fee04cc4c5a5925e79cb76189b305f27537deb898e4df57ac"
+    },
+    "DVRPC_s_Connections_2040_Choices___Voices.yaml": {
+      "path": "_datasets/dvrpcs-connections-2040-choices-voices.md",
+      "sha256": "58a3138c80c8836b45c1d0e968ed45fff5e8820ab378e5ec2a23b93d42c40673"
+    },
+    "DVRPC_s_Equity_Through_Access_Map_Toolkit.yaml": {
+      "path": "_datasets/dvrpcs-equity-through-access-map-toolkit.md",
+      "sha256": "26c168540963372325bc21441582015b22f8f2f4828596638f7b00eccd80b34c"
+    },
+    "Dams.yaml": {
+      "path": "_datasets/dams.md",
+      "sha256": "692f5cdc14a2d0ee4dce7d1dccfdd474776e8a0f9d2abb020b8467acf5832538"
+    },
+    "Delaware_River_Basin_2070_Land_Cover_Forecast.yaml": {
+      "path": "_datasets/delaware-river-basin-2070-land-cover-forecast.md",
+      "sha256": "fc395b300a8629cac3ec13ba71ba0cf8848e03c37323f815cc367ea937ec764d"
+    },
+    "Delaware_River_Basin_High-Resolution_Land_Cover.yaml": {
+      "path": "_datasets/delaware-river-basin-high-resolution-land-cover.md",
+      "sha256": "adabd98462f9a789fc307519ec6f94d2c0725cd2b7e58894fa687ad78b09422f"
+    },
+    "Department_of_Records_Easements.yaml": {
+      "path": "_datasets/department-of-records-easement.md",
+      "sha256": "caf877e988ac638f6d6dbaf0b1c057e673b4a40e175b0e578fd8d1b7e53683ad"
+    },
+    "Department_of_Records_Property_Parcels.yaml": {
+      "path": "_datasets/department-of-records-property-parcels.md",
+      "sha256": "3275ad9578a3efe342ab9a26c633bd006f05294bb9bc117dc58b378a06e2dff0"
+    },
+    "Digital_Elevation_Model__DEM_.yaml": {
+      "path": "_datasets/digital-elevation-model-dem.md",
+      "sha256": "b8687d630565e80483a00d65beb4d9eed952e534a11a09b1ecf79d01a93fa09f"
+    },
+    "District_Attorney_Data_Dashboard.yaml": {
+      "path": "_datasets/district-attorney-dashboard.md",
+      "sha256": "79e43c6327b20556bd7313accaf226c7cdcac523ae82d5cf0c7fed7e095acf66"
+    },
+    "District_Attorney_Data_Download.yaml": {
+      "path": "_datasets/district-attorney.md",
+      "sha256": "8960b11b6a4b9401698cef58041fdf6d9276bc05cb7e91c929682b7b6e4e75bd"
+    },
+    "Economic_Opportunity_Plans.yaml": {
+      "path": "_datasets/economic-opportunity-plans.md",
+      "sha256": "ec0a01b3e186406895f7dd2270a05654156593a19a242e14267883549b184ecc"
+    },
+    "Elected_Committee_People.yaml": {
+      "path": "_datasets/elected-committee-people.md",
+      "sha256": "fd7712cdc4ba9ef71691d763fae759a806c19d27a85ee7dd5e43bc3ff6f1fa60"
+    },
+    "Election_Board_Who_Worked_on_Election_Day.yaml": {
+      "path": "_datasets/election-board-who-worked-on-election-day.md",
+      "sha256": "e08d76a3b6811fb22602b37ca2974ee38c97534a9f60319efd2d8d9c84ca3e55"
+    },
+    "Election_Results.yaml": {
+      "path": "_datasets/election-results.md",
+      "sha256": "f51b1c14301484e8905cdf269b384853705659764a2351e9f59e4e78235758a8"
+    },
+    "Empowerment_Zones.yaml": {
+      "path": "_datasets/empowerment-zones.md",
+      "sha256": "7618ffb9a2a494452f425be5166ffa0073c9050a35d0e4a2d2b2c9159aed6da1"
+    },
+    "Enterprise_Zones.yaml": {
+      "path": "_datasets/enterprise-zones.md",
+      "sha256": "78c4df185a69f26f11e1f246ce16b62f13205c2df3dd63ad83d244a812167807"
+    },
+    "Existing_Trails.yaml": {
+      "path": "_datasets/existing-trails.md",
+      "sha256": "65f8e40a54b170e799b5f7a2edc074e43ccedb744b6789ddb467512a1858ec59"
+    },
+    "Exterior_Violation_Cleanups.yaml": {
+      "path": "_datasets/exterior-violation-cleanups.md",
+      "sha256": "e387840be025e964ca0658e80d3480c1c60275125a07fda3c02002610832cd1c"
+    },
+    "FEMA_Flood_Plain.yaml": {
+      "path": "_datasets/fema-flood-plain.md",
+      "sha256": "af35c027680fc526c08f4a4f5dd4b5f4bd43052f723b8c5c7ca3575170bb5b95"
+    },
+    "Farmers__Market_Locations.yaml": {
+      "path": "_datasets/farmers-markets-locations.md",
+      "sha256": "0fd0e0a3d7c2491024beee8752356496687ab1f78c8149b3ce4e42d43ac748ae"
+    },
+    "Fatal_Crashes.yaml": {
+      "path": "_datasets/fatal-crashes.md",
+      "sha256": "c6bc00fa422721d72bb8f60abdc91f8540036f350a143273e23ae82362bc0714"
+    },
+    "Fire_Department_Facilities.yaml": {
+      "path": "_datasets/fire-department-facilities.md",
+      "sha256": "43263ba8737671bb9d22bdae2fc46d34772fd2c2f3c1c45f79994ba9ada47308"
+    },
+    "Flickr__Phila__only_.yaml": {
+      "path": "_datasets/flickr-phila-only.md",
+      "sha256": "76a06615377b828682430693d79bae4d60efc293a4a8354e268f6cabe40ca54c"
+    },
+    "Flood_Hazard_Zone_Lines.yaml": {
+      "path": "_datasets/flood-hazard-zone-lines.md",
+      "sha256": "3dc4527be0499dbd2de37b9afa5b800f34340e24be33884db0b77f662b1ad10d"
+    },
+    "Flu_Shot_Clinic_Schedule_and_Locations.yaml": {
+      "path": "_datasets/flu-shot-clinic-schedule-and-locations.md",
+      "sha256": "1d940c98b1a78bdd05bc20c9a040d0259427710bc977f590d24a6beb5c7645f7"
+    },
+    "FooBooz_Reviews.yaml": {
+      "path": "_datasets/foobooz-reviews.md",
+      "sha256": "2edfde8ff93279b4b708ab6787c88d893659848684518d342398da22ce7062b4"
+    },
+    "Free_Food___Meal_Sites.yaml": {
+      "path": "_datasets/free-meals.md",
+      "sha256": "183ee7d212c2778e84173df6bebc078b81c218daa84ae8d2a459d5242302c489"
+    },
+    "Free_Library_of_Philadelphia_RSS_Feeds.yaml": {
+      "path": "_datasets/free-library-of-philadelphia-rss-feeds.md",
+      "sha256": "3fd5f7ff0ae86fbc7920afe6c2bd8b53889f6328f584b2f865cf0fb4b920cd2c"
+    },
+    "Free_Wi-Fi_Locations.yaml": {
+      "path": "_datasets/free-wifi.md",
+      "sha256": "6f8e4bb32641bdb8bcd5931ab18e53f0daced54fd82fcf39b09650a6d7e40ad0"
+    },
+    "GreatSchools__Phila__only_.yaml": {
+      "path": "_datasets/greatschools-phila-only.md",
+      "sha256": "df089be837414941980a36b55001c8aa8de079776e953181859d29a189d93cb2"
+    },
+    "Greater_Philadelphia_GeoHistory_Network.yaml": {
+      "path": "_datasets/greater-philadelphia-geohistory-network.md",
+      "sha256": "8f1a2ab274dfbf83c06eca4bd93f74f07d3fd612ba9d75ddb8df792b830f1b98"
+    },
+    "Green_Stormwater_Infrastructure_Planning_Districts.yaml": {
+      "path": "_datasets/pwd-green-stormwater-infrastructure-planning-districts.md",
+      "sha256": "fa2aec302892b4e7f21e7081d6d7dc48f27f66e8b63afef52568b471d259b9de"
+    },
+    "Green_Stormwater_Infrastructure_Private_Projects.yaml": {
+      "path": "_datasets/pwd-green-stormwater-infrastructure-private-projects.md",
+      "sha256": "56457dfa4e5ed42cde00b821482957df15cb62a2c3390a4943b42e676f18bef6"
+    },
+    "Green_Stormwater_Infrastructure_Public_Projects.yaml": {
+      "path": "_datasets/pwd-green-stormwater-infrastructure-public-projects.md",
+      "sha256": "77c7690d23e3a92983ed98421b5af5faeca52a3acbaf4e74a962d3ca93f6f367"
+    },
+    "Green_Stormwater_Infrastructure__GSI__Planning_Parcels.yaml": {
+      "path": "_datasets/pwd-green-stormwater-infrastructure-gsi-planning-parcels.md",
+      "sha256": "cd7d61ec15447445b3ea57759eb27a858c662960076b1274e6747d74fd569805"
+    },
+    "HIV_Testing_Sites.yaml": {
+      "path": "_datasets/hiv-testing-sites.md",
+      "sha256": "39f3c882ec02fb613a556f9f2a96c2f4398bcd7910d367b8a8d275cf3e2c402c"
+    },
+    "Health_Centers.yaml": {
+      "path": "_datasets/health-centers.md",
+      "sha256": "9de72ecb490526c293b5b5bb6fe52934199f4094a8d11087c73749410e5c6fdd"
+    },
+    "Health_of_the_City__Philadelphia_Department_of_Public_Health.yaml": {
+      "path": "_datasets/health-of-the-city.md",
+      "sha256": "1cbb78847b7448eb5a7ebca9a75759763337308d874e93f32732ee8b11632eb2"
+    },
+    "Healthy_Start_Community_Resource_Centers.yaml": {
+      "path": "_datasets/healthy-start-community-resource-centers.md",
+      "sha256": "a850f545f391f246ec9d1c5e01232cd1ad805e8bc46fa39d261a5ce46d604c14"
+    },
+    "Heat_Vulnerability_by_Census_Tract.yaml": {
+      "path": "_datasets/heat-vulnerability-by-census-tract.md",
+      "sha256": "3ba147dcfecdc4a6d2325f0a5ed69e88b323a8ce675be4f1d14f86dcf31b8aa7"
+    },
+    "Highway_Districts.yaml": {
+      "path": "_datasets/highway-districts.md",
+      "sha256": "685270e173a5c65d7329e87a62749eec154b0790ab927cce4be79b9fb041b781"
+    },
+    "Highway_Sections.yaml": {
+      "path": "_datasets/highway-sections.md",
+      "sha256": "8cfb3e3a81cdaafe03f268754eaa835c934f2ba86034b4b6fd8804e03362d9d5"
+    },
+    "Highway_Subsections.yaml": {
+      "path": "_datasets/highway-subsections.md",
+      "sha256": "a694ff0b3e1cf8b6e9e1d492ed9d29a8698871e619632f7f84ccaeba9eeb24bb"
+    },
+    "Historic_Political_Wards___Divisions.yaml": {
+      "path": "_datasets/historic-political-wards-divisions.md",
+      "sha256": "0f60179f5139bd6259345d801aff091e4f463de1e0b1683f1c5c7b93400bbe26"
+    },
+    "Historic_Streams.yaml": {
+      "path": "_datasets/historic-streams.md",
+      "sha256": "8d6b30ae5756969a5eacd590206ae2d2b12c9a24c260fceb7f75404a081871a6"
+    },
+    "Historic_Streets.yaml": {
+      "path": "_datasets/historic-streets.md",
+      "sha256": "2532987cffbb5ebf49d119eaf411fe13c6bd10a447cc1a243823b933ca6cb3b9"
+    },
+    "Historic_Zoning_Base_Maps.yaml": {
+      "path": "_datasets/historic-philadelphia-zoning.md",
+      "sha256": "8d8dd8b17cab992cf84c0364bc1843c8a00621b30a2adb4f8e404ba5d6e2561d"
+    },
+    "Homes_Saved.yaml": {
+      "path": "_datasets/homes-saved.md",
+      "sha256": "bf712bf06cea9083211e8ca93c6a87dc06b45db437be1a0f954cd48d93e7cacd"
+    },
+    "Housing_Counseling_Agencies.yaml": {
+      "path": "_datasets/housing-counseling-agencies.md",
+      "sha256": "3921852e7a167ebd46951adf502f9491496126d96d8f01162e75f051f3d2b68b"
+    },
+    "Hydrology.yaml": {
+      "path": "_datasets/hydrology.md",
+      "sha256": "1e16c2f22737a4a664b2608eba79db2a324dc94f6215b4850bf6692cbc18f71b"
+    },
+    "Impervious_Surfaces.yaml": {
+      "path": "_datasets/impervious-surfaces.md",
+      "sha256": "226ac112bd0045bcf894d9d4593906f80f0d6763c24134d27c020cc64f5b221a"
+    },
+    "Indego_Bike_Share_Stations.yaml": {
+      "path": "_datasets/indego-bike-share-stations.md",
+      "sha256": "d159040c1a9e27d4229d18b15977492b0f25a92ad30424eea9745f0f49f6bd3e"
+    },
+    "Indego_Bike_Share_Trips.yaml": {
+      "path": "_datasets/indego-bike-share-trips.md",
+      "sha256": "ad53dfc61d1a7736030462a656f0cae49f0ec746834589a2195059b86b11a0e5"
+    },
+    "Instore_Forgivable_Loan_Program.yaml": {
+      "path": "_datasets/instore-forgivable-loan-program.md",
+      "sha256": "459f93bf91450b9a811117f78f292a59177f9d17a0dfe34f2db3fed863f6b464"
+    },
+    "Intersection_Controls.yaml": {
+      "path": "_datasets/intersection-controls.md",
+      "sha256": "9e2c36223f60b0ee9a3674e19afd6c9b5fb8762d228f5200c82df3e870b1cd0b"
+    },
+    "Inventory_of_African_American_Historic_Sites.yaml": {
+      "path": "_datasets/inventory-of-african-american-historic-sites.md",
+      "sha256": "00b5849c1a5b233aba6dee512dde78feeed2a1bab881a4c3501badc9dd2a6668"
+    },
+    "Inventory_of_Historic_Religious_Properties.yaml": {
+      "path": "_datasets/inventory-of-historic-religious-properties.md",
+      "sha256": "816f185829fe798803669bc1aaa612c1491e545b09795fefc7bf3de28ab1eb71"
+    },
+    "LandCare_Program.yaml": {
+      "path": "_datasets/landcare-program.md",
+      "sha256": "3ae6419cfa4674b13d4944868bcf9f59e627b84e86da003e506874ce3e41b07b"
+    },
+    "Land_Use.yaml": {
+      "path": "_datasets/land-use.md",
+      "sha256": "9f878a2bb218d4b20d868a8ecaf0791bfbec8f15aff69f9661700e457b008783"
+    },
+    "Language_Services_Usage.yaml": {
+      "path": "_datasets/language-services-usage.md",
+      "sha256": "42d1305148cab0c0f7bba70738b16dd9beeb960f710e9dbaefb3020ab1347b51"
+    },
+    "Lead_Paint_Certifications.yaml": {
+      "path": "_datasets/lead-paint-certs.md",
+      "sha256": "3cbb3b1fff66560a5eeb77b94d35691619c1eac8c4720dae47ee4c480a8067f3"
+    },
+    "Leaf_Collection_Areas.yaml": {
+      "path": "_datasets/leaf-collection-areas.md",
+      "sha256": "8804b68dbd523f569bb38b5442f26f9663050159e13a8855a38b8f2105634a6f"
+    },
+    "Leaf_Dropoff_Sites.yaml": {
+      "path": "_datasets/leaf-dropoff-sites.md",
+      "sha256": "dbf23dbeddb0dd6a198cf0ace8d2005d878c2a3df157d55186dfa52d088ff2ff"
+    },
+    "LiDAR-LAS_data.yaml": {
+      "path": "_datasets/lidar-las-data.md",
+      "sha256": "e6053a3d65af03c926fcd8cf5e08e2f730cedcb5ea0e44c589a5453477153f8b"
+    },
+    "Licenses_and_Inspections_Appeals_of_Code_Violations_and_Permit_Refusals.yaml": {
+      "path": "_datasets/licenses-and-inspections-appeals-of-code-violations-and-permit-refusals.md",
+      "sha256": "215186638cb5ff440de0b084c5984e3d7782c413df13ab7a8b5feeed9adf68dd"
+    },
+    "Licenses_and_Inspections_Building_Certifications.yaml": {
+      "path": "_datasets/licenses-and-inspections-building-certifications.md",
+      "sha256": "2ba5a7b95e753d69c3a5592e0c20801dcef0a47be25a3f2d1aa50dc0d3591a30"
+    },
+    "Licenses_and_Inspections_Building_and_Zoning_Permits.yaml": {
+      "path": "_datasets/licenses-and-inspections-building-and-zoning-permits.md",
+      "sha256": "51a12b23d97298e8eb0b0b355e6316a5580c1c79369574ac3ac78a7885066b13"
+    },
+    "Licenses_and_Inspections_Business_Licenses.yaml": {
+      "path": "_datasets/licenses-and-inspections-business-licenses.md",
+      "sha256": "31d3c29f9a243195871b2a4203e86d4419a18094b31ff815c44a75ed08de1ec3"
+    },
+    "Licenses_and_Inspections_Clean_and_Seal.yaml": {
+      "path": "_datasets/licenses-and-inspections-clean-and-seal.md",
+      "sha256": "00d99e93ca17a0c154ab887dff87a436ea4898b6259924031557f5312e04b71f"
+    },
+    "Licenses_and_Inspections_Code_Violations.yaml": {
+      "path": "_datasets/licenses-and-inspections-code-violations.md",
+      "sha256": "c2dc045dddcc9c1d56c5d62df5a91862da335792d62598f9522bd265d73e83e6"
+    },
+    "Licenses_and_Inspections_Commercial_Activity_Licenses.yaml": {
+      "path": "_datasets/licenses-and-inspections-commercial-activity-licenses.md",
+      "sha256": "36a705dad8590557a1eba12c0f6092d78aff72a0ab4757d25609d4b8477f401d"
+    },
+    "Licenses_and_Inspections_Complaints.yaml": {
+      "path": "_datasets/licenses-and-inspections-complaints.md",
+      "sha256": "1e4cb1ed14666d25c4d133c872fc47332549880d6b891d529d007ee5c02e3499"
+    },
+    "Licenses_and_Inspections_District_Offices.yaml": {
+      "path": "_datasets/licenses-and-inspections-district-offices.md",
+      "sha256": "51105f1f419e860901c29f70ba0e481cac29f3b78f1f36c3ef893e24ce3ac067"
+    },
+    "Licenses_and_Inspections_Districts.yaml": {
+      "path": "_datasets/licenses-and-inspections-districts.md",
+      "sha256": "11696e58e57b53960bb2d5735ae952d6c3ba140342a9ffb62fb1b44881aeec27"
+    },
+    "Licenses_and_Inspections_Dumpsters.yaml": {
+      "path": "_datasets/licenses-and-inspections-dumpsters.md",
+      "sha256": "51bad4c3a38d6da8e71881ccd1ac37f0951755fe2f8e941cfc54587e99ba385d"
+    },
+    "Licenses_and_Inspections_Ease_of_Business.yaml": {
+      "path": "_datasets/licenses-and-inspections-ease-of-business.md",
+      "sha256": "a01e3bee17e8db969230640698e04b81d6c8a199f2730d67cb5254715799069b"
+    },
+    "Licenses_and_Inspections_Permit_Documents.yaml": {
+      "path": "_datasets/licenses-and-inspections-permit-documents.md",
+      "sha256": "e8bd5209cbaf0e0885228b7c81f379c0f09ec05bbb7a6c68a5c46c23282542ea"
+    },
+    "Licenses_and_Inspections_Property_History.yaml": {
+      "path": "_datasets/licenses-and-inspections-property-history.md",
+      "sha256": "94c999248185434572ba517b9eb7a1e42897263b9cfa8bc07a439a32eba615a3"
+    },
+    "Licenses_and_Inspections_Trade_Licenses.yaml": {
+      "path": "_datasets/licenses-and-inspections-trade-licenses.md",
+      "sha256": "3ea16ea3d37ff4d4c35bcf4344f5a943fa5fb8977862b78968d85296ddc77cc1"
+    },
+    "Licenses_and_Inspections_Unsafe_Property_Complaints_by_Hex_Bins.yaml": {
+      "path": "_datasets/unsafe-property-by-hex-bin.md",
+      "sha256": "ac2fce3d51bde67451e6af5704025d130b6a68117abb9cd5913a05479a9770f0"
+    },
+    "Licenses_and_Inspections__BEE_Case_Inspections.yaml": {
+      "path": "_datasets/licenses-and-inspections-bee-investigations.md",
+      "sha256": "5818905ae8232f5e201c90329aa714ca2f333d46e58c16d7741e294ee069a9f7"
+    },
+    "Licenses_and_Inspections__Case_Investigations.yaml": {
+      "path": "_datasets/licenses-and-inspections-case-investigations.md",
+      "sha256": "cd4e5b850ac0c8ae1056b8d38df588c26b7ebb4b594208941b4a7f8301b75c79"
+    },
+    "Licenses_and_Inspections__Outstanding_Fees_and_Fines.yaml": {
+      "path": "_datasets/licenses-and-inspections-outstanding-fees-fines.md",
+      "sha256": "2ec79921d61dab8cc49828c8411ae51fbc5f0aabcffe0c9046f3485b3e834b6b"
+    },
+    "Litter_Index.yaml": {
+      "path": "_datasets/litter-index.md",
+      "sha256": "bad428f2c9c5996bac2fc00ca4f267710d8cdbc1b7403a5b97fc9cd4cf54d597"
+    },
+    "Major_Watersheds_-_Philadelphia.yaml": {
+      "path": "_datasets/pwd-major-watersheds-philadelphia.md",
+      "sha256": "d93792d5b7c2b216a1410538c17f05452ce96582f8fbeb954ce3ec05b4b51eda"
+    },
+    "Major_Watersheds_-_Regional.yaml": {
+      "path": "_datasets/pwd-major-watersheds-regional.md",
+      "sha256": "3b41669947533ae283478f8aeef3b0fe6c95446ef613f1a88e3ef1ab6a2e9f36"
+    },
+    "Market_Value_Assessment__MVA_.yaml": {
+      "path": "_datasets/market-value-assessment.md",
+      "sha256": "61c21da47eebff8a99bced9e4f4e7872a4482e859752e6731af9f13d20f6ed39"
+    },
+    "Metrics_for_Philly_Stat_360.yaml": {
+      "path": "_datasets/phillystat360-metrics.md",
+      "sha256": "d0b778a56eeb4fe647cbb8a07deabf91d16a5e93dbd19de8a7be9b359cabc54c"
+    },
+    "Mid-Century_Modern_Architecture_Inventory.yaml": {
+      "path": "_datasets/mid-century-modern-architecture-inventory.md",
+      "sha256": "8a34e773987c1d5d41026d79eca5b8229668aa1e0581531f770857aad05f2834"
+    },
+    "Mini_City_Halls_Locations.yaml": {
+      "path": "_datasets/mini-city-halls.md",
+      "sha256": "a787ae07cb3492cc8d85a671a2b30536d3988a03bbf9828a98a3b3658d6090fe"
+    },
+    "Municipal_Waste_Operations.yaml": {
+      "path": "_datasets/municipal-waste-operations.md",
+      "sha256": "af0d8613a617ee47abcef5262c781b285e238a73d339775e38fd2e6ad7880a69"
+    },
+    "NOWData_-_NOAA_Online_Weather_Data.yaml": {
+      "path": "_datasets/nowdata-noaa-online-weather-data.md",
+      "sha256": "9e62637870b9199ee15aee28273a2e4698d4765225da2d934818e47a658b9f8c"
+    },
+    "Narcan_Administrations_By_ZIP_Code.yaml": {
+      "path": "_datasets/narcan-administrations.md",
+      "sha256": "301dd0073a6964f240f7207b7b7cfd94f6f6b0f95f157b5521abfd61d943c4ce"
+    },
+    "Narcotics_Activity_Hex_Centroids.yaml": {
+      "path": "_datasets/narcotics-activity-hex-centroids.md",
+      "sha256": "a7af673b88784634e983765d20b72f5654e029b79a4af38394808b7f798d4fd2"
+    },
+    "Neighborhood_Advisory_Committees__NACs_.yaml": {
+      "path": "_datasets/neighborhood-advisory-committees-nacs.md",
+      "sha256": "44f06f2e92b44c770695daf4b44f7df8887daeac2b08ee676b92909bc8cb3e5f"
+    },
+    "Neighborhood_Energy_Centers.yaml": {
+      "path": "_datasets/neighborhood-energy-centers.md",
+      "sha256": "d3d7de0bdc9b8105eebc8519e73909ab91afaec4616697fa84dafaeac19524df"
+    },
+    "Neighborhood_Food_Retail.yaml": {
+      "path": "_datasets/neighborhood-food-retail.md",
+      "sha256": "9cbb42a973d8a593b9be35c95c43c24d66d62b0bf468ed062c9d1b02210576fb"
+    },
+    "Neighborhood_Funding_Stream_Program.yaml": {
+      "path": "_datasets/neighborhood-dunding-atream-program.md",
+      "sha256": "9381511eaf1596dc016d2dade8dbc3b7c2f38a9558e5161f8201380d069164a3"
+    },
+    "Neighborhood_Resources.yaml": {
+      "path": "_datasets/neighborhood-resources.md",
+      "sha256": "d929f3d8e0fcd0ee3268150aae054fc12d07e2e9e5ae4346c6e0838f570c821d"
+    },
+    "Non-Thru_Streets_for_Trucks.yaml": {
+      "path": "_datasets/non-thru-streets-for-trucks.md",
+      "sha256": "5cc0a9ce54ce8f0db25644bff6d758223e7591e92042e2449710f76080d52c7c"
+    },
+    "Now___Then__Modern_and_Historical_Images_of_Philadelphia.yaml": {
+      "path": "_datasets/now-then-modern-and-historical-images-of-philadelphia.md",
+      "sha256": "d45fa16f3f1baeae638eabe3e7634c6798a83123b12a38d004f09f0a780317e2"
+    },
+    "OCF_Assets_Kensington.yaml": {
+      "path": "_datasets/ocf-assets-kensington.md",
+      "sha256": "3cdc4cd9305d3cd9f47f83fc64c09b3c9193fe0cf41a9c323a4e69838cc276ca"
+    },
+    "OEO_Registry_of_Certified_Minority_Women_Disable_Owned_Business_Enterprises.yaml": {
+      "path": "_datasets/oeo-registry-of-certified-minoritywomendisable-owned-business-enterprises.md",
+      "sha256": "fa27f3fb252b2352b26a621076bf47a8ea5dedc14050ef4510628ff6b51be2b6"
+    },
+    "OHS_Point-in-Time__PIT__Zones.yaml": {
+      "path": "_datasets/ohs-point-in-time-zones.md",
+      "sha256": "51ac3f88e28fc8b5677d6290c1c3e689981f140ae73d2d3f364449029ddcb748"
+    },
+    "OPS_Anti_Violence_and_Overdose_Prevention_Grants.yaml": {
+      "path": "_datasets/ops-anti-violence-and-overdose-prevention-grants.md",
+      "sha256": "c7d26b77494b7ebdf38df3c36b0b0e63ba0507d1903bfda6cee334a64ae3b724"
+    },
+    "OpenMaps.yaml": {
+      "path": "_datasets/openmaps.md",
+      "sha256": "92d24020fed770fe659723a828d53580c22e64950136eafc0bf37538788664ac"
+    },
+    "Outdoor_Advertising.yaml": {
+      "path": "_datasets/outdoor-advertising.md",
+      "sha256": "7693a3f9b1147c7714ce6f1104b19bbce2e28d780ef86028ab3359ba09d8b727"
+    },
+    "Overdose_deaths_and_outreach_by_ZIP_code.yaml": {
+      "path": "_datasets/phillystat360-overdose-deaths-by-zip.md",
+      "sha256": "2f5d8194cae1d50959e1952535004c829aa1a8d452be216b818089508ffdae0a"
+    },
+    "PATCO_GTFS.yaml": {
+      "path": "_datasets/patco-gtfs.md",
+      "sha256": "a85d7b15ccb77494100eb59d325cb7e9c016580c73da129d1c200e494b7b6717"
+    },
+    "PA_Ambulatory_Surgical_Centers.yaml": {
+      "path": "_datasets/pa-ambulatory-surgical-centers.md",
+      "sha256": "69046f569a02c9c900bce9527f310f61b650ceae3de0f71c59c5f87b0fb8e443"
+    },
+    "PA_At-Grade_Intersections.yaml": {
+      "path": "_datasets/pa-dot-at-grade-intersections.md",
+      "sha256": "5da716db0f132bad77a28616919600ed32672bc895b6e670bd90ede5024756c7"
+    },
+    "PA_Birth_Centers.yaml": {
+      "path": "_datasets/pa-birth-centers.md",
+      "sha256": "a792d93218d4e67504d7c36e8aca23860742943a57dd72a240efd2d853dab280"
+    },
+    "PA_Bridges.yaml": {
+      "path": "_datasets/pa-dot-bridges.md",
+      "sha256": "b9e07092c1b09601bf942912bd459ea3bbfd6831bdc3bfe98a80c3c2d4c653bc"
+    },
+    "PA_Community_Mental_Health_Centers.yaml": {
+      "path": "_datasets/pa-community-mental-health-facilities.md",
+      "sha256": "33a9630890c50a444298ea0a8a59f91bfb5069b98194040cdcdf2a6770370450"
+    },
+    "PA_Drain_Pipes.yaml": {
+      "path": "_datasets/pa-dot-drain-pipes.md",
+      "sha256": "6e6a050a36fbf74d4483ec622cc4612204091daa27d0934e928f9425fb39d24c"
+    },
+    "PA_Drug_Alcohol_Treatment_Facilities.yaml": {
+      "path": "_datasets/pa-drug-alcohol-treatment-facilities.md",
+      "sha256": "643cf2f54160bc8a5580474ca04fb610c9ee3cf803960ef8d145a3505c752e6e"
+    },
+    "PA_Home_Health_Agencies.yaml": {
+      "path": "_datasets/pa-home-health-agencies.md",
+      "sha256": "1a1a087e4aca4aaf8b3d76016d880710522f204166e651fa18ab0a50f86dd8af"
+    },
+    "PA_Hospices.yaml": {
+      "path": "_datasets/pa-hospices.md",
+      "sha256": "1ab950ca429671146a119420192af41cc66078f36cdd8da0ddf4153a75b68290"
+    },
+    "PA_Hospitals.yaml": {
+      "path": "_datasets/pa-hospitals.md",
+      "sha256": "cedcce9ba86b7f62947d10f37ecc440e590af42701b411fd363b833f850977fe"
+    },
+    "PA_Intermediate_Care_Facilities.yaml": {
+      "path": "_datasets/pa-intermediate-care-facilities.md",
+      "sha256": "90c08d36dc7eb811b6ff75d8bbeb2e083261ac0e0231839e5f137d409c434b5a"
+    },
+    "PA_Interstate_Mile_Markers.yaml": {
+      "path": "_datasets/pa-dot-interstate-mile-markers.md",
+      "sha256": "1339240eb089acf02cb78612f2f8b6c57c7c083be8b2ee67efda75ca5f5ce1b5"
+    },
+    "PA_Local_Roads.yaml": {
+      "path": "_datasets/pa-dot-local-roads.md",
+      "sha256": "fc75a5f2d30e8ea8d19b43798b47bb73d9fceb4bd40251668889360be6f58bca"
+    },
+    "PA_Medical_Marijuana_Dispensaries.yaml": {
+      "path": "_datasets/pa-medical-marijuana-dispensaries.md",
+      "sha256": "09da94d485ddf4d5e4697f57496a2b8d721c98230942af8d24bc49f5d6e7f2f3"
+    },
+    "PA_Municipality_Boundaries.yaml": {
+      "path": "_datasets/pa-dot-municipality-boundaries.md",
+      "sha256": "324bdc5abc8ced13c1b7d6e9f75b4692de6f3afb547dd29521ff02bd4dff6bc3"
+    },
+    "PA_Nursing_Homes.yaml": {
+      "path": "_datasets/pa-nursing-homes.md",
+      "sha256": "babebece59d848cef21d5e1c3457d4827de396239a3e46a86a5dfe35c331f81c"
+    },
+    "PA_Physical_Speech_Therapy_Facilities.yaml": {
+      "path": "_datasets/pa-physical-speech-therapy-facilities.md",
+      "sha256": "00d678432e74745255a93425d617e6a3441738d814184fee569b3784e3787e1f"
+    },
+    "PA_Psychiatric_Residential_Treatment_Facilities.yaml": {
+      "path": "_datasets/pa-psychiatric-residential-treatment-facilities.md",
+      "sha256": "740500b539588fc113f0c6179f29967392d7c427e034eb3bb79fe55f08c8f730"
+    },
+    "PA_Rail_Lines.yaml": {
+      "path": "_datasets/pa-dot-rail-lines.md",
+      "sha256": "cadcc63cb7f466542ccd5b10469d93d184a393f7531c6571b29eff744e28546a"
+    },
+    "PA_Railroad_Crossings.yaml": {
+      "path": "_datasets/pa-dot-railroad-crossings.md",
+      "sha256": "6faa4a26cb26e82c7b996b0fa98b76640ba275c28ddee3397044693853bd36f5"
+    },
+    "PA_School_Districts.yaml": {
+      "path": "_datasets/pa-dot-school-districts.md",
+      "sha256": "c37f047a4236f0243b9c7fe0bc8f9f3fc4d5079ceb4d7cdca51bb2ff5417e4b5"
+    },
+    "PA_State_House_of_Representatives_Districts.yaml": {
+      "path": "_datasets/pa-dot-state-house-of-representatives-districts.md",
+      "sha256": "63ca70f2f33e905f180c88e07790e3604615a8bf53d14ef712e451754bc51929"
+    },
+    "PA_State_Roads.yaml": {
+      "path": "_datasets/pa-dot-state-roads.md",
+      "sha256": "0ae09bc05e3e3c38ea3ee5de9d3345e2572a764469d290e4ac14192b9f5b3edf"
+    },
+    "PA_State_Senate_Districts.yaml": {
+      "path": "_datasets/pa-dot-state-senate-districts.md",
+      "sha256": "1e34feb0cfbc9e8cc5d866e85f1ba9e0ac2ff6e64245fc96425afe3478710341"
+    },
+    "PA_Traffic_Counts.yaml": {
+      "path": "_datasets/pa-dot-traffic-counts.md",
+      "sha256": "aeb75d050290f6592646f78a2b7217567e15e3cf8758692c9fed2b6f085d3a6e"
+    },
+    "PA_Transportation_Improvement_Projects.yaml": {
+      "path": "_datasets/pa-dot-transportation-improvement-projects.md",
+      "sha256": "97606c97af8d2784e9233fd3512e9a81e2b0502e9ce6186babe27188f477f28d"
+    },
+    "PA_U_S__Congressional_Districts.yaml": {
+      "path": "_datasets/pa-dot-congressional-districts.md",
+      "sha256": "8e17cd377cfc4b8fbf8c26d03967666c8bddbf89b4853d7f2ff984e128b9cf70"
+    },
+    "PHA_Housing_Sites.yaml": {
+      "path": "_datasets/pha-housing-sites.md",
+      "sha256": "6e766f7f2c3c4713a4f5c926e037dcac75cf521603204722c84298062c4ee78b"
+    },
+    "PHL_Made_Grant_Program.yaml": {
+      "path": "_datasets/phl-made-grant-program.md",
+      "sha256": "5248507b2d1167a97589c34ade30d8e391383b5bb5071ad254b789d256b7422f"
+    },
+    "PHLmaps.yaml": {
+      "path": "_datasets/phlmaps.md",
+      "sha256": "1b192deaf7bcb239d9634245bea2f9ae4945a4c9c057a695822125e438719773"
+    },
+    "PPR_Adult_Exercise_Equipment.yaml": {
+      "path": "_datasets/ppr-adult-exercise-equipment.md",
+      "sha256": "211a98b33626216ac81995f83d1fac9389bd014c04d4a39a865a88db3aa04983"
+    },
+    "PPR_Boat_Launches.yaml": {
+      "path": "_datasets/ppr-boat-launches.md",
+      "sha256": "cb6c49b5014647c3b0d434d3d9d9c8222c38105c4a2241eacd6e15e3e440e9fe"
+    },
+    "PPR_Building_Structures.yaml": {
+      "path": "_datasets/ppr-building-structures.md",
+      "sha256": "e95afea8e64acba79b358febccdd0b177a3f1e8dfe7f0a225a01adc9d2693bb5"
+    },
+    "PPR_Friends_Group.yaml": {
+      "path": "_datasets/ppr-friends-group.md",
+      "sha256": "27116214a87ba00da9806073064290af5644d287c3e31aa7a16e0255488944b8"
+    },
+    "PPR_Help_Locators.yaml": {
+      "path": "_datasets/ppr-help-locators.md",
+      "sha256": "02323499d97b55132aed24f7ab6e2bce1ad9eec3187c652b040eb19b0a63f89c"
+    },
+    "PPR_Hydration_Stations.yaml": {
+      "path": "_datasets/ppr-hydration-stations.md",
+      "sha256": "83e61ed5cfa114afa802fe92fad3934b0d5afa2725c6e6234cbf348f5d8cb23a"
+    },
+    "PPR_Picnic_Sites.yaml": {
+      "path": "_datasets/ppr-picnic-sites.md",
+      "sha256": "45ac763bae78675ae0e588183449aedbcd49ed86cb5b9a8bcbb6907e99ef3780"
+    },
+    "PPR_Playgrounds.yaml": {
+      "path": "_datasets/ppr-playgrounds.md",
+      "sha256": "0b269a190b93617cd8c83c039c48f71bdafd3dbdef6a3b809ddd776c17df3a29"
+    },
+    "PPR_Playstreets_Locations.yaml": {
+      "path": "_datasets/ppr-playstreets-locations.md",
+      "sha256": "103657b3d0a6ba2e5222bc0aa66c2ce32f17a13c975e0f4dc20b5789ae83a4d7"
+    },
+    "PPR_Program_Districts.yaml": {
+      "path": "_datasets/ppr-program-districts.md",
+      "sha256": "9aed0e56a6883d2364cb0f94a4cf8b59d8ee39313d078c1d73792181075bd34f"
+    },
+    "PPR_Properties.yaml": {
+      "path": "_datasets/ppr-properties.md",
+      "sha256": "82a050d36518a163060712abdca4ea04b6e4a20b9b8f55eb02b2ab487b5aa0a5"
+    },
+    "PPR_Spraygrounds.yaml": {
+      "path": "_datasets/ppr-spraygrounds.md",
+      "sha256": "e6802429d530940da7018ac6e12129e98f79d5e351e37583ae0f1b3d3db47946"
+    },
+    "PPR_Swimming_Pools.yaml": {
+      "path": "_datasets/ppr-swimming-pools.md",
+      "sha256": "1b083821f35e95509381899e3ce3432b88e6d56ffdcc4fa07d9770a0bf5128f0"
+    },
+    "PPR_Tennis_Courts.yaml": {
+      "path": "_datasets/ppr-tennis-courts.md",
+      "sha256": "383db2daca28363b70f21ec10416e507148415a03f848d92f233dd9409aebb89"
+    },
+    "PPR_Tree_Canopy.yaml": {
+      "path": "_datasets/ppr-tree-canopy.md",
+      "sha256": "b301bddae1859788d514fad85e4d172f29994580455991e97aff40cd811ea0e3"
+    },
+    "PWD_Customer_Service_Calls.yaml": {
+      "path": "_datasets/pwd-customer-service-calls.md",
+      "sha256": "ed43800848cf7f308e1f79f8b907c4c1cb13061b8b7d4e22f06e589ad3e46b1f"
+    },
+    "PWD_Geotechnical_Tests.yaml": {
+      "path": "_datasets/pwd-geotechnical-tests.md",
+      "sha256": "99390172602d213cddee644c73826800836b0f3b93b481edeee09d480a1b8528"
+    },
+    "PWD_Sewersheds.yaml": {
+      "path": "_datasets/pwd-sewersheds.md",
+      "sha256": "9947048abb99b23f808158c56bc32c9c448a694a9508abaf080ec7fdba13ac1d"
+    },
+    "PWD_Stormwater_Billing_Parcels.yaml": {
+      "path": "_datasets/pwd-stormwater-billing-parcels.md",
+      "sha256": "1f4d248a426d7b31e21ae8a296e45be82304ca70449f4084f4ae0aec0201fdf3"
+    },
+    "PWD_Stream_Sampling_Locations.yaml": {
+      "path": "_datasets/pwd-stream-sampling-locations.md",
+      "sha256": "558a4572501ebce594e03ddd674e8c775fa64463abc717c902a1876ac6ce679c"
+    },
+    "Parking_Jawn.yaml": {
+      "path": "_datasets/nhand-parking-jawn.md",
+      "sha256": "b02d2a6e629b980dd7463374a3a556621a73caea9769824892b8a0279d1b91b7"
+    },
+    "Parking_Locator.yaml": {
+      "path": "_datasets/parking-locator.md",
+      "sha256": "318a1f8acfc5c6527b83af4c28f8120ff8d1f0d77f0d6e2caa7bcdf4c6ac92ad"
+    },
+    "Parking_Violations.yaml": {
+      "path": "_datasets/parking-violations.md",
+      "sha256": "de74156f1b2b023fe734c836fb026868ecd5676d25ba4af89e42008b9039ceb5"
+    },
+    "Parks___Recreation_Districts.yaml": {
+      "path": "_datasets/parks-recreation-districts.md",
+      "sha256": "eca361c1f34006fad8ab31c3f257667f6d6a8deba79e8ee0a3b16a7cefafc93f"
+    },
+    "Parks___Recreation_Program_Sites.yaml": {
+      "path": "_datasets/parks-recreation-program-sites.md",
+      "sha256": "5bc9540905bade00e27f05d08237d1366e8eb0d62431767efa9347ba8c518bf9"
+    },
+    "Parks_and_Recreation_Out_of_School_Time_Programs.yaml": {
+      "path": "_datasets/parks-and-recreation-out-of-school-time-programs.md",
+      "sha256": "bc296fd0c08a76b395d6132d5d9e2f971a6e83f67830f33255e4e7915e629adc"
+    },
+    "Parks_and_Recreation__PPR__Operations_District_Boundaries.yaml": {
+      "path": "_datasets/ppr-ops-districts.md",
+      "sha256": "ae1e75b5b7162500dbfd255a6b75b182ce4c9cac4152f9417887d4df417d2458"
+    },
+    "Parks_and_Recreation__PPR__Trails.yaml": {
+      "path": "_datasets/parks-and-recreation-ppr-trails.md",
+      "sha256": "71c25343e1bb227b769ca448592d50206c331fe90dc10e9ee14d87d2e5cc0d06"
+    },
+    "Paving_Plan.yaml": {
+      "path": "_datasets/paving-plan.md",
+      "sha256": "37a5d6f54b43034523876be5053d845257df1a81ed140d72cbb9e05a977613fb"
+    },
+    "Pennsylvania_State_House_of_Representatives_Districts.yaml": {
+      "path": "_datasets/pa-state-house-of-representatives-districts.md",
+      "sha256": "4fe283a80968d9a16451ba1bde3ff2ea814a2ad49a36ce8f41c342fb33291483"
+    },
+    "Pennsylvania_State_Senatorial_Districts.yaml": {
+      "path": "_datasets/philadelphia-pennsylvania-state-senatorial-districts.md",
+      "sha256": "450fe33e61ec2b74b7d9cc6ee289bf9bea1cee0e5e5525078fa6c88b1d5f7f4b"
+    },
+    "Pennsylvania_Statewide_High-Resolution_Tree_Canopy.yaml": {
+      "path": "_datasets/pa-high-resolution-tree-canopy.md",
+      "sha256": "a014a3f356f49774582ce7e737b9b22c48dcbefea8dc72e22525ee65ff2921d7"
+    },
+    "Pennypack_Park_Trail_Map.yaml": {
+      "path": "_datasets/pennypack-park-trail-map.md",
+      "sha256": "d9f9381a6a21a22f9c7f8493e07e0b93b8e3e742d2da7e6da5eb31ab1ddfc669"
+    },
+    "People_Released_to_Philadelphia_from_Prison___Jail.yaml": {
+      "path": "_datasets/people-released-to-philadelphia-from-prison-jail.md",
+      "sha256": "475696bf79f59370b5ef7b66d8fb429f42ffb11859ae6eca13840acf6994e97b"
+    },
+    "Percent_for_Art_Locations.yaml": {
+      "path": "_datasets/percent-for-art-locations.md",
+      "sha256": "fd7b09da8849e1bbc46ed3bbc8659bdeff3353d2c04449ca5d5a66e8382d7861"
+    },
+    "PhilaDox_-_Property_Documents.yaml": {
+      "path": "_datasets/philadox-property-documents.md",
+      "sha256": "3d57e7646f6a93d4bf79857b972f6be6ee565665caf7c3ccee8b12e38abaeaad"
+    },
+    "PhilaPlace.yaml": {
+      "path": "_datasets/hsp-philaplace.md",
+      "sha256": "a77dfda7de2503322419160b6c8fd81c007131027f82c4a02d2248e39679f568"
+    },
+    "Philadelphia_Architects_and_Buildings_Project.yaml": {
+      "path": "_datasets/philadelphia-architects-and-buildings-project.md",
+      "sha256": "f9263d0af1efe45c3d3ecc00cd442678024aeae87b70c496ebf0f433d4b3afa0"
+    },
+    "Philadelphia_Beverage_Tax_Registered_Distributors_and_Dealers.yaml": {
+      "path": "_datasets/philadelphia-beverage-tax-registered-distributors-and-dealers.md",
+      "sha256": "66fd42479379383fabb44a2687bd36ebb0241aeceeda19cf7752021393422ca1"
+    },
+    "Philadelphia_Budget_Data.yaml": {
+      "path": "_datasets/acouch-philadelphia-budget-data.md",
+      "sha256": "ae17314d91554d67be9e2cf236590f05311fbc21964892a89386d1bb8c308504"
+    },
+    "Philadelphia_Business_Dashboard.yaml": {
+      "path": "_datasets/philadelphia-business-dashboard.md",
+      "sha256": "f08e5fab8f77c2d1c6300a29c8114874f80c1df9c4ebc89646bc2e4dfd483c00"
+    },
+    "Philadelphia_Business_Lending_Network_Incentive_Grant_Program.yaml": {
+      "path": "_datasets/pbln-program-grants.md",
+      "sha256": "4e1474c904c90114a8413de57cf6c3e61581b3e6b0d8da3b3dbc22bffd3ef5ba"
+    },
+    "Philadelphia_Child_Blood_Lead_Levels.yaml": {
+      "path": "_datasets/philadelphia-child-blood-lead-levels.md",
+      "sha256": "74752d75f3a0b26ea80049bdb97c1183b733e0547f86cd0ec95ba7d8b43c64c1"
+    },
+    "Philadelphia_Code_and_Home_Rule_Charter.yaml": {
+      "path": "_datasets/philadelphia-code-and-home-rule-charter.md",
+      "sha256": "4d7635e93700646171b8e59d44379a2ca5730515706ee30e770c81a02d7cc47e"
+    },
+    "Philadelphia_Crash_Points.yaml": {
+      "path": "_datasets/philadelphia-crash-points.md",
+      "sha256": "f8ee17ab3e7c5db46aa68500debdf84888b69e6c3a00ecc45b4c7526dc3023dd"
+    },
+    "Philadelphia_ESL__English_as_a_Second_Language__Class_Locations.yaml": {
+      "path": "_datasets/philadelphia-esl-english-as-a-second-language-class-locations.md",
+      "sha256": "7e609dd7c3aef59d7688b55db716a311ee901aecaee41e8dab21e7fbb3e78027"
+    },
+    "Philadelphia_Fair_Measure.yaml": {
+      "path": "_datasets/nhand-property-fair-measure.md",
+      "sha256": "545020f0481f2dfec129250f2c26f987d96558fb308dd684b451cc0ac777e0e1"
+    },
+    "Philadelphia_Free_Food_and_Meal_Sites.yaml": {
+      "path": "_datasets/free-food-sites.md",
+      "sha256": "21dd0fbdfbc5b52ba9c998455abd3f67e68f3146fecd9769bbeec5eada679ee4"
+    },
+    "Philadelphia_Gun_Violence_Dashboard.yaml": {
+      "path": "_datasets/nhand-philadelphia-gun-violence-dashboard.md",
+      "sha256": "3cd08fc7422e00bfb9d2def8aa6a1de8d513d5d14088f19d196dd0322297304a"
+    },
+    "Philadelphia_Historic_Maps.yaml": {
+      "path": "_datasets/historic-maps.md",
+      "sha256": "27a794ddb71265f507b25becb252f87f22681d53e3af741762eca37c0ebdaf5e"
+    },
+    "Philadelphia_Hospitals.yaml": {
+      "path": "_datasets/philadelphia-hospitals.md",
+      "sha256": "b9cb2920f13a0eea40a1961eedf4e6ff906bda488410a67808efa00397fed605"
+    },
+    "Philadelphia_Household_Internet_Assessment_Survey.yaml": {
+      "path": "_datasets/philadelphia-household-internet-assessment-survey.md",
+      "sha256": "86769d30e1e0a6552a8585a126582c0ad3de5172fc05443713cb398faec026b6"
+    },
+    "Philadelphia_Land_Cover_Raster.yaml": {
+      "path": "_datasets/philadelphia-land-cover-raster.md",
+      "sha256": "a705dd99360d35c581f808ab24de757d7826e08d26a6b02c0b182d5e0d531f08"
+    },
+    "Philadelphia_Lobbying_Information_System__App_.yaml": {
+      "path": "_datasets/philadelphia-lobbying-information-system-app.md",
+      "sha256": "c781c27b71940cff8a829d2022fab7439e29ff7527621b7b176d944d23e6b691"
+    },
+    "Philadelphia_Neighborhoods.yaml": {
+      "path": "_datasets/philadelphia-neighborhoods.md",
+      "sha256": "802d04a3a257e867eefe0405342b0590ec517d3b9fc508b7335fa6e230642998"
+    },
+    "Philadelphia_Police_Complaint_Archive.yaml": {
+      "path": "_datasets/philadelphia-police-complaint-archive.md",
+      "sha256": "2039b681c9d989839f210eeab241448b1a7620a7e8fe2944b0cd1ae0f473af6a"
+    },
+    "Philadelphia_Properties_and_Assessment_History.yaml": {
+      "path": "_datasets/philadelphia-properties-and-assessment-history.md",
+      "sha256": "7b951f3d5807459b92553501784ae6402687ea4b58eb24aba23bfc1b946faef6"
+    },
+    "Philadelphia_Public_Art__philart_net.yaml": {
+      "path": "_datasets/philadelphia-public-art-philartnet.md",
+      "sha256": "e04378e7c334d4e6b637abae1db8ae07d1ae13d58022c91bfd49c0fe2bd223a5"
+    },
+    "Philadelphia_Registered_Historic_Districts.yaml": {
+      "path": "_datasets/philadelphia-registered-historic-districts.md",
+      "sha256": "b00d2cb6a37ba66529fa83dc0ecf7155c22e89ba19b5f22d815796c4e543ffcc"
+    },
+    "Philadelphia_Registered_Historic_Properties.yaml": {
+      "path": "_datasets/philadelphia-registered-historic-properties.md",
+      "sha256": "16adbb5853281612f82135c95081c7f2c0905cb8b91fd2e118af08298200a11e"
+    },
+    "Philadelphia_Tree_Inventory.yaml": {
+      "path": "_datasets/philadelphia-tree-inventory.md",
+      "sha256": "af7f098030719e281b58fe39292df6c385467137f699b364e66108f94631033f"
+    },
+    "Philadelphia_Universities_and_Colleges.yaml": {
+      "path": "_datasets/philadelphia-universities-and-colleges.md",
+      "sha256": "d0f28c0d1c49089e5cbda99207ee1e50f1979b6f8abf2f0c75ff8c896a1fdb46"
+    },
+    "Philadelphia_Vital_Statistics_-_Mortality__Deaths_.yaml": {
+      "path": "_datasets/philadelphia-vital-statistics-mortality-deaths.md",
+      "sha256": "6a565ac9f56506b5a8ee0179f38c9746a357b576ddab273887384c232e3adc41"
+    },
+    "Philadelphia_Vital_Statistics_-_Natality__Births_.yaml": {
+      "path": "_datasets/philadelphia-vital-statistics-natality-births.md",
+      "sha256": "a4668c4c1946e3c14cc6fb093d2d18bf7069fcaeff9b6a07c1a305d87107feb2"
+    },
+    "Philadelphia_Vital_Statistics_-_Population_Metrics.yaml": {
+      "path": "_datasets/philadelphia-vital-statistics-population-metrics.md",
+      "sha256": "6fedb02db3caefa3942e1354b96909358d39fea735c6a1d11668749910d70d02"
+    },
+    "Philadelphia_Vital_Statistics_-_Social_Determinants_of_Health__SDOH_.yaml": {
+      "path": "_datasets/philadelphia-vital-statistics-social-determinants-of-health-sdoh.md",
+      "sha256": "a04042fa67f0f6f53a3b13927266f5c6d1568bc240f494be5f59dd12021ff65c"
+    },
+    "PhillyHistory_org.yaml": {
+      "path": "_datasets/phillyhistoryorg.md",
+      "sha256": "2ff2db1ff7a01aa2e936f07987b66e7621e1f44fcbec2f00160cc469aa13dac1"
+    },
+    "Philly_Freight_Finder.yaml": {
+      "path": "_datasets/philly-freight-finder.md",
+      "sha256": "2d4753c7cdc13af06cd9433807864c3c5e4c1bdc0d4f0bbaa4b2e451180dcf9b"
+    },
+    "Philly_KEYSPOT_Locations.yaml": {
+      "path": "_datasets/philly-keyspot-locations.md",
+      "sha256": "542b135f2ca7bf488ddc073d88b38ed6cf650e7bc7711b897cd8c1c2ad5112a1"
+    },
+    "Philly_Rising_Boundaries.yaml": {
+      "path": "_datasets/philly-rising-boundaries.md",
+      "sha256": "7c1f3405dc8599de05271715d254ba65a6066595e7b12adb91b4ee53b9f3b86b"
+    },
+    "Philly_School_Experience_Survey__PSES_.yaml": {
+      "path": "_datasets/sdp-philly-school-experience-survey.md",
+      "sha256": "cfc35035d81605d5b3c0cd54170d31acffbdb99bcdac0405876e5717c53f22dd"
+    },
+    "Piers.yaml": {
+      "path": "_datasets/piers.md",
+      "sha256": "73c225b2793a5b3f376ac1d2e7a502daa47ee7db9ac6a49e2798238dcca5b299"
+    },
+    "Planning_Districts.yaml": {
+      "path": "_datasets/planning-districts.md",
+      "sha256": "effc97227aac6e9131acc4a6afccc682a16abbf6035626372200fd80214bc658"
+    },
+    "Police_Athletic_League__PAL__Centers.yaml": {
+      "path": "_datasets/police-athletic-league-pal-centers.md",
+      "sha256": "71c5ac9893a7aad5259b453739d527060c5efa2e833568d5a0d2c043d3815c8e"
+    },
+    "Police_Districts.yaml": {
+      "path": "_datasets/police-districts.md",
+      "sha256": "d28723ef16636292ff0858d6027e0f5da015a43fe0c32540ad0d47f9ae65fd49"
+    },
+    "Police_Divisions.yaml": {
+      "path": "_datasets/police-divisions.md",
+      "sha256": "5ae699c6ca2207d12917c3b6633ebc428e88d26b2e16075462bcf4ac15236e23"
+    },
+    "Police_Service_Areas.yaml": {
+      "path": "_datasets/police-service-areas.md",
+      "sha256": "f768934644109c2b4a5dcfd0c08712dcc12c2312fc294f7dfda9e54847f2ae4a"
+    },
+    "Police_Stations.yaml": {
+      "path": "_datasets/police-stations.md",
+      "sha256": "f11699b825b147779881554c7bdee41ddc6cd5ce361f241d255ae3caccbca0e0"
+    },
+    "Political_Ward_Divisions.yaml": {
+      "path": "_datasets/political-ward-divisions.md",
+      "sha256": "09551b350cf8425a7f7ada557a1c87d5eecb670b57428fed98fbf04f040931af"
+    },
+    "Political_Wards.yaml": {
+      "path": "_datasets/political-wards.md",
+      "sha256": "6deab2755389994ba3173de99b70dc268967abfc23581655eb289a079e26e220"
+    },
+    "Polling_Places.yaml": {
+      "path": "_datasets/polling-places.md",
+      "sha256": "2ec8c3e3ca0680c06bf9be5065da248634b87eecaa181120fd8ff7088f8a8d53"
+    },
+    "PrEP_Providers.yaml": {
+      "path": "_datasets/prep-providers.md",
+      "sha256": "8584c8d1b967c9523b6c72d6df55631d3c5bf45bf4de85f49e6553136831286c"
+    },
+    "Professional_Services_Contracts.yaml": {
+      "path": "_datasets/professional-services-contracts.md",
+      "sha256": "4e2f73cbaf32695e9343f022e33fa36b9b524ee51287a887cbff669966b1cb3d"
+    },
+    "ProgressPHL_Social_Progress_Index_Explorer.yaml": {
+      "path": "_datasets/controller-progress-phl.md",
+      "sha256": "9d7c8d8d5bb3f6ebdd0ffb6f7d689bff205660017a49be80a16a112e7ac9afad"
+    },
+    "Public_School_Catchment_Areas.yaml": {
+      "path": "_datasets/sdp-school-catchment-areas.md",
+      "sha256": "6b212d0dfb5ade854c09a82f1ecc8fc2ce7d2c861a3b9e3f364f4e4f45e3f872"
+    },
+    "Quality_Jobs_Program.yaml": {
+      "path": "_datasets/quality-jobs-program.md",
+      "sha256": "499c0174de298ef98ff81e4478fc184a67437542b05a506b9ec814682c5e08a4"
+    },
+    "Railroad_Lines.yaml": {
+      "path": "_datasets/railroad-lines.md",
+      "sha256": "15622c7b193f34f5e0c029f05d646bea51591ca1788199030c796a7b9dc86256"
+    },
+    "Rain_Barrels.yaml": {
+      "path": "_datasets/pwd-rain-barrels.md",
+      "sha256": "7d1febd0fb130be84cf4c9bf9bb52ec45bab5ea80132523e2b2a75536840ebb0"
+    },
+    "Rain_Check_Installation_Sites.yaml": {
+      "path": "_datasets/pwd-rain-check-installation-sites.md",
+      "sha256": "d9bc91ff81f79df003d688c8c85f2b9086daa44bcdaff101a88017fdeb61c2a7"
+    },
+    "Rain_Gauges.yaml": {
+      "path": "_datasets/pwd-rain-gauges.md",
+      "sha256": "26c486b923f908e143686322365a77067763330ccfe90e179889c1e7e14fbfaf"
+    },
+    "Real_Estate_Tax_Balances.yaml": {
+      "path": "_datasets/real-estate-tax-balances.md",
+      "sha256": "805dd80aad0e54895a9dc1a42d520270adbb958a4d538c833c20deaa333a7e56"
+    },
+    "Real_Estate_Transfers.yaml": {
+      "path": "_datasets/real-estate-transfers.md",
+      "sha256": "92bc00bdc4c455e56a7421340480f9a954066657a81a34be93aaab6ba7808d6f"
+    },
+    "RecycleBank_Participation.yaml": {
+      "path": "_datasets/recyclebank-participation.md",
+      "sha256": "7ae7aa04f2ade2c21effd55b7fa56b04844d9c1214eea566d1aaea1157bbdde6"
+    },
+    "Recycling_Diversion_Rate.yaml": {
+      "path": "_datasets/recycling-diversion-rate.md",
+      "sha256": "8f5feddb9ee150fecdd53294d99ce951490f11fbf8e2ba297c6925538b61a99a"
+    },
+    "Recycling_and_Donations_Resources.yaml": {
+      "path": "_datasets/recycling-donations-resources.md",
+      "sha256": "ea11437fb5363db37e74bb964b16e9789c5ac58c2b1b0421642ffa36360f8b86"
+    },
+    "Red_Light_Cameras.yaml": {
+      "path": "_datasets/red-light-cameras.md",
+      "sha256": "9d5b238a51aaa0367278cefa7e681ef06b66215a8c48f4fc827ad90a5b5490aa"
+    },
+    "Redevelopment_Certified_Areas.yaml": {
+      "path": "_datasets/redevelopment-certified-areas.md",
+      "sha256": "cf7fdc389b886ec535c1de411736cd4b812cfdfbcb93fa71c59e9496d6b3850b"
+    },
+    "Registered_Community_Gardens.yaml": {
+      "path": "_datasets/registered-community-gardens.md",
+      "sha256": "46881e779f79baffa3cdd9659efc121ad1b82f9beab89021ed38bd5798ce8f65"
+    },
+    "Registered_Community_Organizations__RCO__Boundaries.yaml": {
+      "path": "_datasets/registered-community-organizations-rco-boundaries.md",
+      "sha256": "0f4b48d200cd72d1ae6e398ffb6bebe61077266195333b7a740114a9912a36e1"
+    },
+    "Residency_Waivers.yaml": {
+      "path": "_datasets/residency-waivers.md",
+      "sha256": "98a028c53b5649bb87526d98fcc59282d5bc27ebc00c4be408608657bc4ffd50"
+    },
+    "Residential_Parking_Permit_Blocks.yaml": {
+      "path": "_datasets/residential-parking-permit-blocks.md",
+      "sha256": "17c272f392e63a19cbb3b9c96593e353e7985e92c3f924c7e11462ba59ffed7c"
+    },
+    "Retrofitted_Homes.yaml": {
+      "path": "_datasets/retrofitted-homes.md",
+      "sha256": "04d070e7b83adbc633e17f8cb14c3e8ee4d440b77bff014d77310edf309295a8"
+    },
+    "Riparian_Buffers.yaml": {
+      "path": "_datasets/riparian-buffers.md",
+      "sha256": "76cfcb1cc15adb7fa15d5a2883558177a4dab72442e6bb94bae4f9823e3d0ee6"
+    },
+    "Ryan_White_HIV_Treatment_Centers.yaml": {
+      "path": "_datasets/ryan-white-hiv-treatment-centers.md",
+      "sha256": "979c655ae08c68198dc63fa019f0d77f9a29259d1e01108020619b2e933366bf"
+    },
+    "SEPTA_Alerts.yaml": {
+      "path": "_datasets/septa-alerts.md",
+      "sha256": "ab729587ebb62841293634c0456e3e4b05ea668081755f96fab81a1edeccff99"
+    },
+    "SEPTA_Bus_Detours.yaml": {
+      "path": "_datasets/septa-bus-detours.md",
+      "sha256": "c8bdd7634d3e720cb389d320ae2af0fbd01b6a0acf4feec5cfa37cb3a5fafb98"
+    },
+    "SEPTA_Elevator_Outages.yaml": {
+      "path": "_datasets/septa-elevator-outages.md",
+      "sha256": "595ed7818e13054371f40e0648c8b2e0d3ae02dd41d60667243d02f8523030b8"
+    },
+    "SEPTA_Finances.yaml": {
+      "path": "_datasets/septa-finances.md",
+      "sha256": "e326e4c93005c8190d79ce6cd75fada7a644f0c79c96f9253a00b44dce110625"
+    },
+    "SEPTA_GTFS.yaml": {
+      "path": "_datasets/septa-gtfs.md",
+      "sha256": "e8fb87634d916ec5854f45c7237d226e05077db74829a5e273e540d732a16976"
+    },
+    "SEPTA_GTFS_Real-time_Alerts_and_Updates.yaml": {
+      "path": "_datasets/septa-gtfs-alerts-updates.md",
+      "sha256": "5381817f9bd1b5f2965302c9fbc400a16731f65fc1556d5b2105e584ddf909f8"
+    },
+    "SEPTA_Metro_APIs.yaml": {
+      "path": "_datasets/septa-metro-apis.md",
+      "sha256": "6b8df7c15fe964319b4ed2791d289d262be5e3ad3fe7a5d4ff06562b877c39d6"
+    },
+    "SEPTA_Performance_Dashboards.yaml": {
+      "path": "_datasets/septa-dashboards.md",
+      "sha256": "74b28a46e4db8764a375bbc07c02dbdc0a4ef1ae6bbd9144f37441c76beefaa9"
+    },
+    "SEPTA_Real-time_Map.yaml": {
+      "path": "_datasets/septa-real-time-map.md",
+      "sha256": "295a5f3897b65906c35abd15b16d32397cb8dcf509357d80593bf9d3213d32ad"
+    },
+    "SEPTA_Regional_Rail_APIs.yaml": {
+      "path": "_datasets/septa-regional-rail-trainview.md",
+      "sha256": "75b82e3e40a6a9d3e247830f978b4c5510c24e78b836c88573ea353e43e1bad0"
+    },
+    "SEPTA_Regional_Rail_On-time_Performance_Reports.yaml": {
+      "path": "_datasets/phor-septa-train-otp.md",
+      "sha256": "4a52c3c5152e0e600ddfc61cf456bb4c51d8b8236e28ecd6b546aae974856cb9"
+    },
+    "SEPTA_Ridership_Statistics.yaml": {
+      "path": "_datasets/septa-ridership-statistics.md",
+      "sha256": "7bc7f7d83da2da5220882dbfeeb9be3b5ce004940844eec544984e38764cc06c"
+    },
+    "SEPTA_Routes__Stops__and_Locations.yaml": {
+      "path": "_datasets/septa-routes-stops-locations.md",
+      "sha256": "f7380259610eadaf6d7889e1a69c651ba228893a795e9425ae98d20bd0198a2f"
+    },
+    "SEPTA_SMS_Transit.yaml": {
+      "path": "_datasets/septa-sms-transit.md",
+      "sha256": "59fc2e0816e9d448805a2bd20feb2ee5f402c4ef635d0c3ad47b405478e26c2f"
+    },
+    "SEPTA_Schedules.yaml": {
+      "path": "_datasets/septa-schedules.md",
+      "sha256": "7daa9455f868c5a0524306db0a1f246c3f8b4ba629533e504352b527f54089f0"
+    },
+    "SEPTA_TransitView.yaml": {
+      "path": "_datasets/septa-transitview.md",
+      "sha256": "098078df0d619233ce7fc5fff2769c4c9c8e28fc9a1f36fcc331eb9894823430"
+    },
+    "SEPTA_Trip_Planner.yaml": {
+      "path": "_datasets/septa-trip-planner.md",
+      "sha256": "c179b3316f30ed328d8f6602489ad189c59554b43880e5e8439748458a962478"
+    },
+    "Sanitation_Areas.yaml": {
+      "path": "_datasets/sanitation-areas.md",
+      "sha256": "fbfefd6ff885127aab153269b581102b98a8c8abfe8a6e915938a3afbdd5d7d2"
+    },
+    "Sanitation_Collection_Day_Boundary.yaml": {
+      "path": "_datasets/sanitation-collection-day-boundary.md",
+      "sha256": "3a3c3d3679c3be846dec8b8a45453a11b653259e55b440a3f92652d4316260b8"
+    },
+    "Sanitation_Convenience_Centers.yaml": {
+      "path": "_datasets/sanitation-convenience-centers.md",
+      "sha256": "f80e192c52f42d61a78102d49bf1928e2d374ceacbac9cbba19de5e8497d0ded"
+    },
+    "Sanitation_Districts.yaml": {
+      "path": "_datasets/sanitation-districts.md",
+      "sha256": "f2f91146637ff8ab04075c8c4eca6406686c23e2cc027bcbe438af05b682e664"
+    },
+    "School_Catchment_Retention_Information.yaml": {
+      "path": "_datasets/sdp-school-catchment-retention.md",
+      "sha256": "10c37ee983f92008416c9d1f54ed6856e2ee5e5b47f708fe4f5b5426ff6af3d9"
+    },
+    "School_Crossing_Guards_Locations.yaml": {
+      "path": "_datasets/school-crossing-guard-locations.md",
+      "sha256": "90a634cfa5bf1dfc7297f3f31bececd160ba653a853152747dac04920fa7a3f4"
+    },
+    "School_District_Employees.yaml": {
+      "path": "_datasets/sdp-district-employees.md",
+      "sha256": "d9470332da975dd569a1d3113dc7cdaaab2b3cfa275134c81877e5fd0c847727"
+    },
+    "School_District_Finances.yaml": {
+      "path": "_datasets/sdp-district-finances.md",
+      "sha256": "19b424fdc87e9554df551b32b10bdff4a37d9ddc7857a7c0e1bbabfdcc7de562"
+    },
+    "School_District_PSSA___Keystone_Performance.yaml": {
+      "path": "_datasets/sdp-pssa-keystone-performance.md",
+      "sha256": "1ff048a3e59dca7cf649b23a4fec5fa6dc06c4efe316973ab793e722322f5633"
+    },
+    "School_District_Pre-School_Information.yaml": {
+      "path": "_datasets/sdp-pre-school-information.md",
+      "sha256": "f94336b9f5b69cb5ce0641a9187fdb1bde1940e3eea7c1e88182fd4b97a40787"
+    },
+    "School_District_School_Finder.yaml": {
+      "path": "_datasets/sdp-school-finder.md",
+      "sha256": "3bacec2b5559c0858a0defd38988b339ae50e28eb3e06a6b46ed8df6afeb90f2"
+    },
+    "School_District_School_Lists.yaml": {
+      "path": "_datasets/sdp-school-lists.md",
+      "sha256": "ffcdb239570986150e79b35b24b0592e36ed2c6866e74ab8e4b3f2a5ff62802e"
+    },
+    "School_District_School_Progress_Report_Data.yaml": {
+      "path": "_datasets/sdp-school-progress-report-data.md",
+      "sha256": "9c3f52d0f5f24b805e331b6de6410d1f0fbd96eaa0b7f2c176d25468c958d4b0"
+    },
+    "School_Enrollment_and_Demographics.yaml": {
+      "path": "_datasets/sdp-school-enrollment-and-demographics.md",
+      "sha256": "d9e29d35aa21ad1d16595947b1a67f02f1079182cdcedb73e416ed94f57d97e9"
+    },
+    "School_Meals_and_Nutrition.yaml": {
+      "path": "_datasets/sdp-school-meals-and-nutrition.md",
+      "sha256": "63e96d5103f2cab584a8aca94ac038e2c517ffb17dfb274a5b34fe960716be87"
+    },
+    "School_Performance.yaml": {
+      "path": "_datasets/sdp-school-performance.md",
+      "sha256": "a52b896d020831f5428542fc59d4c15660f54641a6274efa145808fa11ad30c6"
+    },
+    "School_Selection_Information.yaml": {
+      "path": "_datasets/sdp-school-selection-information.md",
+      "sha256": "b5d0de18e42e51c38fca4b6752c63939a59e277813f7cef662d7204c0329129f"
+    },
+    "Schools.yaml": {
+      "path": "_datasets/schools.md",
+      "sha256": "698bdf30f25f062b3c202f212ae5381d04630790b223f1fedfb06f67551ffe20"
+    },
+    "Schools_Parcels.yaml": {
+      "path": "_datasets/schools-parcels.md",
+      "sha256": "3a949c2d09d4a1a3778cb1a5326c3c37593874f434c1170d56f99cd70d1481cd"
+    },
+    "SeeClickFix__Phila__only_.yaml": {
+      "path": "_datasets/seeclickfix-phila-only.md",
+      "sha256": "88a2b4c0d5be433b4d71dd22f74baaec8c6d8c6e8119316d3758e2c7c62e3a03"
+    },
+    "Sharps_Drop_Boxes.yaml": {
+      "path": "_datasets/sharps-drop-boxes.md",
+      "sha256": "4b7e45659bb1fd6de66a58cf775507c14c69e4b9fb169a2cc773496c8a728575"
+    },
+    "Shooting_Victims.yaml": {
+      "path": "_datasets/shooting-victims.md",
+      "sha256": "487ef4b886df1b93140d5a1254a9cc266ec957cabd4182d37d599a1479cc777b"
+    },
+    "Sidewalk_Cafe_By-Right_Area.yaml": {
+      "path": "_datasets/streets-sidewalk-cafe-by-right-area.md",
+      "sha256": "7ccdaf694d7358f3601194dd245f8da0d4efa8010b21e2b19eabf1558d42af54"
+    },
+    "Skookul_SEPTA_Real_Time_Locator.yaml": {
+      "path": "_datasets/skookul-septa-real-time-locator.md",
+      "sha256": "80789a88488883da126daaac99ed22a541b1b6fd2ab0c14ee69710b9cc391581"
+    },
+    "Snow_Emergency_Routes.yaml": {
+      "path": "_datasets/snow-emergency-routes.md",
+      "sha256": "fae2b9c4b8b95170125e7f12a7f1c7450c51f7b072f8d7b7237b0f5a646b7b23"
+    },
+    "Soil_Survey__Philadelphia_County.yaml": {
+      "path": "_datasets/soil-survey-philadelphia-county.md",
+      "sha256": "34047e5daa7feb0f5d2d16868aad84ddc5ff320acd8bb1197fd734f51d059bda"
+    },
+    "Special_Vending_Districts.yaml": {
+      "path": "_datasets/special-vending-districts.md",
+      "sha256": "d13f24f99ff53ec2462384cca734c69703d5f8c32ea114cab1beb33985e12aa4"
+    },
+    "Speculative_Monuments_for_Philadelphia.yaml": {
+      "path": "_datasets/speculative-monuments-for-philadelphia.md",
+      "sha256": "f048319c62a8e93613eb75c8b1f8a6c194a2a71232cc1614108ec478c059ad46"
+    },
+    "Storefront_Improvement_Program_Grants_Disbursed.yaml": {
+      "path": "_datasets/storefront-improvement-program-grants-disbursed.md",
+      "sha256": "beec1ae19ee539f137eda1e32a05ce7c19f11e64808547a493ae6150d7cd194c"
+    },
+    "Stormwater_Management_Practice_Polygons.yaml": {
+      "path": "_datasets/pwd-stormwater-management-practice-polygons.md",
+      "sha256": "1089274d0054e394b27a3eec43e5163052b6849ef3721d6b2622adba2088f14b"
+    },
+    "Stormwater_Outfalls.yaml": {
+      "path": "_datasets/pwd-stormwater-outfalls.md",
+      "sha256": "186cadc7cb70e5c3a1400bad4931a675cf9d746e24f690187b0a1dc6beed0b86"
+    },
+    "StreetSmartPHL.yaml": {
+      "path": "_datasets/street-smart-phl.md",
+      "sha256": "b55c129b96a8ce6fe40bc8d2f31428f7d7595fb56d0054cd9ad73abb3e4728ec"
+    },
+    "Street_Centerlines.yaml": {
+      "path": "_datasets/street-centerlines.md",
+      "sha256": "79ac38aeb722772f2cd9c909c0fc61b204eac6dbe50ee7c884e9fdffb142c332"
+    },
+    "Street_Centerlines_for_Vision_Zero_High_Injury_Network_2017.yaml": {
+      "path": "_datasets/street-centerlines-for-vision-zero-high-injury-network-2017.md",
+      "sha256": "a04b3253212827601e9ce05bafbd3d0dea75ff41c18de9ca6099e51a96c012eb"
+    },
+    "Street_Lane_Closure_Emergency_Utility_Network.yaml": {
+      "path": "_datasets/street-lane-closure-emergency-utility-network.md",
+      "sha256": "f066b95286a4d056e780c41925c1407f3a7617c0fb8d7510480821f2a4a50c19"
+    },
+    "Street_Lane_Closures.yaml": {
+      "path": "_datasets/street-lane-closures.md",
+      "sha256": "f85f741de769e096a852c202862f77f7a08523a6d3f3b9406ec5c6a7d3e67e0f"
+    },
+    "Street_Lane_Closures_-_PGW.yaml": {
+      "path": "_datasets/street-lane-closures-pgw.md",
+      "sha256": "b7733351f56a3ea5fa4c60d6d441f258223183bb4f24141459d265dfe733a800"
+    },
+    "Street_Legal_Cards.yaml": {
+      "path": "_datasets/street-legal-cards.md",
+      "sha256": "2ca0304f2f7b218493465c0841e31e308d2b1540466dc0915eb1c126281bfd5b"
+    },
+    "Street_Name_Alias_List.yaml": {
+      "path": "_datasets/street-name-alias-list.md",
+      "sha256": "6c87ecb3de14636342dde2b1b1c0924586b269c9fa49357c328b080afc93d93f"
+    },
+    "Street_Nodes.yaml": {
+      "path": "_datasets/street-nodes.md",
+      "sha256": "cf95253b193a01f56481ed0c41b20509301411877f1e5d2489b928d11f449ba9"
+    },
+    "Street_Place_Names.yaml": {
+      "path": "_datasets/street-place-names.md",
+      "sha256": "e79f20fa257bdcbb54b3cd14f009a004caba1fe74c812fd588900353ca4a14a0"
+    },
+    "Street_Poles.yaml": {
+      "path": "_datasets/street-poles.md",
+      "sha256": "ae1ce3bcdbd347eed9127784b799079c0954e69bd69ca59a304af63d7d4b04b9"
+    },
+    "Street_s_Code_Violation_Notices.yaml": {
+      "path": "_datasets/streets-code-violation-notices.md",
+      "sha256": "5dae498756249987b619b593a90960d6aa01a921d892854e8d4cd90c38b7d253"
+    },
+    "Streets_Composite_Layer.yaml": {
+      "path": "_datasets/streets-composite-layer.md",
+      "sha256": "40878c8c99ab203196a5af7035ec11b0fb1c264302118a49e437c56cf1066d65"
+    },
+    "TMF_Emergency_Grant_Program.yaml": {
+      "path": "_datasets/tmf-emergency-grants.md",
+      "sha256": "ae80acac9da25de8cca0814172eecd041dc117e6a4fe970728f714bd06e898e7"
+    },
+    "Taking_Care_of_Business_Trees_Planted.yaml": {
+      "path": "_datasets/tcb-trees-planted.md",
+      "sha256": "79007a974d8397bf400219a803d824ecfbcf466446909027af1f141822c05a78"
+    },
+    "Taking_Care_of_Business__TCB__Clean_Corridors_Program.yaml": {
+      "path": "_datasets/taking-care-of-business.md",
+      "sha256": "d38cd3795077e0e8ac33b3db7c0530901ff4199e5f88887d2576cd60c33a03c7"
+    },
+    "Tobacco-Free_School_Zones.yaml": {
+      "path": "_datasets/tobacco-free-school-zones.md",
+      "sha256": "9082384332074e220b96ab90704abb028355b16a776e57e389f2bb325c0c7515"
+    },
+    "Tobacco_Retailer_Density_Caps.yaml": {
+      "path": "_datasets/tobacco-retailer-density-caps.md",
+      "sha256": "150dd53f50e60db5e9f572715d47f95da9a985db63cf56b071d5686ac51fb5c0"
+    },
+    "Tobacco_Retailer_Permits.yaml": {
+      "path": "_datasets/tobacco-retailer-permits.md",
+      "sha256": "de90b1f075e0d1ebbfd94173bff09b27409d53ea4832a81b435367c4ebf243da"
+    },
+    "Topographic_Change_in_Philadelphia.yaml": {
+      "path": "_datasets/topographic-change-in-philadelphia.md",
+      "sha256": "f61d961a74abaa249eb0347aa759141978b2862cd2417eceeecb2c7ea6035191"
+    },
+    "Topographic_Contours.yaml": {
+      "path": "_datasets/topographic-contours.md",
+      "sha256": "41856abe92a1230b8a4eb08e54298abded6b42b14e285418dab19ce7829dd630"
+    },
+    "Tornadoes__1950-2004.yaml": {
+      "path": "_datasets/tornadoes-1950-2004.md",
+      "sha256": "469e9c1a95a5617515fdca120f59297a1be9f1e8c01b39bb0d740c7551fe51b6"
+    },
+    "Track_Streets.yaml": {
+      "path": "_datasets/track-streets.md",
+      "sha256": "b2980330d537054cf358363487955efb53b82549ec99d2ef9e5dc52b129e7fe0"
+    },
+    "Traffic_Calming_Devices.yaml": {
+      "path": "_datasets/traffic-calming.md",
+      "sha256": "35a094498a2fc82c8d47bc5a4915a8d9bead12f70ca9510710ea49734cea93e3"
+    },
+    "Traffic_Calming_Devices_by_Hexbins.yaml": {
+      "path": "_datasets/traffic-calming-devices-by-hex-bins.md",
+      "sha256": "f729ef9e0cbbebb258bebda16f100998ae7bfc160d53a8e30d3145a8b9c1f76d"
+    },
+    "Traffic_Districts.yaml": {
+      "path": "_datasets/traffic-districts.md",
+      "sha256": "b81425c67920e4ff02b3e64cafe59cc14a1c9141c6e2288713126091738a954a"
+    },
+    "Traffic_Preventative_Maintenance_Districts.yaml": {
+      "path": "_datasets/traffic-preventative-maintenance-districts.md",
+      "sha256": "ce8f9f32bc0dc06000d33ac03a8b1f872ce87dbc813ee1091340927abd1c31c1"
+    },
+    "US_Congressional_Districts.yaml": {
+      "path": "_datasets/us-congressional-districts.md",
+      "sha256": "ab4acdfe56d7c1f36a5003ab46f8ab759b0c72bff696fd071f42bf98cb3d748f"
+    },
+    "Urban_Agriculture_Projects.yaml": {
+      "path": "_datasets/urban-agriculture-projects.md",
+      "sha256": "be4a53c6aa069895512499aa75ac679c9bb00ad99065c953d3655364619a1b5f"
+    },
+    "Vacant_Lot_Cleanups.yaml": {
+      "path": "_datasets/vacant-lot-cleanups.md",
+      "sha256": "43262ef9f092948cf5711591c80a733128cc5e9e0cd5ca7728007915ff718506"
+    },
+    "Vacant_Property_Indicators.yaml": {
+      "path": "_datasets/vacant-property-indicators.md",
+      "sha256": "cb418a8e60c178ed1b29ebe2df4cdb5ee56fc8f3f9ce49245b532f4d43e7e296"
+    },
+    "Vacant_Property_Indicators_Percentage_by_Block.yaml": {
+      "path": "_datasets/vacant-property-indicators-percentage-by-block.md",
+      "sha256": "e5d271e8ee1152acbc7b679d1592a579efb6f5ca1c694499191caecd98eac6ac"
+    },
+    "Vehicle___Pedestrian_Investigations.yaml": {
+      "path": "_datasets/vehicle-pedestrian-investigations.md",
+      "sha256": "a97e8f2535ba2b66ac20d0e631ae3ebbd10c83f9fd1b4708af0eb6b43a69fd99"
+    },
+    "Vending_Prohibited_Streets.yaml": {
+      "path": "_datasets/vending-prohibited-streets.md",
+      "sha256": "f866506e8d90fde504003dfa5c2c4d88bda52ad993f130538df777854593818b"
+    },
+    "Vending_Prohibition_Exceptions.yaml": {
+      "path": "_datasets/vending-prohibition-exceptions.md",
+      "sha256": "aa842d93a03111042ff6c034767f71cd9681b1baf8ef2a8eecbbbf015e2d924a"
+    },
+    "Vending_Regulations.yaml": {
+      "path": "_datasets/vending-regulations.md",
+      "sha256": "ca95e7975e1eb62ce376dc0298a8e4edc4f208dd95998ed2aa9da9d912cb61e7"
+    },
+    "Vision_Zero_High_Injury_Network.yaml": {
+      "path": "_datasets/vision-zero-high-injury-network.md",
+      "sha256": "383facac2b707af9b85bc1b7e58570be4d13ef0e66e44614e3d66a9054ce980c"
+    },
+    "Voter_Election_Registration_and_Turnout.yaml": {
+      "path": "_datasets/voter-turnout.md",
+      "sha256": "536b9e5e838d1270ec302f28f70cd5a007144b273198f88d561208f83fb57be3"
+    },
+    "Walk_Score__Phila__only_.yaml": {
+      "path": "_datasets/walk-score-phila-only.md",
+      "sha256": "b5ce32f9210c60f6251006c7370c80f5a3d8d2514cffbc229660171afa0e183f"
+    },
+    "Water_Department_Grants_Disbursed.yaml": {
+      "path": "_datasets/pwd-water-department-grants-disbursed.md",
+      "sha256": "817051365a86b3666d7c42b546c403ca28861ddc31b07b3109ed2f5736e214f4"
+    },
+    "Water_Inlets.yaml": {
+      "path": "_datasets/pwd-water-inlets.md",
+      "sha256": "7d836ce56d592875b7b891d5a480a5a51d5243dd265a1e49988c301e0e5ec105"
+    },
+    "Water_Service_Lines.yaml": {
+      "path": "_datasets/pwd-water-service-lines-app.md",
+      "sha256": "3c610d1a2bd55dd0003d8e01e8eb2e07604c4c3128790633fe870dd1a65af4bd"
+    },
+    "Watercourses_Designated_for_Protection.yaml": {
+      "path": "_datasets/pwd-watercourses-designated-for-protection.md",
+      "sha256": "029562f754f6187320ca0ea3d050a0ff02ddb6f07eb1106b441191eb58fe41ef"
+    },
+    "West_Philadelphia_Promise_Zone.yaml": {
+      "path": "_datasets/west-philadelphia-promise-zone.md",
+      "sha256": "2b0f603d4613718dc782714ea5f613f66e29413c122ebbbc3cdfc437f97de11b"
+    },
+    "Wire_Waste_Baskets__Trash_Bins_.yaml": {
+      "path": "_datasets/wire-waste-baskets-trash-bins.md",
+      "sha256": "5efbbfa6d009ed804176df1c75656f26aacd250eb2857626e31aade49c5f9780"
+    },
+    "Women__Infants___Children__WIC__Offices.yaml": {
+      "path": "_datasets/women-infants-children-wic-offices.md",
+      "sha256": "e315dc2c10124dd804d8124843af66ad07be486f618cc7a6aac1cb5d6a34dabc"
+    },
+    "World_Meeting_of_Families_Authorized_Vehicle_Route.yaml": {
+      "path": "_datasets/world-meeting-of-families-authorized-vehicle-route.md",
+      "sha256": "b8d4136ef6d9f2b52bdcd4aa69752f1fde6a8d9bf4126e604fb31820e9f871fb"
+    },
+    "World_Meeting_of_Families_Secure_Perimeter.yaml": {
+      "path": "_datasets/world-meeting-of-families-secure-perimeter.md",
+      "sha256": "20b3d8a112c2e054f1e00210f0f7c466ef2694ff4f736cb8284c1964aa9a9dd7"
+    },
+    "World_Meeting_of_Families_Secure_Vehicle_Perimeter.yaml": {
+      "path": "_datasets/world-meeting-of-families-secure-vehicle-perimeter.md",
+      "sha256": "ab788ae015880d824a5b3142aabc72737e5a586be515e70d11870d4179cd5cd1"
+    },
+    "World_Meeting_of_Families_Traffic_Box.yaml": {
+      "path": "_datasets/world-meeting-of-families-traffic-box.md",
+      "sha256": "8a423234c6c25390e6b0474e5974d72a77c1f87fc9203e8dab9f0f369a5b5b56"
+    },
+    "Youth_Risk_Behavior_Survey__YRBS_.yaml": {
+      "path": "_datasets/sdp-youth-risk-behavior-survey.md",
+      "sha256": "a8f06c3034350c7a0ca94c2cc09904d4948803a5725160be310d1827c733ed83"
+    },
+    "Zillow__Phila__only_.yaml": {
+      "path": "_datasets/zillow-phila-only.md",
+      "sha256": "5b533b3670ef1338ddcbd7a043dc57f2e42b93394ea5e177c9aa196fc0b187e3"
+    },
+    "Zip_Codes.yaml": {
+      "path": "_datasets/zip-codes.md",
+      "sha256": "8e900921afb3c6c158557081f5e0cdd7a0994ee447d6d98ef20e1e79fb97acdb"
+    },
+    "Zoning_Base_Districts.yaml": {
+      "path": "_datasets/zoning-base-districts.md",
+      "sha256": "cefbe4b76f7559ff1e4bf3dfec5977b65abb7204576c6f6ad941b9f2671a0d84"
+    },
+    "Zoning_Descriptions.yaml": {
+      "path": "_datasets/zoning-descriptions.md",
+      "sha256": "9ced6cc671801c6771fbc6ae03d748727582453419d7fc22c8ed7164a7958fca"
+    },
+    "Zoning_Overlays.yaml": {
+      "path": "_datasets/zoning-overlays.md",
+      "sha256": "60c8277e551a4f3acab340a02192392ac96d05a904028788597bbb1cbd3b1f1c"
+    },
+    "Zoning_Steep_Slope_Protected_Area.yaml": {
+      "path": "_datasets/zoning-steep-slope-protected-area.md",
+      "sha256": "b597b846312a727d4296f75321464318cdf5ce4b0143238fc2834ebb72bde8ce"
+    }
+  },
+  "repository": "opendataphilly/opendataphilly-jkan",
+  "retained_legacy_files": [
+    "Advancing_Education_Safely.yaml",
+    "Buy_Fresh__Buy_Local_PA.yaml",
+    "Candidates.yaml",
+    "Census_ACS_5-Year_Estimates__All_Variables__-_Philadelphia.yaml",
+    "Clean_Plates__Restaurant_Health_Inspections.yaml",
+    "Crime_Visualizations_in_Philadelphia_County.yaml",
+    "Department_of_Records_Easement.yaml",
+    "District_Employees_and_Finance.yaml",
+    "Drink_Philly_Happy_Hour___Specials.yaml",
+    "Farmers_Markets_Locations.yaml",
+    "Large_Building_Energy_Benchmarking_Data.yaml",
+    "Online_Citizen_s_Guide.yaml",
+    "PA_Transporation_Improvement_Projects.yaml",
+    "PPR_Permittable_Space.yaml",
+    "PSSA___Keystone_Performance.yaml",
+    "Philadelphia_Artist_Census_2018.yaml",
+    "Philadelphia_Basemaps.yaml",
+    "Philadelphia_Public_Art_API.yaml",
+    "Playstreets_Locations.yaml",
+    "SEPTA_Metro_Real-time_Trips.yaml",
+    "School_Finder.yaml",
+    "School_Information.yaml",
+    "School_Progress_Report_Data.yaml",
+    "Vending_Prohibited_Areas.yaml",
+    "WeWorkInPhilly.yaml"
+  ],
+  "revision": "72c443beb6d83d7f9d3cd8b9d4cd0a1d59f33d12"
+}

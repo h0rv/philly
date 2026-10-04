@@ -266,7 +266,7 @@ test("aggregate group ordering cannot collide with the aggregate's value alias",
   await service.aggregate(
     aggregateSchema.parse({ datasetId, groupBy: "value" }),
   );
-  assert.match(calls[1], /GROUP BY "value" ORDER BY group_value LIMIT/);
+  assert.match(calls[1], /GROUP BY "value" ORDER BY group_value ASC LIMIT/);
 });
 test("JSON text fallback is identical and leaves room for the full response even with escaping", async () => {
   const { boundedResult } = await import("../src/bounds.ts");
@@ -297,5 +297,102 @@ test("upstream JSON media type is exact and case-insensitive", async () => {
         }),
     ).schema({ datasetId }),
     /non-JSON/,
+  );
+});
+
+test("year discovery, schema, latest preview and ranked counts preserve scope", async () => {
+  assert.ok(
+    search("crime 2025", 0, 20).datasets.some((d) => d.id === datasetId),
+  );
+  assert.ok(
+    search("311 2025", 0, 20).datasets.some(
+      (d) => d.id === "311_Service_and_Information_Requests",
+    ),
+  );
+  const resource = describe(datasetId, 0, 20).resources.find(
+    (r) => r.name.includes("2025") && r.backend === "carto",
+  )!;
+  assert.ok(resource);
+  const calls: string[] = [];
+  const service = new DataService(async (url) => {
+    const sql = new URL(url).searchParams.get("q")!;
+    calls.push(sql);
+    if (sql.endsWith("LIMIT 0"))
+      return Response.json({ fields: fixture.fields, rows: [] });
+    // Fixed backend contract responses, not a SQL interpreter.
+    if (sql.includes("COUNT(*)")) {
+      assert.match(
+        sql,
+        /GROUP BY "text_general_code" ORDER BY value DESC, group_value ASC LIMIT 3$/,
+      );
+      return Response.json({
+        rows: [
+          { group_value: "Theft", value: 2 },
+          { group_value: "Burglary", value: 1 },
+        ],
+      });
+    }
+    assert.match(
+      sql,
+      /WHERE "hour" >= 14 ORDER BY "cartodb_id" DESC LIMIT 3 OFFSET 0$/,
+    );
+    return Response.json({ rows: [...fixture.rows].reverse() });
+  });
+  const selection = { datasetId, resourceId: resource.id };
+  const schema = await service.schema(selection);
+  assert.equal(schema.fields.hour.type, "number");
+  const filters = [{ column: "hour", op: "gte", value: 14 }];
+  const page = await service.query(
+    querySchema.parse({
+      ...selection,
+      filters,
+      orderDirection: "desc",
+      limit: 2,
+    }),
+  );
+  assert.deepEqual(
+    page.rows.map((r) => r.cartodb_id),
+    [3, 2],
+  );
+  assert.equal(page.nextOffset, 2);
+  assert.equal(page.orderDirection, "desc");
+  const totals = await service.aggregate(
+    aggregateSchema.parse({
+      ...selection,
+      filters,
+      groupBy: "text_general_code",
+      orderBy: "value",
+      orderDirection: "desc",
+      limit: 2,
+    }),
+  );
+  assert.deepEqual(totals.rows, [
+    { group_value: "Theft", value: 2 },
+    { group_value: "Burglary", value: 1 },
+  ]);
+  assert.equal(totals.truncated, false);
+  assert.equal(totals.orderBy, "value");
+  for (const result of [schema, page, totals]) {
+    assert.equal(result.resourceId, resource.id);
+    assert.equal(result.resourceName, resource.name);
+    assert.equal(result.sourceUrl, resource.url);
+    assert.equal(result.license, "City of Philadelphia License");
+    assert.ok(!Number.isNaN(Date.parse(result.retrievedAt)));
+  }
+  for (const sql of calls) {
+    assert.match(sql, /2025-01-01/);
+    assert.match(sql, /2026-01-01/);
+  }
+  assert.deepEqual(totals.appliedFilters, page.appliedFilters);
+  assert.equal(
+    querySchema.safeParse({
+      ...selection,
+      orderDirection: "desc; DROP TABLE x",
+    }).success,
+    false,
+  );
+  assert.equal(
+    aggregateSchema.safeParse({ ...selection, orderBy: "COUNT(*)" }).success,
+    false,
   );
 });

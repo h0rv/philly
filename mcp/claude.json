@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "philly": {
+      "command": "npm",
+      "args": ["--prefix", "mcp", "run", "--silent", "stdio"]
+    }
+  }
+}

@@ -38,6 +38,7 @@ export const querySchema = z.strictObject({
   limit: z.number().int().min(1).max(LIMITS.rows).default(20),
   offset: z.number().int().min(0).max(LIMITS.offset).default(0),
   orderBy: identifier.optional(),
+  orderDirection: z.enum(["asc", "desc"]).default("asc"),
 });
 export const aggregateSchema = z.strictObject({
   ...selection,
@@ -45,6 +46,8 @@ export const aggregateSchema = z.strictObject({
   operation: z.enum(["count", "sum", "avg", "min", "max"]).default("count"),
   column: identifier.optional(),
   groupBy: identifier.optional(),
+  orderBy: z.enum(["group", "value"]).default("group"),
+  orderDirection: z.enum(["asc", "desc"]).default("asc"),
   limit: z.number().int().min(1).max(50).default(20),
 });
 export type Fetcher = (
@@ -187,6 +190,7 @@ export class DataService {
       return {
         datasetId: dataset.id,
         resourceId: resource.id,
+        resourceName: resource.name,
         sourceUrl: resource.url,
         license: dataset.license,
         retrievedAt: new Date().toISOString(),
@@ -219,18 +223,20 @@ export class DataService {
       if (order) checkColumn(order, fields);
       if (input.offset && !order)
         throw new Error("Pagination requires orderBy. Prefer a unique key.");
-      const sql = `SELECT ${columns.map(quote).join(",")} FROM (${resource.query}) AS source${where(input.filters, fields)}${order ? ` ORDER BY ${quote(order)}` : ""} LIMIT ${input.limit + 1} OFFSET ${input.offset}`;
+      const sql = `SELECT ${columns.map(quote).join(",")} FROM (${resource.query}) AS source${where(input.filters, fields)}${order ? ` ORDER BY ${quote(order)} ${input.orderDirection.toUpperCase()}` : ""} LIMIT ${input.limit + 1} OFFSET ${input.offset}`;
       const data = await this.request(sql, signal);
       const truncated = data.rows.length > input.limit;
       return {
         datasetId: dataset.id,
         resourceId: resource.id,
+        resourceName: resource.name,
         sourceUrl: resource.url,
         license: dataset.license,
         retrievedAt: new Date().toISOString(),
         appliedFilters: input.filters,
         columns,
         orderBy: order ?? null,
+        orderDirection: order ? input.orderDirection : null,
         rows: data.rows.slice(0, input.limit),
         truncated,
         offset: input.offset,
@@ -272,11 +278,16 @@ export class DataService {
         );
       const expression = `${input.operation.toUpperCase()}(${input.column ? quote(input.column) : "*"}) AS value`;
       const group = input.groupBy ? quote(input.groupBy) : null;
-      const sql = `SELECT ${group ? `${group} AS group_value,` : ""}${expression} FROM (${resource.query}) AS source${where(input.filters, fields)}${group ? ` GROUP BY ${group} ORDER BY group_value` : ""} LIMIT ${input.limit + 1}`;
+      const groupOrder =
+        input.orderBy === "value"
+          ? `value ${input.orderDirection.toUpperCase()}, group_value ASC`
+          : `group_value ${input.orderDirection.toUpperCase()}`;
+      const sql = `SELECT ${group ? `${group} AS group_value,` : ""}${expression} FROM (${resource.query}) AS source${where(input.filters, fields)}${group ? ` GROUP BY ${group} ORDER BY ${groupOrder}` : ""} LIMIT ${input.limit + 1}`;
       const data = await this.request(sql, signal);
       return {
         datasetId: dataset.id,
         resourceId: resource.id,
+        resourceName: resource.name,
         sourceUrl: resource.url,
         license: dataset.license,
         retrievedAt: new Date().toISOString(),
@@ -284,6 +295,8 @@ export class DataService {
         operation: input.operation,
         column: input.column ?? null,
         groupBy: input.groupBy ?? null,
+        orderBy: group ? input.orderBy : null,
+        orderDirection: group ? input.orderDirection : null,
         rows: data.rows.slice(0, input.limit),
         truncated: data.rows.length > input.limit,
         nextOffset: null,

@@ -1,8 +1,8 @@
 # Philly
 
-<img src="./assets/philly.svg" width="320" alt="Philly">
+<img src="https://raw.githubusercontent.com/h0rv/philly/main/assets/philly.svg" width="320" alt="Philly">
 
-Query Philadelphia's 400+ public datasets with server-side filtering, smart caching, and streaming.
+Query Philadelphia public data from Python, your terminal, or an MCP client.
 
 ## Installation
 
@@ -21,8 +21,8 @@ See [deployment readiness and approval gates](mcp/DEPLOYMENT.md).
 The website now starts with install/connect instructions and a five-row SVG
 wordmark adapted from [sprts](https://github.com/h0rv/sprts) with
 [MIT attribution](assets/NOTICE). City Atlas is preserved at
-`/explorations/city-atlas/`, alongside the existing exploration gallery. Dataset counts are generated from the YAML catalog
-with `cd mcp && npm run catalog`.
+`/explorations/city-atlas/`, alongside the existing exploration gallery. The MCP catalog is generated from the packaged YAML with
+`cd mcp && npm run catalog`.
 
 ## Quick Start
 
@@ -43,7 +43,7 @@ async for chunk in phl.stream("Crime Incidents"):
 
 ```bash
 # Discovery
-phl datasets                           # List all 400+ datasets
+phl datasets                           # List available datasets
 phl search "crime" --fuzzy             # Fuzzy search
 phl info "Crime Incidents"             # Dataset metadata
 
@@ -65,16 +65,6 @@ phl count "Crime Incidents"
 phl cache-info
 phl cache-clear
 ```
-
-## Why Philly?
-
-|                       | requests + pandas   | philly                          |
-| --------------------- | ------------------- | ------------------------------- |
-| Server-side filtering | Manual URL building | `--where "year = 2024"`         |
-| Format handling       | Per-format code     | Auto-detects from 40+ formats   |
-| Caching               | DIY                 | Built-in with TTL + LRU         |
-| Dataset discovery     | Browse website      | `phl search "permits"`          |
-| Streaming             | Manual chunking     | `phl stream` / async generators |
 
 ## Configuration
 
@@ -112,3 +102,33 @@ If an exploration is missing required generated assets, it stays listed as build
 ## License
 
 MIT
+
+## Refresh catalog metadata
+
+```sh
+uv run python scripts/update_datasets.py
+npm --prefix mcp run catalog
+npm --prefix mcp run catalog:check
+```
+
+The updater pins the upstream Git revision, validates records before writing,
+retains existing IDs, and records source paths, hashes and rejected records in
+[src/philly/catalog-source.json](src/philly/catalog-source.json). Use
+`--source /path/to/upstream-checkout` for an offline refresh. Invalid or duplicate
+records stop the write; after reviewing the report, `--allow-partial` updates valid
+records and retains legacy records without silently dropping them.
+
+## Or ask an agent
+
+With Pi 1+ installed and a model configured, replace the URL with your deployed MCP endpoint:
+
+```sh
+pi mcp add philly --url https://YOUR-PHILLY-MCP-HOST/mcp && pi --print "Use the philly MCP server to find building-permit datasets and show five sample records with source links."
+```
+
+This saves or replaces the `philly` connection in Pi's user configuration.
+Pi activates Codemode for MCP automatically. The remote Worker is not yet deployed.
+See Pi's [MCP documentation](https://pi.dev/docs/latest/mcp) and
+[CLI reference](https://pi.dev/docs/latest/cli). Syntax and local MCP plumbing were
+checked without an authenticated model call.
+See [MCP workflow evidence and limits](mcp/EFFECTIVENESS.md).

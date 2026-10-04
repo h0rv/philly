@@ -8,7 +8,8 @@ import {
   querySchema,
   aggregateSchema,
 } from "./data.ts";
-export const VERSION = "0.1.0";
+import packageInfo from "../package.json" with { type: "json" };
+export const VERSION = packageInfo.version;
 export const toolDescriptions = {
   search_datasets:
     "Search the bundled Philadelphia catalog by words. Returns stable dataset IDs and backend capabilities; metadata is a snapshot.",

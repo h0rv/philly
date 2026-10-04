@@ -2,11 +2,18 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Wordmark from '../components/Wordmark.astro';
 import Install from '../components/Install.astro';
-import catalog from '../data/catalog.generated.json';
 ---
 <BaseLayout>
   <h1><Wordmark /></h1>
-  <p>Search {catalog.datasets} Philadelphia datasets from your terminal, Python, or MCP client.</p>
+  <p>Search Philadelphia public data from your terminal, Python, or MCP client.</p>
   <Install />
+  <h2>Examples</h2>
+  <figure><button data-copy aria-label="Copy CLI examples">Copy</button><pre><code>phl search "crime"
+phl info "Crime Incidents"
+phl sample "Crime Incidents" --limit 5</code></pre></figure>
+  <h2>Or ask an agent</h2>
+  <p><small>Pi 1+ · model configured · replace the MCP URL</small></p>
+  <figure><button data-copy aria-label="Copy agent example">Copy</button><pre><code>pi mcp add philly --url https://YOUR-PHILLY-MCP-HOST/mcp &amp;&amp; pi --print "Use the philly MCP server to find building-permit datasets and show five sample records with source links."</code></pre></figure>
+  <p><small>Saves the philly connection in Pi. Deploy the MCP server first.</small></p>
   <p><a href={`${import.meta.env.BASE_URL}connect/`}>Client setup</a></p>
 </BaseLayout>

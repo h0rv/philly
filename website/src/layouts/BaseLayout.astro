@@ -1,5 +1,6 @@
 ---
 import '../styles/base.css';
+import Wordmark from '../components/Wordmark.astro';
 const { title = 'Philly — Philadelphia open data', description = 'Philadelphia open data for your terminal, Python notebooks, and AI tools.' } = Astro.props;
 const base = import.meta.env.BASE_URL;
 ---
@@ -10,20 +11,19 @@ const base = import.meta.env.BASE_URL;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <title>{title}</title>
+    <meta property="og:image" content={new URL(`${base}philly.svg`, Astro.site ?? Astro.url).href} />
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
   </head>
   <body>
     <a href="#main">Skip to content</a>
-    <header>
-      <a href={base} aria-label="Philly home">philly</a>
-      <nav aria-label="Main navigation">
-        <a href={`${base}connect/`}>Connect</a>
-        <a href="https://github.com/h0rv/philly">GitHub</a>
-      </nav>
-    </header>
-    <main id="main"><slot /></main>
+    <main id="main">
+      {Astro.url.pathname !== base && <a href={base} aria-label="Philly home"><Wordmark /></a>}
+      <slot />
+    </main>
     <footer>
       <nav aria-label="More">
+        <a href="https://github.com/h0rv/philly">GitHub</a>
+        <a href={`${base}connect/`}>Connect</a>
         <a href={`${base}explorations/city-atlas/`}>City Atlas</a>
         <a href={`${base}explorations/`}>Explore</a>
         <a href="https://github.com/h0rv/philly/blob/main/LICENSE">MIT</a>

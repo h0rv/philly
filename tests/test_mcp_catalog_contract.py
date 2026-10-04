@@ -25,7 +25,9 @@ def test_worker_catalog_preserves_ids_resources_and_license():
         ):
             assert resource["url"] == (original["url"] or "")
             identity = f"{original['url'] or ''}\n{original.get('name') or ''}\n{original.get('format') or 'unknown'}"
-            assert resource["id"] == hashlib.sha256(identity.encode()).hexdigest()[:16]
+            assert resource["id"] == (
+                original.get("id") or hashlib.sha256(identity.encode()).hexdigest()[:16]
+            )
             if resource["query"]:
                 assert detect_backend(resource["url"]) == BackendType.CARTO
 

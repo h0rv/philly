@@ -4,7 +4,7 @@ Guidance for AI coding agents working in this repository.
 
 ## What this is
 
-`philly` is a Python library + CLI (`phl`) for querying OpenDataPhilly's ~478 public datasets with server-side filtering, caching, and streaming. The repo also hosts data-journalism "explorations" and an Astro site that publishes them to GitHub Pages.
+`philly` is a Python library + CLI (`phl`) for querying OpenDataPhilly's public datasets with server-side filtering, caching, and streaming. The repo also hosts data-journalism "explorations" and an Astro site that publishes them to GitHub Pages.
 
 Two installable packages live under `src/`:
 - `philly` — the library (`from philly import Philly`)
