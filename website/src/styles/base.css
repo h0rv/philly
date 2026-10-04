@@ -1,0 +1,40 @@
+:root {
+  color-scheme: light dark;
+  --paper: #fafafa;
+  --ink: #222;
+  --quiet: #666;
+  --rule: #d6d6d6;
+  --well: #f0f0f0;
+  font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-size: 14px; line-height: 1.7; }
+body > header, main, body > footer { width: min(640px, calc(100% - 40px)); margin-inline: auto; }
+body > header { display: flex; justify-content: space-between; align-items: center; padding-block: 24px; border-bottom: 1px solid var(--rule); gap: 16px; }
+nav { display: flex; flex-wrap: wrap; gap: 20px; }
+a { color: inherit; text-underline-offset: 4px; }
+a:hover { text-decoration-thickness: 2px; }
+header a { text-decoration: none; }
+main { padding-block: 48px; }
+h1, h2, h3 { line-height: 1.25; font-weight: 600; }
+h1 { margin: 0 0 24px; font-size: 28px; }
+h1 svg { display: block; width: 304px; max-width: 100%; height: auto; }
+h2 { font-size: 15px; margin: 24px 0 8px; }
+h3 { font-size: 15px; }
+p { margin-block: 16px; }
+small { color: var(--quiet); font-size: 12px; }
+section + section, article + article { margin-top: 32px; border-top: 1px solid var(--rule); padding-top: 16px; }
+button { font: inherit; font-size: 12px; color: var(--quiet); background: transparent; border: 0; padding: 2px 4px; min-height: 24px; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+button:hover { color: var(--ink); }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+figure { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 8px; margin: 0 0 8px; padding: 12px; background: var(--well); border: 1px solid var(--rule); }
+figure button { grid-column: 2; grid-row: 1; }
+pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; line-height: 1.8; }
+figure pre { grid-column: 1; grid-row: 1; margin: 0; }
+code { font-family: inherit; }
+body > footer { border-top: 1px solid var(--rule); padding-block: 20px 32px; font-size: 12px; color: var(--quiet); }
+body > a[href="#main"] { position: absolute; top: -100px; left: 20px; padding: 10px; background: var(--paper); z-index: 1; }
+body > a[href="#main"]:focus { top: 4px; }
+[role=status] { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+@media (max-width: 480px) { main { padding-block: 32px; } nav { gap: 16px; } }
+@media (prefers-color-scheme: dark) { :root { --paper: #191919; --ink: #eee; --quiet: #aaa; --rule: #444; --well: #242424; } }

@@ -1,6 +1,6 @@
 # Philly
 
-<img src="./assets/logo.png" width="256" alt="logo">
+<img src="./assets/philly.svg" width="320" alt="Philly">
 
 Query Philadelphia's 400+ public datasets with server-side filtering, smart caching, and streaming.
 
@@ -9,6 +9,20 @@ Query Philadelphia's 400+ public datasets with server-side filtering, smart cach
 ```bash
 uv add philly
 ```
+
+## MCP and website
+
+The [MCP service](mcp/README.md) adds bounded, read-only discovery, schema,
+preview, structured filtering and aggregation using the official TypeScript SDK
+2.3.0. It runs locally over stdio or Streamable HTTP and is prepared for
+Cloudflare Workers with static assets. **No public MCP endpoint is deployed yet.**
+See [deployment readiness and approval gates](mcp/DEPLOYMENT.md).
+
+The website now starts with install/connect instructions and a five-row SVG
+wordmark adapted from [sprts](https://github.com/h0rv/sprts) with
+[MIT attribution](assets/NOTICE). City Atlas is preserved at
+`/explorations/city-atlas/`, alongside the existing exploration gallery. Dataset counts are generated from the YAML catalog
+with `cd mcp && npm run catalog`.
 
 ## Quick Start
 
@@ -78,7 +92,7 @@ defaults:
 
 ## Website
 
-This repo now includes a small Astro site for GitHub Pages, kept separate from the Python package source.
+This repo includes a static Astro site, kept separate from the Python package source. The existing GitHub Pages workflow remains in place; the MCP project adds an undeployed Cloudflare configuration.
 We use Poe tasks from the repo root.
 
 ```bash
@@ -89,7 +103,7 @@ uv run poe site-build
 
 The site build does two things:
 
-1. Builds the Astro landing page and explorations index
+1. Builds the install/connect landing page, machine-readable guide and explorations routes
 2. Copies any ready exploration artifacts into `website/public/explorations/`
 
 Exploration publish metadata lives in `website/config/explorations.mjs`.

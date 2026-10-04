@@ -9,5 +9,5 @@ const withBase = (value) => `${base}${String(value).replace(/^\//, '')}`;
     <a href={withBase(exploration.href)}>{exploration.title}</a>
   </h3>
   <p>{exploration.summary}</p>
-  <p class="tags">{exploration.tags.join(' · ')}</p>
+  <p>{exploration.tags.join(' · ')}</p>
 </article>

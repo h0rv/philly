@@ -1,0 +1,37 @@
+{
+  "name": "philly-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "catalog": "node scripts/catalog.mjs",
+    "check": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test test/*.test.ts",
+    "dev": "wrangler dev --ip 127.0.0.1",
+    "build": "wrangler deploy --dry-run --outdir dist",
+    "stdio": "node --experimental-strip-types src/stdio.ts",
+    "test:browser": "playwright test",
+    "benchmark": "node --experimental-strip-types scripts/benchmark.ts",
+    "test:workerd": "node --experimental-strip-types scripts/workerd-smoke.ts",
+    "format:check": "prettier --check \"src/*.ts\" \"test/*.ts\" \"scripts/*.{ts,mjs}\" \"browser/*.ts\" playwright.config.ts tsconfig.json wrangler.jsonc",
+    "test:live": "node --experimental-strip-types scripts/live-smoke.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "2.3.0",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/client": "2.3.0",
+    "@modelcontextprotocol/sdk": "1.32.0",
+    "@playwright/test": "1.63.0",
+    "@types/node": "26.6.4",
+    "miniflare": "5.20261001.0-alpha",
+    "prettier": "3.9.9",
+    "typescript": "7.0.2",
+    "wrangler": "4.147.0",
+    "yaml": "2.9.1"
+  }
+}

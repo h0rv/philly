@@ -1,0 +1,15 @@
+<h2>Terminal</h2>
+<figure><button data-copy aria-label="Copy terminal install command">Copy</button><pre><code>uv tool install philly</code></pre></figure>
+
+<h2>Python</h2>
+<figure><button data-copy aria-label="Copy Python install command">Copy</button><pre><code>uv add philly</code></pre></figure>
+<h2>MCP stdio</h2>
+<figure><button data-copy aria-label="Copy local MCP setup">Copy</button><pre><code>git clone https://github.com/h0rv/philly.git
+cd philly/mcp
+npm ci
+npm run stdio</code></pre></figure>
+<h2>Remote MCP</h2>
+<figure><button data-copy aria-label="Copy remote MCP URL template">Copy</button><pre><code>https://your-worker.example/mcp</code></pre></figure>
+<small>Your deployed endpoint.</small>
+<p role="status" aria-live="polite" data-copy-status></p>
+<script>import '../scripts/interactions';</script>

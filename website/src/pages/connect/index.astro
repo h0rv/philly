@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Connect — Philly" description="Connect Philly to a local MCP client.">
+  <h1>Connect Philly</h1>
+  <p><small>Node 24+</small></p>
+  <h2>Install</h2>
+  <figure><button data-copy aria-label="Copy server installation">Copy</button><pre><code>git clone https://github.com/h0rv/philly.git
+cd philly/mcp
+npm ci</code></pre></figure>
+  <h2>Stdio</h2>
+  <p>Replace <code>/absolute/path/to/philly</code> with your checkout’s path.</p>
+  <div>
+    <h3>Claude Code</h3>
+    <figure><button data-copy aria-label="Copy Claude Code setup">Copy</button><pre><code>claude mcp add philly -- node --experimental-strip-types /absolute/path/to/philly/mcp/src/stdio.ts</code></pre></figure>
+  </div>
+  <div>
+    <h3>Desktop clients</h3>
+    <figure><button data-copy aria-label="Copy stdio client configuration">Copy</button><pre><code>{JSON.stringify({mcpServers:{philly:{command:'node',args:['--experimental-strip-types','/absolute/path/to/philly/mcp/src/stdio.ts']}}},null,2)}</code></pre></figure>
+  </div>
+  <div>
+    <h3>VS Code</h3>
+    <p>Add to <code>.vscode/mcp.json</code>:</p>
+    <figure><button data-copy aria-label="Copy VS Code configuration">Copy</button><pre><code>{JSON.stringify({servers:{philly:{type:'stdio',command:'node',args:['--experimental-strip-types','/absolute/path/to/philly/mcp/src/stdio.ts']}}},null,2)}</code></pre></figure>
+  </div>
+  <div>
+    <h3>Local HTTP</h3>
+    <p>From the repository root:</p>
+    <figure><button data-copy aria-label="Copy local HTTP setup">Copy</button><pre><code>cd website
+bun install --frozen-lockfile
+bun run build
+cd ../mcp
+npm run dev</code></pre></figure>
+    <figure><button data-copy aria-label="Copy local MCP URL">Copy</button><pre><code>http://127.0.0.1:8787/mcp</code></pre></figure>
+    <small>For clients on your computer. Cloud-hosted assistants cannot reach localhost.</small>
+  </div>
+  <h2>Remote MCP</h2>
+  <p><small>Your deployed endpoint in <code>.vscode/mcp.json</code>:</small></p>
+  <figure><button data-copy aria-label="Copy remote MCP configuration">Copy</button><pre><code>{JSON.stringify({servers:{philly:{type:'http',url:'https://your-worker.example/mcp'}}},null,2)}</code></pre></figure>
+  <p><a href="https://github.com/h0rv/philly/blob/main/mcp/README.md">MCP tools and limits</a></p>
+  <p role="status" aria-live="polite" data-copy-status></p>
+</BaseLayout>
+<script>import '../../scripts/interactions';</script>
