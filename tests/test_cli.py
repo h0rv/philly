@@ -535,3 +535,20 @@ class TestOutputFormatterEdgeCases:
 
         # Should be JSON for large dicts
         assert '"key0"' in output
+
+
+def test_version_flag_in_subprocess(tmp_path):
+    from importlib.metadata import version
+    import subprocess
+    import sys
+
+    result = subprocess.run(
+        [sys.executable, "-m", "philly", "--version"],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        timeout=20,
+    )
+    assert result.returncode == 0
+    assert result.stdout == f"philly {version('philly')}\n"
+    assert result.stderr == ""
