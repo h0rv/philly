@@ -18,9 +18,10 @@ preview, structured filtering and aggregation using the official TypeScript SDK
 Cloudflare Workers with static assets. **No public MCP endpoint is deployed yet.**
 See [deployment readiness and approval gates](mcp/DEPLOYMENT.md).
 
-The website now starts with install/connect instructions and an original SVG
-wordmark. City Atlas is preserved at `/explorations/city-atlas/`, alongside the
-existing exploration gallery. Dataset counts are generated from the YAML catalog
+The website now starts with install/connect instructions and a five-row SVG
+wordmark adapted from [sprts](https://github.com/h0rv/sprts) with
+[MIT attribution](assets/NOTICE). City Atlas is preserved at
+`/explorations/city-atlas/`, alongside the existing exploration gallery. Dataset counts are generated from the YAML catalog
 with `cd mcp && npm run catalog`.
 
 ## Quick Start

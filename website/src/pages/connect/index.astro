@@ -1,19 +1,40 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import catalog from '../../data/catalog.generated.json';
 ---
-<BaseLayout title="Connect — Philly" description="Install Philly locally and connect an MCP client over stdio or Streamable HTTP.">
-  <section><p class="eyebrow">Your tools. Public data.</p><h1>Connect Philly.</h1><p class="lede">Search {catalog.datasets} datasets from your editor or assistant. No account needed for local setup.</p><p>A public hosted endpoint has not been deployed. These examples run on your computer.</p></section>
-  <section><h2>1. Get the server</h2><p>Use Node 24+ and npm. Run these commands once:</p><div class="codebox"><button class="copy" aria-label="Copy server installation">Copy</button><pre><code>git clone https://github.com/h0rv/philly.git
+<BaseLayout title="Connect — Philly" description="Connect Philly to a local MCP client.">
+  <h1>Connect Philly</h1>
+  <p><small>Node 24+ required. Hosted MCP is not live.</small></p>
+  <h2>Install</h2>
+  <figure><button data-copy aria-label="Copy server installation">Copy</button><pre><code>git clone https://github.com/h0rv/philly.git
 cd philly/mcp
-npm ci</code></pre></div><p class="muted">Read the code and dependencies before running. The server reads public data from <code>phl.carto.com</code>.</p></section>
-  <section><h2>2. Choose a client</h2><p>For desktop clients that support stdio, use this server entry. Replace the path with your checkout’s absolute path:</p><div class="codebox"><button class="copy" aria-label="Copy stdio client configuration">Copy</button><pre><code>{JSON.stringify({mcpServers:{philly:{command:'node',args:['--experimental-strip-types','/absolute/path/to/philly/mcp/src/stdio.ts']}}},null,2)}</code></pre></div><h3>Claude Code</h3><div class="codebox"><button class="copy" aria-label="Copy Claude Code setup">Copy</button><pre><code>claude mcp add philly -- node --experimental-strip-types /absolute/path/to/philly/mcp/src/stdio.ts</code></pre></div><h3>VS Code</h3><p>Add to <code>.vscode/mcp.json</code>:</p><pre><code>{JSON.stringify({servers:{philly:{type:'stdio',command:'node',args:['--experimental-strip-types','/absolute/path/to/philly/mcp/src/stdio.ts']}}},null,2)}</code></pre></section>
-  <section><h2>Prefer local HTTP?</h2><p>From the repository root, build the site, then start the Worker:</p><pre><code>cd website
+npm ci</code></pre></figure>
+  <h2>Connect</h2>
+  <p>Replace <code>/absolute/path/to/philly</code> with your checkout’s path.</p>
+  <details open>
+    <summary>Claude Code</summary>
+    <figure><button data-copy aria-label="Copy Claude Code setup">Copy</button><pre><code>claude mcp add philly -- node --experimental-strip-types /absolute/path/to/philly/mcp/src/stdio.ts</code></pre></figure>
+  </details>
+  <details>
+    <summary>Desktop clients</summary>
+    <figure><button data-copy aria-label="Copy stdio client configuration">Copy</button><pre><code>{JSON.stringify({mcpServers:{philly:{command:'node',args:['--experimental-strip-types','/absolute/path/to/philly/mcp/src/stdio.ts']}}},null,2)}</code></pre></figure>
+  </details>
+  <details>
+    <summary>VS Code</summary>
+    <p>Add to <code>.vscode/mcp.json</code>:</p>
+    <figure><button data-copy aria-label="Copy VS Code configuration">Copy</button><pre><code>{JSON.stringify({servers:{philly:{type:'stdio',command:'node',args:['--experimental-strip-types','/absolute/path/to/philly/mcp/src/stdio.ts']}}},null,2)}</code></pre></figure>
+  </details>
+  <details>
+    <summary>Local HTTP</summary>
+    <p>From the repository root:</p>
+    <figure><button data-copy aria-label="Copy local HTTP setup">Copy</button><pre><code>cd website
 bun install --frozen-lockfile
 bun run build
 cd ../mcp
-npm run dev</code></pre><p>Connect a local Streamable HTTP client to:</p><div class="codebox"><button class="copy" aria-label="Copy local MCP URL">Copy</button><pre><code>http://127.0.0.1:8787/mcp</code></pre></div><p class="muted">Cloud-hosted assistants cannot reach your localhost. Use a published HTTPS endpoint after deployment is approved. Do not enter a localhost URL into a remote connector.</p></section>
-  <section><h2>3. Ask a small question</h2><p>Try “Find crime datasets, inspect the available resources and fields, then preview five rows. Include the source and license.”</p><p>Search and descriptions work across the catalog. Schema, preview, filtering and count/aggregation are supported for approved CARTO resources in {catalog.queryableDatasets} datasets. Other resources return source links and an explicit unsupported result for remote queries.</p><p>Responses include resource IDs, source URL, license, retrieval time, filters and truncation. The catalog is a bundled snapshot. Rows are fetched live, so pages can change.</p><p><a href="https://github.com/h0rv/philly/blob/main/mcp/README.md">Tools, limits & deployment guide ↗</a> · <a href={`${import.meta.env.BASE_URL}llms.txt`}>llms.txt</a></p></section>
-  <p role="status" aria-live="polite" class="sr-only" data-copy-status></p>
+npm run dev</code></pre></figure>
+    <figure><button data-copy aria-label="Copy local MCP URL">Copy</button><pre><code>http://127.0.0.1:8787/mcp</code></pre></figure>
+    <small>For clients on your computer. Cloud-hosted assistants cannot reach localhost.</small>
+  </details>
+  <p><a href="https://github.com/h0rv/philly/blob/main/mcp/README.md">MCP tools and limits</a></p>
+  <p role="status" aria-live="polite" data-copy-status></p>
 </BaseLayout>
 <script>import '../../scripts/interactions';</script>

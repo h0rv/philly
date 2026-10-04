@@ -16,7 +16,7 @@ document.querySelectorAll<HTMLElement>('[data-tabs]').forEach(group => {
     });
   });
 });
-document.querySelectorAll<HTMLButtonElement>('.copy').forEach(button => {
+document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach(button => {
   button.addEventListener('click', async () => {
     const code = button.parentElement?.querySelector('code');
     const status = document.querySelector('[data-copy-status]');
