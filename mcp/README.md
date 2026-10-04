@@ -3,13 +3,13 @@
 <img src="../assets/philly.svg" width="240" alt="Philly">
 
 
-Read-only Philadelphia open data, using the official TypeScript MCP SDK **2.3.0** and protocol **2026-07-28**. `createMcpHandler` creates a fresh server per request, with default legacy stateless Streamable HTTP compatibility. Local stdio serves both eras too. The Python `phl` CLI and library remain independent and unchanged.
+Read-only Philadelphia open data, using the official TypeScript MCP SDK **2.3.0** and protocol **2026-07-28**. `createMcpHandler` creates a fresh server per request, with default legacy stateless Streamable HTTP compatibility. Local stdio serves both eras too. The Python `phl` CLI and library are installed separately.
 
-**Status: prepared and locally tested, not deployed.** No public MCP URL exists yet. The existing GitHub Pages production site is not changed by this branch. See [deployment readiness](DEPLOYMENT.md).
+GitHub Pages serves the static website. Deploy the Worker separately for a remote MCP endpoint; see [deployment readiness](DEPLOYMENT.md).
 
 ## Run locally
 
-Requires Node 24+ and npm; Bun 1.3.11 builds the optional website.
+Stdio requires Node 24+ and npm. Local HTTP also requires Bun 1.3.11 to build the website assets used by the Worker configuration.
 
 ```sh
 cd mcp
@@ -38,7 +38,7 @@ claude mcp add philly -- node --experimental-strip-types /absolute/path/to/phill
 
 For VS Code, use `.vscode/mcp.json` with the same command/args beneath `"servers": { "philly": { "type": "stdio", ... } }`. [Claude Code reference](https://code.claude.com/docs/en/mcp); [VS Code reference](https://code.visualstudio.com/docs/agent-customization/mcp-servers).
 
-For local HTTP, first build static assets from the repository root:
+For local HTTP, run this complete setup from the repository root:
 
 ```sh
 cd website
@@ -81,7 +81,7 @@ Resource selection defaults to the first approved resource **in catalog order**.
 
 ## Catalog and backend policy
 
-`npm run catalog` deterministically generates the Worker catalog and website counts from all checked-in Python YAML files. No network is used. Dataset IDs are YAML filenames without `.yaml`; resource IDs hash URL + name + format, so resource reordering does not change IDs. Metadata is a snapshot, not a freshness guarantee. CI fails if generated content drifts.
+`npm run catalog` deterministically generates the Worker catalog from all checked-in Python YAML files. No network is used. Dataset IDs are YAML filenames without `.yaml`; resource IDs use a preserved explicit ID when present, otherwise a hash of URL + name + format. Resource reordering does not change IDs. Metadata is a snapshot, not a freshness guarantee. CI fails if generated content drifts.
 
 Only HTTPS `phl.carto.com/api/v2/sql` resources with a narrow, generator-validated SELECT grammar are enabled. The grammar permits a single table, optional known lat/lng projections, and simple date comparisons. It rejects arbitrary expressions, joins and other catalog SQL. Reviewed source queries are compiled into the service; clients cannot supply source SQL. Use discovery to inspect current resource capabilities. Descriptions paginate resources; default 10, maximum 20.
 

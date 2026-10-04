@@ -749,6 +749,9 @@ class PhillyCLI:
 
 def main() -> None:
     """Entry point for the phl command."""
+    if sys.argv[1:] == ["--version"]:
+        print(f"philly {__version__}")
+        return
     Fire(PhillyCLI)
 
 
