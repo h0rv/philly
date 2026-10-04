@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-test("landing, keyboard tabs, clipboard and local connection instructions", async ({
+test("all setup options are visible with compact keyboard-accessible copy controls", async ({
   page,
   context,
 }, info) => {
@@ -19,26 +19,27 @@ test("landing, keyboard tabs, clipboard and local connection instructions", asyn
   await expect(
     page.getByRole("button", { name: "Copy terminal install command" }),
   ).toBeInViewport();
-  await expect(
-    page.getByRole("link", { name: "Connect an MCP client" }),
-  ).toBeInViewport();
-  expect(await page.locator("main [class]").count()).toBe(0);
-  await page.getByRole("tab", { name: "Terminal" }).focus();
-  await page.keyboard.press("ArrowRight");
-  await expect(page.getByRole("tab", { name: "Python" })).toHaveAttribute(
-    "aria-selected",
-    "true",
-  );
-  await page.keyboard.press("End");
-  await expect(
-    page.getByRole("tab", { name: "MCP", exact: true }),
-  ).toBeFocused();
-  await expect(page.getByRole("tabpanel")).toContainText("npm ci");
-  await page.getByRole("button", { name: "Copy local MCP setup" }).click();
-  expect(await page.evaluate(() => navigator.clipboard.readText())).toContain(
+  expect(
+    await page.locator("main [class], [role=tab], details, [hidden]").count(),
+  ).toBe(0);
+  for (const text of [
+    "uv tool install philly",
+    "uv add philly",
     "npm run stdio",
+    "https://your-worker.example/mcp",
+  ]) {
+    await expect(page.locator("pre").filter({ hasText: text })).toBeVisible();
+  }
+  for (const button of await page.locator("button[data-copy]").all()) {
+    const box = await button.boundingBox();
+    expect(box!.height).toBeGreaterThanOrEqual(24);
+    expect(box!.height).toBeLessThanOrEqual(28);
+    expect(box!.width).toBeLessThanOrEqual(64);
+  }
+  await expect(page.locator('a[href*="docs.astral.sh"]')).toHaveCount(0);
+  await expect(page.locator("body")).not.toContainText(
+    "Hosted MCP is not live",
   );
-  await page.getByRole("tab", { name: "Terminal" }).click();
   await page.screenshot({
     path: `${info.project.outputDir}/philly-${info.project.name}.png`,
     fullPage: true,
@@ -48,11 +49,33 @@ test("landing, keyboard tabs, clipboard and local connection instructions", asyn
     path: `${info.project.outputDir}/philly-${info.project.name}-dark.png`,
     fullPage: true,
   });
-  await page.getByRole("link", { name: "Connect", exact: true }).click();
+  await page.getByRole("link", { name: "Client setup", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "Connect Philly" }),
   ).toBeVisible();
-  await page.getByText("Local HTTP", { exact: true }).click();
+  expect(await page.locator("details, [hidden], [role=tab]").count()).toBe(0);
+  for (const label of [
+    "Copy server installation",
+    "Copy Claude Code setup",
+    "Copy stdio client configuration",
+    "Copy VS Code configuration",
+    "Copy local HTTP setup",
+    "Copy local MCP URL",
+    "Copy remote MCP configuration",
+  ]) {
+    const button = page.getByRole("button", { name: label, exact: true });
+    await expect(button).toBeVisible();
+    await expect(button.locator("..").locator("pre")).toBeVisible();
+    await button.focus();
+    await expect(button).toBeFocused();
+    await page.keyboard.press("Enter");
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
+      await button.locator("..").locator("code").textContent(),
+    );
+    const box = await button.boundingBox();
+    expect(box!.height).toBeLessThanOrEqual(28);
+    expect(box!.width).toBeLessThanOrEqual(64);
+  }
   await expect(
     page.getByText("http://127.0.0.1:8787/mcp", { exact: true }),
   ).toBeVisible();
@@ -61,6 +84,14 @@ test("landing, keyboard tabs, clipboard and local connection instructions", asyn
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
+  await expect(page.locator('a[href*="docs.astral.sh"]')).toHaveCount(0);
+  await expect(page.locator("body")).not.toContainText(
+    "Hosted MCP is not live",
+  );
+  await page.screenshot({
+    path: `${info.project.outputDir}/connect-${info.project.name}.png`,
+    fullPage: true,
+  });
   expect(errors).toEqual([]);
 });
 test("clipboard denial gives selectable fallback; atlas and gallery routes survive", async ({
