@@ -18,6 +18,11 @@ with ZipFile(directory / f"philly-{version}-py3-none-any.whl") as wheel:
         "phl = philly.__main__:main"
         in wheel.read(f"philly-{version}.dist-info/entry_points.txt").decode()
     )
+    for notice in ["LICENSE", "THIRD_PARTY_NOTICES", "assets/NOTICE"]:
+        assert (
+            wheel.read(f"philly-{version}.dist-info/licenses/{notice}")
+            == (ROOT / notice).read_bytes()
+        )
     expected = {
         p.name: p.read_bytes() for p in (ROOT / "src/philly/datasets").glob("*.yaml")
     }

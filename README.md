@@ -4,6 +4,14 @@
 
 Query Philadelphia public data from Python, your terminal, or an MCP client.
 
+Catalog metadata comes from [OpenDataPhilly](https://opendataphilly.org/),
+maintained in its [upstream repository](https://github.com/opendataphilly/opendataphilly-jkan).
+Data is supplied by individual publishers, including City departments, nonprofits
+and researchers, under each dataset's terms; see [OpenDataPhilly's terms](https://opendataphilly.org/about/#terms).
+Philly is an independent project. Source URLs and recorded licenses accompany MCP results;
+missing license metadata is not a grant of permission. The code's MIT license does
+not relicense datasets. Upstream notices are in [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES).
+
 ## Installation
 
 ```bash

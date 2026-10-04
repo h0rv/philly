@@ -17,6 +17,14 @@ test("all setup options are visible with compact keyboard-accessible copy contro
     ),
   ).toBe(true);
   await expect(page.locator("body > header")).toHaveCount(0);
+  await expect(
+    page
+      .locator("footer")
+      .getByRole("link", { name: "OpenDataPhilly", exact: true }),
+  ).toHaveAttribute("href", "https://opendataphilly.org/");
+  await expect(page.locator("footer")).toContainText(
+    "Data: individual publishers.",
+  );
   await expect(page.locator("main")).not.toContainText(
     /\d[\d,+]*\s+(?:Philadelphia\s+)?datasets/i,
   );

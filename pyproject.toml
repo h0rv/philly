@@ -4,6 +4,7 @@ version = "1.1.0"
 description = "Python library and CLI for OpenDataPhilly datasets"
 readme = "README.md"
 license = "MIT"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES", "assets/NOTICE"]
 requires-python = ">=3.11"
 keywords = ["philadelphia", "open-data", "civic-data", "geospatial", "pandas"]
 classifiers = [
