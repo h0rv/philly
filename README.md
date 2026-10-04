@@ -128,15 +128,16 @@ records and retains legacy records without silently dropping them.
 
 ## Or ask an agent
 
-With Pi 1+ installed and a model configured, replace the URL with your deployed MCP endpoint:
+Install and sign in to your agent, then replace the URL with your deployed MCP endpoint.
+The [website](https://philly.horv.co/) offers copyable Claude Code, Codex and Pi tabs.
 
-```sh
-pi mcp add philly --url https://YOUR-PHILLY-MCP-HOST/mcp && pi --print "Use the philly MCP server to find building-permit datasets and show five sample records with source links."
-```
+- **Claude Code:** pass an HTTP entry through `--mcp-config` and `--strict-mcp-config` for one run. [Setup docs](https://code.claude.com/docs/en/mcp).
+- **Codex:** pass `-c 'mcp_servers.philly.url="https://YOUR-PHILLY-MCP-HOST/mcp"'` for one run. [Setup docs](https://developers.openai.com/codex/mcp/).
+- **Pi 1+:** `pi mcp add philly --url https://YOUR-PHILLY-MCP-HOST/mcp` saves or replaces the user connection; Codemode activates automatically. [Setup docs](https://pi.dev/docs/latest/mcp).
 
-This saves or replaces the `philly` connection in Pi's user configuration.
-Pi activates Codemode for MCP automatically. The remote Worker is not yet deployed.
-See Pi's [MCP documentation](https://pi.dev/docs/latest/mcp) and
-[CLI reference](https://pi.dev/docs/latest/cli). Syntax and local MCP plumbing were
-checked without an authenticated model call.
-See [MCP workflow evidence and limits](mcp/EFFECTIVENESS.md).
+Ask: "Use the philly MCP server to find building-permit datasets and show five sample records with source links."
+
+These use standard MCP; no separate Philly plugin or skill is required. Keep the
+agent's normal permission prompts. The remote Worker requires separate deployment.
+CLI syntax/configuration and local MCP plumbing were checked without an authenticated
+model call. See [MCP workflow evidence and limits](mcp/EFFECTIVENESS.md).

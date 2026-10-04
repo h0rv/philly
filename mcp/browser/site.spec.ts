@@ -37,9 +37,7 @@ test("all setup options are visible with compact keyboard-accessible copy contro
   await expect(
     page.getByRole("button", { name: "Copy terminal install command" }),
   ).toBeInViewport();
-  expect(
-    await page.locator("main [class], [role=tab], details, [hidden]").count(),
-  ).toBe(0);
+  expect(await page.locator("main details").count()).toBe(0);
   await expect(page.locator("main")).toContainText(
     "pi mcp add philly --url https://YOUR-PHILLY-MCP-HOST/mcp",
   );
@@ -52,7 +50,7 @@ test("all setup options are visible with compact keyboard-accessible copy contro
   ]) {
     await expect(page.locator("pre").filter({ hasText: text })).toBeVisible();
   }
-  for (const button of await page.locator("button[data-copy]").all()) {
+  for (const button of await page.locator("button[data-copy]:visible").all()) {
     const box = await button.boundingBox();
     expect(box!.height).toBeGreaterThanOrEqual(24);
     expect(box!.height).toBeLessThanOrEqual(28);
@@ -164,4 +162,63 @@ test("City Atlas service worker controls the preserved page route", async ({
     return scope;
   });
   expect(scope).toBe("http://127.0.0.1:4321/explorations/city-atlas/");
+});
+
+test("agent tabs support keyboard navigation, exact copying and mobile layout", async ({
+  page,
+  context,
+}) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.goto("/");
+  const tabs = page.getByRole("tab");
+  await expect(tabs).toHaveText(["Claude Code", "Codex", "Pi"]);
+  await tabs.nth(0).focus();
+  for (const [key, index] of [
+    ["ArrowRight", 1],
+    ["End", 2],
+    ["ArrowRight", 0],
+    ["ArrowLeft", 2],
+    ["Home", 0],
+  ] as const) {
+    await page.keyboard.press(key);
+    await expect(tabs.nth(index)).toBeFocused();
+    await expect(tabs.nth(index)).toHaveAttribute("aria-selected", "true");
+    await expect(page.getByRole("tabpanel")).toHaveCount(1);
+  }
+  for (const [index, fragment] of [
+    "--strict-mcp-config",
+    "mcp_servers.philly.url",
+    "pi mcp add philly",
+  ].entries()) {
+    await tabs.nth(index).click();
+    const panel = page.getByRole("tabpanel");
+    await expect(panel).toContainText(fragment);
+    const copy = panel.getByRole("button");
+    await copy.focus();
+    await page.keyboard.press("Enter");
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
+      await panel.locator("code").textContent(),
+    );
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+    await expect(
+      page.getByRole("heading", { name: "Terminal", exact: true }),
+    ).toBeVisible();
+  }
+});
+
+test("agent commands remain available without JavaScript", async ({
+  browser,
+  baseURL,
+}) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  await page.goto(baseURL!);
+  await expect(page.locator("[data-agent-tabs] pre")).toHaveCount(3);
+  for (const pre of await page.locator("[data-agent-tabs] pre").all())
+    await expect(pre).toBeVisible();
+  await context.close();
 });

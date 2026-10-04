@@ -33,3 +33,13 @@ all Philly tools and no errors. No real user configuration or credentials change
 The homepage's `pi mcp add` command intentionally saves the user's connection; its
 URL must be replaced after deployment. No authenticated model or public endpoint
 run was performed.
+
+## Agent setup tabs
+
+Claude Code uses documented per-run JSON `--mcp-config` with explicit HTTP type and
+`--strict-mcp-config`; the prompt precedes its variadic configuration option. Codex
+uses a per-run TOML `-c` override, validated with `codex ... mcp get philly --json`
+(which reported enabled Streamable HTTP with the expected URL). Pi uses the saved
+connection command described above. Browser tests exercise tab order, arrow/Home/End
+keys, focus, selected state, exact clipboard contents, mobile width and no-JavaScript
+fallback. No model completion or saved user configuration change was performed.
