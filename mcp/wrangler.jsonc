@@ -13,4 +13,11 @@
   },
   "vars": { "PUBLIC_ORIGIN": "http://127.0.0.1:8787" },
   "observability": { "enabled": false },
+  "env": {
+    "production": {
+      "name": "philly-mcp",
+      "account_id": "ad42ca6462e685e4e4da043973e3781a",
+      "vars": { "PUBLIC_ORIGIN": "https://philly.horv.co" },
+    },
+  },
 }
