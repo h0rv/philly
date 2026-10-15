@@ -1,41 +1,44 @@
-# Deployment readiness
+# Deployment
 
-No Cloudflare deployment, authentication, token, secret or paid resource has been created. The static website is published separately through the existing GitHub Pages workflow and domain; that does not deploy the MCP service. The checked-in configuration deliberately has `workers_dev: false`, `preview_urls: false`, no routes and a loopback `PUBLIC_ORIGIN`. It is suitable for local testing and dry-run packaging; **it is not a production configuration**.
+Website: **https://philly.horv.co/** · Remote MCP: **https://philly.horv.co/mcp**
 
-## Intended free-tier shape
+Cloudflare deployment was confirmed on 2026-10-15 for main commit `a939489531095f08f79098d44a4b7086724ace39`: build `ae2fc263-d135-4ab5-8651-c587f584ddf9`, Worker version `b7bfc786-2610-4a53-9f58-6e208ad71cd4` at 100%. The custom domain is attached, with an active wildcard certificate; the dedicated certificate was pending at confirmation. Automatic builds from main are enabled.
 
-One stateless Worker + static Astro assets. No Durable Objects, D1, KV, R2, scheduled jobs, accounts or session storage. Existing pages/assets are served asset-first; `/mcp` and `/mcp/*` run the Worker first. Unknown paths can reach the Worker fallback, which delegates to the asset binding. No dynamic page rendering. Observability storage is disabled.
+## Configuration
 
-Cloudflare documents Free limits of 100,000 Worker requests/day accountwide, 10 ms CPU per request, 128 MB memory, 50 subrequests and 6 simultaneous outgoing connections. Static asset requests are free. Network wait is not CPU, but JSON parsing, catalog search and SDK validation are. Current service caps are substantially lower than outgoing/request-byte limits; **actual free-plan CPU and traffic fit remains unproven until an approved deployment is measured**.
+One stateless `philly-mcp` Worker serves the existing Astro site and `/mcp`. Static assets are served first; `/mcp` and `/mcp/*` run the Worker first. `PUBLIC_ORIGIN` is `https://philly.horv.co`. The production environment selects the existing Cloudflare account. Local development retains its loopback origin.
 
-Local baseline after engineering-review fixes on Node v24.19.0, 2026-10-03 (500 samples; HTTP 200 samples after warmup):
+The deployment uses Workers Free, 23 static assets and the existing authorized build credential. No new credentials, paid resources, Durable Objects, D1, KV, R2, scheduled jobs or session storage were added. Observability storage, workers.dev and preview URLs remain disabled. The custom domain is managed separately from Wrangler. The existing GitHub Pages workflow remains in place; the unrelated `isophilly` Worker is unchanged.
 
-| Operation | p50 wall ms | p95 wall ms | mean process CPU ms |
-| --- | ---: | ---: | ---: |
-| Catalog search | 0.047 | 0.076 | 0.068 |
-| Bounded decode + parse, 120 KiB | 0.163 | 0.335 | 0.267 |
-| Full legacy HTTP search | 0.474 | 0.815 | 0.717 |
+## Build and deploy
 
-These are local microbenchmarks, not Cloudflare request billing measurements. They exclude cold startup, live schema/query responses and network. Wrangler dry-run initially reported about 2.33 MiB uncompressed / 406 KiB gzip, below the Free compressed Worker size limit. Local workerd successfully serves current and legacy protocol discovery/search. Browser page builds stay static. Re-run measurements after dependency or catalog changes.
+Use Node 24+ and Bun 1.3.11. From the repository root:
 
-## Authentication preflight (read-only)
+```sh
+cd website
+bun install --frozen-lockfile
+bun run build
+cd ../mcp
+npm ci
+npm run build -- --env production
+```
 
-The saved environment has no recognized Cloudflare credential/account variables, no default Wrangler auth file in the standard or task-specific config locations, and no project credential file. No token values were printed and no Cloudflare API authentication, refresh, login or credential generation was attempted. This does not inspect an external account or another computer's keychain.
+The last command only packages a dry run. With the existing authorized Cloudflare build credential, deploy from `mcp`:
 
-The installed Wrangler 4.147.0 supports device OAuth, verified with `wrangler login --help`. After **explicit approval to create/persist OAuth credentials**, the suitable remote/mobile flow is `cd mcp && npx --no-install wrangler login --device --browser=false`. The user opens the official Cloudflare verification page and enters the short-lived device code in their own browser; no API token should be pasted into chat. Credential storage must be approved before starting (the CLI can use `--use-keyring` when a supported OS keychain is available). The device flow does not require opening a callback port or widening inbound network access.
+```sh
+npx --no-install wrangler deploy --env production
+```
 
-The sign-in flow uses `dash.cloudflare.com`; subsequent account inspection uses `api.cloudflare.com`. These network destinations are not enabled by this implementation. After sign-in, run `wrangler whoami` and choose the intended existing Free account explicitly. Do not select a paid plan, register a domain, alter DNS, or deploy as part of authentication. No login was started here.
+The Worker entrypoint is `src/worker.ts`; the `ASSETS` binding uses `../website/dist`. The reviewed bundle was 407 KiB gzip. Do not enable paid services or change credential permissions for this deployment.
 
-## Remaining approval and validation gates
+## Verification status
 
-1. **Live data test:** approve/publish only `phl.carto.com`, HTTPS 443. All data operations use `/api/v2/sql`; no redirects. Validate schema, a five-row preview with selected columns, one structured filter and one count against the chosen resource. No static-file hosts, ArcGIS, map/font CDNs or proxies are required for the new MCP/landing page. City Atlas retains its prior external dependencies; offline checks only verify its preserved route.
-2. **Cloudflare account:** choose the intended existing account and confirm Free plan. Authentication has not been verified. Any new login/persistent credential creation requires explicit approval; no credentials are generated by this branch. Deployment would require `api.cloudflare.com` and the selected endpoint's exact hostname, plus any authentication destinations confirmed by the chosen approved flow. Do not broaden this environment's network settings automatically.
-3. **Endpoint:** choose an approved workers.dev subdomain or custom HTTPS hostname. Set `PUBLIC_ORIGIN` to its exact origin, configure the corresponding route or explicitly enable workers.dev in a reviewed production config. Keep the current GitHub Pages website serving until migration is separately approved. A custom domain may entail DNS changes, which are not part of this implementation.
-4. **Deploy after approval:** build assets and dry-run first; review bindings, account, route and bundle. Then deploy the exact reviewed commit manually with the approved credentials/config. No workflow in this branch deploys Cloudflare. The separately authorized static GitHub Pages release does not satisfy these Cloudflare gates.
-5. **Acceptance:** run both MCP protocol clients against the deployed `/mcp`; verify same-origin/host rejection, originless native access, limits and live data provenance. Measure CPU, memory, errors and accountwide traffic under small bounded workload. Confirm acceptable free-tier headroom before publishing connection instructions. A localhost success does not prove a live endpoint.
+Local validation passed: 509 Python tests, 25 MCP tests, 10 browser tests, lint/type/catalog checks, Astro build, production dry-run packaging, and current/legacy MCP clients against workerd. PR and main CI passed for the deployment commit.
 
-After acceptance, update the landing page and `/connect/` by replacing the reserved `your-worker.example` placeholder with the real HTTPS URL. Remote ChatGPT/Claude connectors need that reachable URL; stdio/local HTTP can be used now. No OAuth is advertised for this public read-only service.
+Deployment confirmation is not a live protocol test. This environment's proxy denied the direct HTTPS check with CONNECT 403; no bypass was attempted. Public TLS, current/legacy MCP discovery, origin rejection, and bounded live CARTO schema/preview/filter/count checks remain unverified here. Production CPU, memory and traffic headroom have not been measured. No authenticated agent model call is claimed.
 
-Rollback is a manual return to the previous Worker version and/or removal of the new route after approval. The Python package is unchanged. GitHub Pages serves the static install/connect website and preserved explorations; it cannot host the MCP Worker. Production migration and its rollback need a separate approved route/DNS plan.
+The public service has isolate-local concurrency limits, not a distributed rate limit. Abuse can exhaust the account's Free daily request allowance. Keep the account on Free; do not upgrade to address quota exhaustion.
+
+Rollback uses a previously verified Worker version through the existing deployment connection. Check domain and asset behavior after rollback; the Python package is independent.
 
 References: [Workers limits](https://developers.cloudflare.com/workers/platform/limits/), [static asset billing](https://developers.cloudflare.com/workers/static-assets/billing-and-limitations/), [asset routing](https://developers.cloudflare.com/workers/static-assets/routing/advanced/).

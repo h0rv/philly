@@ -5,7 +5,7 @@
 
 Read-only Philadelphia open data, using the official TypeScript MCP SDK **2.3.0** and protocol **2026-07-28**. `createMcpHandler` creates a fresh server per request, with default legacy stateless Streamable HTTP compatibility. Local stdio serves both eras too. The Python `phl` CLI and library are installed separately.
 
-GitHub Pages serves the static website. Deploy the Worker separately for a remote MCP endpoint; see [deployment readiness](DEPLOYMENT.md).
+Connect using Streamable HTTP at **https://philly.horv.co/mcp**. The public, read-only service requires no API key. Cloudflare serves the website and MCP together; see [deployment details and verification status](DEPLOYMENT.md).
 
 ## Run locally
 

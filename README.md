@@ -90,7 +90,7 @@ defaults:
 
 ## Website
 
-This repo includes a static Astro site, kept separate from the Python package source. The existing GitHub Pages workflow remains in place; the MCP project adds an undeployed Cloudflare configuration.
+This repo includes a static Astro site, kept separate from the Python package source. Cloudflare serves the website and remote MCP at [philly.horv.co](https://philly.horv.co/). The existing GitHub Pages workflow remains in place.
 We use Poe tasks from the repo root.
 
 ```bash
@@ -128,16 +128,16 @@ records and retains legacy records without silently dropping them.
 
 ## Or ask an agent
 
-Install and sign in to your agent, then replace the URL with your deployed MCP endpoint.
+Install and sign in to your agent. The remote MCP endpoint is `https://philly.horv.co/mcp`.
 The [website](https://philly.horv.co/) offers copyable Claude Code, Codex and Pi tabs.
 
 - **Claude Code:** pass an HTTP entry through `--mcp-config` and `--strict-mcp-config` for one run. [Setup docs](https://code.claude.com/docs/en/mcp).
-- **Codex:** pass `-c 'mcp_servers.philly.url="https://YOUR-PHILLY-MCP-HOST/mcp"'` for one run. [Setup docs](https://developers.openai.com/codex/mcp/).
-- **Pi 1+:** `pi mcp add philly --url https://YOUR-PHILLY-MCP-HOST/mcp` saves or replaces the user connection; Codemode activates automatically. [Setup docs](https://pi.dev/docs/latest/mcp).
+- **Codex:** pass `-c 'mcp_servers.philly.url="https://philly.horv.co/mcp"'` for one run. [Setup docs](https://developers.openai.com/codex/mcp/).
+- **Pi 1+:** `pi mcp add philly --url https://philly.horv.co/mcp` saves or replaces the user connection; Codemode activates automatically. [Setup docs](https://pi.dev/docs/latest/mcp).
 
 Ask: "Use the philly MCP server to find building-permit datasets and show five sample records with source links."
 
 These use standard MCP; no separate Philly plugin or skill is required. Keep the
-agent's normal permission prompts. The remote Worker requires separate deployment.
+agent's normal permission prompts.
 CLI syntax/configuration and local MCP plumbing were checked without an authenticated
 model call. See [MCP workflow evidence and limits](mcp/EFFECTIVENESS.md).

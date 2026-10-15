@@ -31,8 +31,8 @@ connected to the built Worker over loopback Streamable HTTP using an isolated
 `PI_CODING_AGENT_DIR` fixture. It reported `connected`, default `codemode` exposure,
 all Philly tools and no errors. No real user configuration or credentials changed.
 The homepage's `pi mcp add` command intentionally saves the user's connection; its
-URL must be replaced after deployment. No authenticated model or public endpoint
-run was performed.
+URL is now `https://philly.horv.co/mcp`. No authenticated model or public endpoint
+run was performed in this verification.
 
 ## Agent setup tabs
 
