@@ -23,8 +23,8 @@ Current and legacy protocol clients and both stdio eras are exercised offline. T
 
 ## Limits of the result
 
-No live CARTO responses have been checked; approval for `phl.carto.com:443` is still pending. Fixtures prove construction and failure behavior, not backend availability, current schema or real counts. No public endpoint exists. Local benchmarks and workerd success do not prove deployed Free-plan CPU/memory/traffic fit. Isolate-local concurrency is not distributed rate limiting; public traffic can still consume the account's daily quota. Existing Pages workflows/domain are untouched.
+No live CARTO responses have been checked; approval for `phl.carto.com:443` is still pending. Fixtures prove construction and failure behavior, not backend availability, current schema or real counts. At the time of this review no public endpoint existed; see [current deployment status](DEPLOYMENT.md). Local benchmarks and workerd success do not prove deployed Free-plan CPU/memory/traffic fit. Isolate-local concurrency is not distributed rate limiting; public traffic can still consume the account's daily quota. Existing Pages workflows/domain are untouched.
 
-Cloudflare credential presence was inspected without reading values: no recognized credential/account environment variables, default Wrangler auth files, or project credential files were found. No Cloudflare API authentication was attempted. A human-approved device OAuth sign-in and explicit Free-account selection are still needed; see `DEPLOYMENT.md`.
+Cloudflare credential presence was inspected without reading values: no recognized credential/account environment variables, default Wrangler auth files, or project credential files were found. No Cloudflare API authentication was attempted. This was the pre-deployment inspection; deployment later used an existing authorized build credential. See [current deployment status](DEPLOYMENT.md).
 
 Reference: [MCP structured-content compatibility guidance](https://modelcontextprotocol.io/specification/2025-06-18/server/tools#structured-content).

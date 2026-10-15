@@ -4,6 +4,8 @@ export function GET() {
 
 Philadelphia public data for Python, CLI and MCP.
 
+Remote MCP: https://philly.horv.co/mcp (Streamable HTTP, public and read-only).
+
 Use tools/list for current tools and input contracts. Discover dataset IDs, then describe resources to select a source and inspect its capabilities before querying.
 Catalog metadata is a bundled snapshot. Resource names identify year coverage; returned source links and license describe provenance.
 Only approved CARTO resources support bounded remote queries. Other resources are discovery-only; the Python CLI supports broader local loading.

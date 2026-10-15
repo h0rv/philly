@@ -39,16 +39,20 @@ test("all setup options are visible with compact keyboard-accessible copy contro
   ).toBeInViewport();
   expect(await page.locator("main details").count()).toBe(0);
   await expect(page.locator("main")).toContainText(
-    "pi mcp add philly --url https://YOUR-PHILLY-MCP-HOST/mcp",
+    "pi mcp add philly --url https://philly.horv.co/mcp",
   );
   await expect(page.locator("main")).toContainText("pi --print");
   for (const text of [
     "uv tool install philly",
     "uv add philly",
     "npm run stdio",
-    "https://your-worker.example/mcp",
+    "https://philly.horv.co/mcp",
   ]) {
-    await expect(page.locator("pre").filter({ hasText: text })).toBeVisible();
+    await expect(
+      text.startsWith("https://")
+        ? page.locator("pre").getByText(text, { exact: true })
+        : page.locator("pre").filter({ hasText: text }),
+    ).toBeVisible();
   }
   for (const button of await page.locator("button[data-copy]:visible").all()) {
     const box = await button.boundingBox();

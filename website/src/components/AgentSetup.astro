@@ -1,5 +1,5 @@
 ---
-const url = 'https://YOUR-PHILLY-MCP-HOST/mcp';
+const url = 'https://philly.horv.co/mcp';
 const prompt = 'Use the philly MCP server to find building-permit datasets and show five sample records with source links.';
 const agents = [
   { id: 'claude', name: 'Claude Code', note: 'Connection for this run only.', command: `claude "${prompt}" --strict-mcp-config --mcp-config '${JSON.stringify({mcpServers:{philly:{type:'http',url}}})}'`, docs: 'https://code.claude.com/docs/en/mcp' },
@@ -8,7 +8,7 @@ const agents = [
 ];
 ---
 <h2 id="agent-heading">Or ask an agent</h2>
-<p><small>Agent installed and signed in · replace the URL with your deployed MCP endpoint.</small></p>
+<p><small>Agent installed and signed in · connects to Philly’s remote MCP.</small></p>
 <div data-agent-tabs>
   <div role="tablist" aria-labelledby="agent-heading" hidden>
     {agents.map(agent => <button type="button" role="tab" id={`tab-${agent.id}`} aria-controls={`panel-${agent.id}`} aria-selected="false" tabindex="-1">{agent.name}</button>)}

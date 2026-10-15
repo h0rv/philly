@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
-<BaseLayout title="Connect — Philly" description="Connect Philly to a local MCP client.">
+<BaseLayout title="Connect — Philly" description="Connect Philly to a remote or local MCP client.">
   <h1>Connect Philly</h1>
   <p><small>Node 24+</small></p>
   <h2>Install</h2>
@@ -36,8 +36,8 @@ npm run dev</code></pre></figure>
     <small>For clients on your computer. Cloud-hosted assistants cannot reach localhost.</small>
   </div>
   <h2>Remote MCP</h2>
-  <p><small>Your deployed endpoint in <code>.vscode/mcp.json</code>:</small></p>
-  <figure><button data-copy aria-label="Copy remote MCP configuration">Copy</button><pre><code>{JSON.stringify({servers:{philly:{type:'http',url:'https://your-worker.example/mcp'}}},null,2)}</code></pre></figure>
+  <p><small>Use the remote endpoint in <code>.vscode/mcp.json</code>:</small></p>
+  <figure><button data-copy aria-label="Copy remote MCP configuration">Copy</button><pre><code>{JSON.stringify({servers:{philly:{type:'http',url:'https://philly.horv.co/mcp'}}},null,2)}</code></pre></figure>
   <p><a href="https://github.com/h0rv/philly/blob/main/mcp/README.md">MCP tools and limits</a></p>
   <p role="status" aria-live="polite" data-copy-status></p>
 </BaseLayout>
