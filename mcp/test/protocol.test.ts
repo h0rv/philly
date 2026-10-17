@@ -8,6 +8,7 @@ import { Client as LegacyClient } from "@modelcontextprotocol/sdk/client/index.j
 import { StreamableHTTPClientTransport as LegacyTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { createWorker } from "../src/worker.ts";
 import { LIMITS } from "../src/bounds.ts";
+import { outputSchemas } from "../src/contracts.ts";
 import { DataService } from "../src/data.ts";
 const origin = "http://127.0.0.1:8787";
 const env = { PUBLIC_ORIGIN: origin };
@@ -41,11 +42,13 @@ for (const modern of [true, false]) {
       await client.connect(transport);
       const listed = await client.listTools();
       assert.equal(listed.tools.length, 6);
+      for (const tool of listed.tools) assert.ok(tool.outputSchema, tool.name);
       const result = await client.callTool({
         name: "search_datasets",
         arguments: { query: "crime" },
       });
       assert.ok(JSON.stringify(result).includes("Crime_Incidents"));
+      outputSchemas.search_datasets.parse(result.structuredContent);
       const content = result.content;
       assert.ok(Array.isArray(content));
       const text = content.find((item) => item.type === "text");
@@ -61,6 +64,11 @@ for (const modern of [true, false]) {
         arguments: { datasetId: "does-not-exist" },
       });
       assert.equal(unsupported.isError, true);
+      assert.equal(
+        (unsupported.structuredContent as { error: { code: string } }).error
+          .code,
+        "DATASET_NOT_FOUND",
+      );
       assert.equal(network(), 0);
       assert.equal((await client.listResources()).resources.length, 1);
     } finally {
@@ -195,4 +203,74 @@ test("legacy batches cannot amplify work behind one HTTP admission slot", async 
   assert.equal(response.status, 400);
   assert.equal((await response.json()).error.code, -32600);
   assert.equal(network(), 0);
+});
+
+test("MCP output contracts cover discovery, CARTO and ArcGIS calls and preview alias", async () => {
+  const arcMeta = {
+    fields: [{ name: "OBJECTID", type: "esriFieldTypeOID" }],
+    objectIdField: "OBJECTID",
+    maxRecordCount: 1000,
+    advancedQueryCapabilities: {
+      supportsPagination: true,
+      supportsOrderBy: true,
+    },
+  };
+  const service = new DataService(async (url) => {
+    const u = new URL(url);
+    if (u.hostname === "services.arcgis.com")
+      return Response.json(
+        u.pathname.endsWith("/query")
+          ? { features: [{ attributes: { OBJECTID: 1 } }] }
+          : arcMeta,
+      );
+    return Response.json({
+      fields: { cartodb_id: { type: "number" } },
+      rows: u.searchParams.get("q")!.endsWith("LIMIT 0")
+        ? []
+        : [{ cartodb_id: 1, value: 1 }],
+    });
+  });
+  const worker = createWorker(service);
+  const client = new Client({ name: "contracts", version: "1" });
+  await client.connect(
+    new StreamableHTTPClientTransport(new URL(`${origin}/mcp`), {
+      fetch: async (url, init) => worker.fetch(new Request(url, init), env),
+    }),
+  );
+  try {
+    for (const datasetId of ["Crime_Incidents", "PWD_Geotechnical_Tests"]) {
+      for (const name of [
+        "describe_dataset",
+        "get_schema",
+        "query_dataset",
+        "preview_dataset",
+        "aggregate_dataset",
+      ] as const) {
+        const result = await client.callTool({
+          name,
+          arguments: { datasetId },
+        });
+        if (
+          name === "aggregate_dataset" &&
+          datasetId === "PWD_Geotechnical_Tests"
+        ) {
+          assert.equal(result.isError, true);
+          assert.equal(
+            (result.structuredContent as { error: { code: string } }).error
+              .code,
+            "UNSUPPORTED_OPERATION",
+          );
+        } else {
+          assert.ok(!result.isError, JSON.stringify(result));
+          outputSchemas[
+            name === "preview_dataset" ? "query_dataset" : name
+          ].parse(result.structuredContent);
+        }
+        const content = result.content as { type: string; text: string }[];
+        assert.deepEqual(JSON.parse(content[0].text), result.structuredContent);
+      }
+    }
+  } finally {
+    await client.close();
+  }
 });

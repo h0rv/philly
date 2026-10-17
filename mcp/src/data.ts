@@ -1,95 +1,32 @@
 import { z } from "zod";
+import { ArcgisAdapter } from "./arcgis.ts";
+import { arcgisLayer, SOURCE_ID } from "./sources.ts";
 import { lookup } from "./catalog.ts";
 import { LIMITS, readBounded } from "./bounds.ts";
-export const identifier = z
-  .string()
-  .max(63)
-  .regex(/^[a-zA-Z_][a-zA-Z0-9_]*$/);
-export const selection = {
-  datasetId: z.string().min(1).max(200),
-  resourceId: z
-    .string()
-    .regex(/^[a-f0-9]{16}$/)
-    .optional(),
-};
-export const filterSchema = z.strictObject({
-  column: identifier,
-  op: z.enum(["eq", "ne", "lt", "lte", "gt", "gte", "is_null", "not_null"]),
-  value: z
-    .union([
-      z
-        .string()
-        .max(200)
-        .regex(/^[^\x00-\x1f\\]*$/),
-      z.number().finite(),
-      z.boolean(),
-      z.null(),
-    ])
-    .optional(),
-});
-export const filtersSchema = z
-  .array(filterSchema)
-  .max(LIMITS.filters)
-  .default([]);
-export const querySchema = z.strictObject({
-  ...selection,
-  filters: filtersSchema,
-  columns: z.array(identifier).min(1).max(LIMITS.columns).optional(),
-  limit: z.number().int().min(1).max(LIMITS.rows).default(20),
-  offset: z.number().int().min(0).max(LIMITS.offset).default(0),
-  orderBy: identifier.optional(),
-  orderDirection: z.enum(["asc", "desc"]).default("asc"),
-});
-export const aggregateSchema = z.strictObject({
-  ...selection,
-  filters: filtersSchema,
-  operation: z.enum(["count", "sum", "avg", "min", "max"]).default("count"),
-  column: identifier.optional(),
-  groupBy: identifier.optional(),
-  orderBy: z.enum(["group", "value"]).default("group"),
-  orderDirection: z.enum(["asc", "desc"]).default("asc"),
-  limit: z.number().int().min(1).max(50).default(20),
-});
+import {
+  identifier,
+  selection,
+  filtersSchema,
+  querySchema,
+  aggregateSchema,
+  where,
+  checkColumn,
+  type Fields,
+} from "./query.ts";
+export {
+  identifier,
+  selection,
+  filterSchema,
+  filtersSchema,
+  querySchema,
+  aggregateSchema,
+  where,
+} from "./query.ts";
 export type Fetcher = (
   url: string | URL,
   init?: RequestInit,
 ) => Promise<Response>;
-type Fields = Record<string, { type: string }>;
 const quote = (s: string) => `"${identifier.parse(s)}"`;
-export function where(filters: z.infer<typeof filtersSchema>, fields: Fields) {
-  return filters.length
-    ? " WHERE " +
-        filters
-          .map((f) => {
-            checkColumn(f.column, fields);
-            if (f.op === "is_null" || f.op === "not_null")
-              return `${quote(f.column)} IS ${f.op === "not_null" ? "NOT " : ""}NULL`;
-            if (f.value === undefined || f.value === null)
-              throw new Error(
-                "Comparisons require a value; use is_null / not_null for null.",
-              );
-            const literal =
-              typeof f.value === "string"
-                ? `'${f.value.replaceAll("'", "''")}'`
-                : String(f.value);
-            const op = {
-              eq: "=",
-              ne: "<>",
-              lt: "<",
-              lte: "<=",
-              gt: ">",
-              gte: ">=",
-            }[f.op];
-            return `${quote(f.column)} ${op} ${literal}`;
-          })
-          .join(" AND ")
-    : "";
-}
-function checkColumn(name: string, fields: Fields) {
-  identifier.parse(name);
-  if (!Object.hasOwn(fields, name))
-    throw new Error(`Unknown column: ${name}. Use get_schema.`);
-}
 export class DataService {
   private active = 0;
   private fetcher: Fetcher;
@@ -112,6 +49,7 @@ export class DataService {
       ? AbortSignal.any([controller.signal, cancellation])
       : controller.signal;
     try {
+      signal.throwIfAborted();
       return await fn(signal);
     } finally {
       clearTimeout(timer);
@@ -186,8 +124,16 @@ export class DataService {
   ) {
     const { dataset, resource } = lookup(input.datasetId, input.resourceId);
     return this.run(async (signal) => {
+      if (arcgisLayer(resource.url))
+        return new ArcgisAdapter(this.fetcher).schema(
+          dataset,
+          resource,
+          input,
+          signal,
+        );
       const fields = await this.fields(resource.query!, signal);
       return {
+        sourceId: SOURCE_ID,
         datasetId: dataset.id,
         resourceId: resource.id,
         resourceName: resource.name,
@@ -195,6 +141,8 @@ export class DataService {
         license: dataset.license,
         retrievedAt: new Date().toISOString(),
         appliedFilters: [],
+        completeness: "complete",
+        completenessReasons: [],
         truncated: false,
         nextOffset: null,
         schemaSource: "CARTO query metadata (LIMIT 0), not sample inference",
@@ -205,6 +153,13 @@ export class DataService {
   async query(input: z.infer<typeof querySchema>, cancellation?: AbortSignal) {
     const { dataset, resource } = lookup(input.datasetId, input.resourceId);
     return this.run(async (signal) => {
+      if (arcgisLayer(resource.url))
+        return new ArcgisAdapter(this.fetcher).query(
+          dataset,
+          resource,
+          input,
+          signal,
+        );
       const fields = await this.fields(resource.query!, signal);
       const columns =
         input.columns ??
@@ -227,6 +182,7 @@ export class DataService {
       const data = await this.request(sql, signal);
       const truncated = data.rows.length > input.limit;
       return {
+        sourceId: SOURCE_ID,
         datasetId: dataset.id,
         resourceId: resource.id,
         resourceName: resource.name,
@@ -238,6 +194,23 @@ export class DataService {
         orderBy: order ?? null,
         orderDirection: order ? input.orderDirection : null,
         rows: data.rows.slice(0, input.limit),
+        completeness:
+          truncated ||
+          input.offset > 0 ||
+          (!input.columns && columns.length < Object.keys(fields).length)
+            ? "partial"
+            : "complete",
+        completenessReasons: [
+          ...(truncated ? ["row_limit"] : []),
+          ...(input.offset ? ["offset"] : []),
+          ...(truncated && !order ? ["no_stable_order"] : []),
+          ...(truncated && input.offset + input.limit > LIMITS.offset
+            ? ["offset_limit"]
+            : []),
+          ...(!input.columns && columns.length < Object.keys(fields).length
+            ? ["columns_omitted"]
+            : []),
+        ],
         truncated,
         offset: input.offset,
         nextOffset:
@@ -257,6 +230,10 @@ export class DataService {
   ) {
     const { dataset, resource } = lookup(input.datasetId, input.resourceId);
     return this.run(async (signal) => {
+      if (arcgisLayer(resource.url))
+        throw new Error(
+          "Unsupported operation: ArcGIS aggregation is not supported.",
+        );
       const fields = await this.fields(resource.query!, signal);
       if (input.column) checkColumn(input.column, fields);
       if (input.groupBy) checkColumn(input.groupBy, fields);
@@ -285,6 +262,7 @@ export class DataService {
       const sql = `SELECT ${group ? `${group} AS group_value,` : ""}${expression} FROM (${resource.query}) AS source${where(input.filters, fields)}${group ? ` GROUP BY ${group} ORDER BY ${groupOrder}` : ""} LIMIT ${input.limit + 1}`;
       const data = await this.request(sql, signal);
       return {
+        sourceId: SOURCE_ID,
         datasetId: dataset.id,
         resourceId: resource.id,
         resourceName: resource.name,
@@ -298,6 +276,9 @@ export class DataService {
         orderBy: group ? input.orderBy : null,
         orderDirection: group ? input.orderDirection : null,
         rows: data.rows.slice(0, input.limit),
+        completeness: data.rows.length > input.limit ? "partial" : "complete",
+        completenessReasons:
+          data.rows.length > input.limit ? ["group_limit"] : [],
         truncated: data.rows.length > input.limit,
         nextOffset: null,
         scope: "Full matching source resource, not a preview sample.",

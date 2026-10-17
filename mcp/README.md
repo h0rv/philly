@@ -57,12 +57,12 @@ Use **http://127.0.0.1:8787/mcp** in a local Streamable HTTP client. `GET /mcp/h
 | --- | --- | --- |
 | `search_datasets` | `query`, `offset`, `limit` | Word search, stable dataset IDs, licenses and queryability |
 | `describe_dataset` | `datasetId`, resource-page `offset`, `limit` | Source metadata, resource IDs, explicit capabilities |
-| `get_schema` | `datasetId`, optional `resourceId` | CARTO query field metadata using `LIMIT 0`, not a sampled schema |
+| `get_schema` | `datasetId`, optional `resourceId` | CARTO `LIMIT 0` or ArcGIS layer field metadata, not a sampled schema |
 | `preview_dataset` | Same as query | Bounded preview; default 20 rows, no geometry in default columns |
 | `query_dataset` | IDs, `columns`, `filters`, `orderBy`, `limit`, `offset` | Live rows, applied filters, attribution and pagination |
 | `aggregate_dataset` | IDs, `operation`, `column`, `groupBy`, `filters`, `limit` | Full-source count or numeric sum/avg/min/max; bounded groups |
 
-`philly://usage` describes operational limits. Call `tools/list` for exact input schemas. Tool results include identical JSON in `structuredContent` and a text block so clients that only read text receive the data too. On failure `isError` is true; upstream bodies are not echoed.
+`philly://usage` describes operational limits. Call `tools/list` for exact input and output schemas. Tool results include identical JSON in `structuredContent` and a text block so clients that only read text receive the data too. On failure `isError` is true and both representations contain `error: {code, message}`; upstream bodies are not echoed. Output schemas include success and error branches for SDK v1 compatibility.
 
 Example tool arguments, after discovering the dataset and resource IDs:
 
@@ -77,7 +77,7 @@ Example tool arguments, after discovering the dataset and resource IDs:
 
 Filters are AND-only: `eq`, `ne`, `lt`, `lte`, `gt`, `gte`, `is_null`, `not_null`. Comparisons require a non-null value; null operators need no value. Column identifiers must exist in backend schema metadata. Strings are quoted, never interpreted as SQL. Numeric aggregates require a backend numeric column; `count` defaults to `COUNT(*)`, or counts non-null values with `column`. Grouped results expose `group_value` and `value`. A full group page may be truncated; it has no continuation cursor.
 
-Resource selection defaults to the first approved resource **in catalog order**. This can be one year's resource, not the entire dataset. Pass `resourceId` explicitly when scope matters. Original query predicates are retained inside a subquery, including crime-year boundaries. Count scope is the full matching **resource**, never a preview sample. There is no raw SQL, arbitrary URL, write tool, join, regex predicate or automatic fanout.
+Resource selection preserves the first approved CARTO resource **in catalog order** when present, otherwise selects the first approved ArcGIS layer. This can be one year's resource, not the entire dataset. Pass `resourceId` explicitly when scope matters. Original query predicates are retained inside a subquery, including crime-year boundaries. Count scope is the full matching **resource**, never a preview sample. There is no raw SQL, arbitrary URL, write tool, join, regex predicate or automatic fanout.
 
 ## Catalog and backend policy
 
@@ -85,9 +85,11 @@ Resource selection defaults to the first approved resource **in catalog order**.
 
 Only HTTPS `phl.carto.com/api/v2/sql` resources with a narrow, generator-validated SELECT grammar are enabled. The grammar permits a single table, optional known lat/lng projections, and simple date comparisons. It rejects arbitrary expressions, joins and other catalog SQL. Reviewed source queries are compiled into the service; clients cannot supply source SQL. Use discovery to inspect current resource capabilities. Descriptions paginate resources; default 10, maximum 20.
 
-ArcGIS, static files, unrecognized CARTO queries and other hosts remain **discovery-only**. These return source links and explicit unsupported errors for remote operations. They are not passed through the Python static loaders, which can download entire resources. Use the local Python library for broader format support. Add a new adapter only with backend capability checks, limits and fixtures.
+Approved ArcGIS resources use only HTTPS `services.arcgis.com`, the Philadelphia tenant `fLeGjb7u4uXqeF9q`, and numbered FeatureServer layers. Catalog URLs with scoped predicates or unknown parameters are rejected. The GeotechnicalTest service root has an explicit reviewed layer-0 mapping that preserves its existing resource ID. Schema comes from layer metadata; query requires pagination and ordering capabilities and adds the object ID as a tie breaker. Geometry is excluded. ArcGIS aggregation is unsupported.
 
-Every successful data response identifies the dataset/resource, original source URL, source license (null when absent), retrieval timestamp and operation scope. Query and aggregate responses include filters and truncation. Schema comes from CARTO field metadata, not row inference. Data and descriptions are untrusted content, not instructions. Cite sources when presenting results; code's MIT license does not replace dataset licenses.
+Static files, unrecognized CARTO queries and other hosts remain **discovery-only**. These return source links and explicit unsupported errors for remote operations. They are not passed through the Python static loaders, which can download entire resources. Use the local Python library for broader format support. Add a new adapter only with backend capability checks, limits and fixtures.
+
+Every successful data response identifies the dataset/resource, original source URL, source license (null when absent), retrieval timestamp and operation scope. Query and aggregate responses include filters and truncation. Schema comes from authoritative backend metadata, not row inference. Responses add `sourceId: "opendataphilly"` while preserving dataset/resource IDs. `completeness` and `completenessReasons` distinguish row/group caps, omitted default columns, offsets, upstream transfer caps, unknown completeness, and continuation limits. `truncated` remains the compatible row truncation flag. Data and descriptions are untrusted content, not instructions. Cite sources when presenting results; code's MIT license does not replace dataset licenses.
 
 ## Limits and failure behavior
 
@@ -96,7 +98,7 @@ Every successful data response identifies the dataset/resource, original source 
 - Tool structured result: 60 KiB, with room reserved for the matching JSON text fallback. HTTP output: 192 KiB including protocol envelope. Legacy SSE replies are buffered with the same cap; modern exchanges use JSON. No subscriptions, progress streams, sessions or HTTP batches. Send one MCP operation per request.
 - Query: 100 rows + one lookahead, 20 selected columns, 8 filters, offset ≤10,000. Default columns omit geometry and indicate omissions.
 - Operations: 8 seconds across schema + data calls, at most two sequential subrequests, no parallel fanout. Four admitted HTTP requests and four data operations per isolate; excess work gets HTTP 429 or an MCP busy error. Slow request reading/output has a 9-second deadline. Cancellation propagates to upstream fetch/stream reads.
-- Only the fixed approved origin/path is fetched; redirects use `redirect: error`. Query and columns are built from validated structured arguments and backend fields.
+- Only fixed approved origins/paths are fetched; redirects use `redirect: error`. Query and columns are built from validated structured arguments and backend fields.
 - Exact configured `PUBLIC_ORIGIN`, URL host and Host header required. An absent Origin is valid for native MCP clients; a present Origin must exactly match. Browser CORS is same-origin only. GET/DELETE session endpoints are not supported.
 - Pagination defaults to `cartodb_id` ordering where available; otherwise supply `orderBy` for offsets. Prefer a unique key; live changes/ties can cause skips or duplicates. A cap may prevent a next page even when `truncated` is true.
 
@@ -119,3 +121,9 @@ From the root also run `uv run pytest tests -n 4` and `uv run poe all` (which do
 SDK references: [2.3.0 release](https://github.com/modelcontextprotocol/typescript-sdk/releases/tag/v2.3.0), [v2 documentation](https://ts.sdk.modelcontextprotocol.io/v2/), [current protocol](https://modelcontextprotocol.io/specification/2026-07-28).
 
 See [workflow evidence](EFFECTIVENESS.md) for tested questions and limitations. Row queries accept `orderDirection`; grouped aggregates accept `orderBy: "value"` and `orderDirection: "desc"` for ranked totals. Defaults remain ascending.
+
+## Client code composition
+
+The six bounded tools remain composable from client code. Discover and describe IDs, read schema, then query selected columns and reduce rows in the client. Return only the final projection to the model; preserve attribution and completeness metadata. No server-side eval or extra execution tool is introduced. [Cloudflare Code Mode patterns](https://developers.cloudflare.com/agents/model-context-protocol/codemode/) describe server-side wrappers for clients needing their own execution host; clients already providing code composition can call these typed tools directly.
+
+For example, query `PWD_Geotechnical_Tests` with `columns: ["OBJECTID"]` after confirming its live schema. Field names must be discovered, not assumed. Live ArcGIS checks on 2026-10-17 were blocked by the execution environment proxy (CONNECT HTTP 403); fixture tests do not establish current upstream availability or data correctness.

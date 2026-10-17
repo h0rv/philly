@@ -1,4 +1,5 @@
 import raw from "./generated/catalog.json" with { type: "json" };
+import { arcgisLayer, SOURCE_ID } from "./sources.ts";
 export interface Resource {
   id: string;
   name: string;
@@ -34,7 +35,10 @@ export function search(query: string, offset: number, limit: number) {
       id: d.id,
       title: d.title,
       categories: d.categories,
-      queryable: d.resources.some((r) => r.query !== null),
+      sourceId: SOURCE_ID,
+      queryable: d.resources.some(
+        (r) => r.query !== null || arcgisLayer(r.url),
+      ),
       license: d.license,
     })),
   };
@@ -44,10 +48,11 @@ export function lookup(datasetId: string, resourceId?: string) {
   if (!dataset) throw new Error("Unknown dataset ID. Use search_datasets.");
   const resource = resourceId
     ? dataset.resources.find((r) => r.id === resourceId)
-    : dataset.resources.find((r) => r.query);
-  if (!resource?.query)
+    : (dataset.resources.find((r) => r.query) ??
+      dataset.resources.find((r) => arcgisLayer(r.url)));
+  if (!resource || (!resource.query && !arcgisLayer(resource.url)))
     throw new Error(
-      "Unsupported resource: only approved CARTO queries support remote operations. Use describe_dataset for source links or the Python CLI locally.",
+      "Unsupported resource: only approved CARTO and Philadelphia ArcGIS layers support remote operations. Use describe_dataset for source links or the Python CLI locally.",
     );
   return { dataset, resource };
 }
@@ -56,17 +61,26 @@ export function describe(datasetId: string, offset: number, limit: number) {
   if (!d) throw new Error("Unknown dataset ID.");
   return {
     ...d,
+    sourceId: SOURCE_ID,
     resources: d.resources
       .slice(offset, offset + limit)
       .map(({ query, ...r }) => ({
         ...r,
-        backend: query ? "carto" : "discovery-only",
+        sourceId: SOURCE_ID,
+        backend: query
+          ? "carto"
+          : arcgisLayer(r.url)
+            ? "arcgis"
+            : "discovery-only",
         capabilities: query
           ? ["schema", "preview", "query", "count", "aggregate"]
-          : [],
-        unsupportedReason: query
-          ? null
-          : "No bounded adapter approved for this resource.",
+          : arcgisLayer(r.url)
+            ? ["schema", "preview", "query"]
+            : [],
+        unsupportedReason:
+          query || arcgisLayer(r.url)
+            ? null
+            : "No bounded adapter approved for this resource.",
       })),
     totalResources: d.resources.length,
     nextOffset: offset + limit < d.resources.length ? offset + limit : null,
