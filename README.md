@@ -141,3 +141,32 @@ These use standard MCP; no separate Philly plugin or skill is required. Keep the
 agent's normal permission prompts.
 CLI syntax/configuration and local MCP plumbing were checked without an authenticated
 model call. See [MCP workflow evidence and limits](mcp/EFFECTIVENESS.md).
+
+### Typed remote MCP queries from Python or the CLI
+
+`RemotePhilly` uses the same bounded catalog-ID operations as MCP clients. It keeps the complete provenance, filters, completeness reasons and next offset instead of returning rows alone. Existing local `Philly` loaders are unchanged. New draft adapters become available only after the target server runs that version; an undeployed branch does not change the public endpoint.
+
+```python
+import asyncio
+from philly import RemotePhilly
+
+async def main():
+    remote = RemotePhilly("http://127.0.0.1:8787/mcp")  # local branch server
+    found = await remote.search("rivers")
+    print(found)
+    schema = await remote.schema("usgs:schuylkill_latest")
+    page = await remote.query("usgs:schuylkill_latest", limit=5)
+    print(schema, page)
+
+asyncio.run(main())
+```
+
+```sh
+phl remote search rivers --endpoint http://127.0.0.1:8787/mcp
+phl remote schema usgs:schuylkill_latest --endpoint http://127.0.0.1:8787/mcp
+phl remote query usgs:schuylkill_latest --limit 5 --endpoint http://127.0.0.1:8787/mcp
+```
+
+The default endpoint is `https://philly.horv.co/mcp`. `remote describe`, `remote schema`, `remote query` and `remote aggregate` share stable dataset/resource IDs with MCP. SDK query arguments use MCP names such as `resourceId` and `orderBy`; CLI options use `--resource-id` and `--order-by`. Inspect capabilities before querying: the four scoped LoC/USGS/MusicBrainz/NOAA resources support native paging and selected columns, with explicit errors for filters, custom ordering and aggregation. See the [MCP provider scopes](mcp/README.md#scoped-provider-catalog-draft-requires-this-server-version).
+
+The client supports the Philly server's stateless legacy JSON/finite-SSE tool calls. It accepts HTTPS endpoints or loopback HTTP, follows no redirects, uses no credentials or retries, caps request/decoded response bytes, and enforces a total deadline. `RemoteToolError.code` preserves structured tool codes; no alternative upstream fetch is attempted on error.

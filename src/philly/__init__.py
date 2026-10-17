@@ -19,6 +19,7 @@ from philly.filtering import (
     detect_backend,
 )
 from philly.philly import Philly
+from philly.remote import RemotePhilly, RemoteToolError
 from philly.sample import (
     format_chunk,
     get_columns_from_sample,
@@ -42,6 +43,8 @@ __all__ = [
     "NetworkConfig",
     "Philly",
     "PhillyConfig",
+    "RemotePhilly",
+    "RemoteToolError",
     "build_arcgis_agg_query",
     "build_arcgis_distinct_query",
     "build_arcgis_query",

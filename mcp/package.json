@@ -18,7 +18,8 @@
     "test:workerd": "node --experimental-strip-types scripts/workerd-smoke.ts",
     "format:check": "prettier --check \"src/*.ts\" \"test/*.ts\" \"scripts/*.{ts,mjs}\" \"browser/*.ts\" playwright.config.ts tsconfig.json wrangler.jsonc",
     "test:live": "node --experimental-strip-types scripts/live-smoke.ts",
-    "catalog:check": "node scripts/catalog.mjs --check"
+    "catalog:check": "node scripts/catalog.mjs --check",
+    "test:python": "node --experimental-strip-types scripts/python-smoke.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/server": "2.3.0",
