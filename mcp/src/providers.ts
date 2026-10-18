@@ -13,12 +13,32 @@ const locItem = z.object({
   date: optionalText,
   description: z.array(text).optional(),
 });
+// Search JSON uses decimal strings; validate before converting so missing/empty
+// values never become the numeric coordinate zero.
+const coordinate = (min: number, max: number) =>
+  z
+    .string()
+    .max(40)
+    .regex(/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/)
+    .transform(Number)
+    .pipe(z.number().finite().min(min).max(max))
+    .nullish();
 const place = z.object({
   id: z.uuid(),
   name: text,
   type: optionalText,
   address: optionalText,
-  area: z.object({ name: text }).optional(),
+  area: z.object({ name: text }).nullish(),
+  coordinates: z
+    .object({ latitude: coordinate(-90, 90), longitude: coordinate(-180, 180) })
+    .nullish(),
+  "life-span": z
+    .object({
+      begin: z.string().max(10).nullish(),
+      end: z.string().max(10).nullish(),
+      ended: z.boolean().nullish(),
+    })
+    .nullish(),
 });
 const observation = z.object({
   id: text,
@@ -43,8 +63,29 @@ const columnsBySource: Record<string, string[]> = {
     "unit_of_measure",
     "approval_status",
   ],
-  musicbrainz: ["id", "name", "type", "address", "area"],
+  musicbrainz: [
+    "id",
+    "name",
+    "type",
+    "address",
+    "area",
+    "latitude",
+    "longitude",
+    "begin_date",
+    "end_date",
+    "ended",
+    "place_url",
+  ],
   noaa: ["time", "height_meters", "station", "datum", "time_zone", "product"],
+};
+const musicBrainzTypes: Record<string, string> = {
+  latitude: "number or null; WGS84 degrees from coordinates.latitude",
+  longitude: "number or null; WGS84 degrees from coordinates.longitude",
+  begin_date: "string or null; original partial date from life-span.begin",
+  end_date: "string or null; original partial date from life-span.end",
+  ended:
+    "boolean or null; reported life-span.ended, not inferred current status",
+  place_url: "string; MusicBrainz record URL constructed from id (MBID)",
 };
 export class ProviderAdapter {
   private fetcher: Fetcher;
@@ -81,7 +122,11 @@ export class ProviderAdapter {
       fields: Object.fromEntries(
         columnsBySource[source].map((c) => [
           c,
-          { type: "string or null (normalized provider projection)" },
+          {
+            type:
+              (source === "musicbrainz" ? musicBrainzTypes[c] : undefined) ??
+              "string or null (normalized provider projection)",
+          },
         ]),
       ),
       schemaSource:
@@ -210,6 +255,12 @@ export class ProviderAdapter {
           type: r.type ?? null,
           address: r.address ?? null,
           area: r.area?.name ?? null,
+          latitude: r.coordinates?.latitude ?? null,
+          longitude: r.coordinates?.longitude ?? null,
+          begin_date: r["life-span"]?.begin || null,
+          end_date: r["life-span"]?.end || null,
+          ended: r["life-span"]?.ended ?? null,
+          place_url: `https://musicbrainz.org/place/${r.id}`,
         }));
         more = input.offset + rows.length < data.count;
       } else if (source === "usgs") {

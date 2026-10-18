@@ -26,6 +26,8 @@ const fixtures: Record<string, unknown> = {
         name: "Studio",
         type: "Studio",
         area: { name: "Philadelphia" },
+        coordinates: { latitude: "39.95", longitude: "-75.16" },
+        "life-span": { begin: "1971", ended: false },
       },
     ],
   },
@@ -252,6 +254,16 @@ test("provider results cross actual MCP v2 and legacy tool contracts", async () 
           }
           assert.ok(!result.isError, JSON.stringify(result));
           outputSchemas[name].parse(result.structuredContent);
+          if (name === "query_dataset" && d.sourceId === "musicbrainz") {
+            const row = (
+              result.structuredContent as { rows: Record<string, unknown>[] }
+            ).rows[0];
+            assert.equal(row.latitude, 39.95);
+            assert.equal(row.longitude, -75.16);
+            assert.equal(row.begin_date, "1971");
+            assert.equal(row.end_date, null);
+            assert.equal(row.ended, false);
+          }
           const content = result.content as { text: string }[];
           assert.deepEqual(
             JSON.parse(content[0].text),
@@ -268,5 +280,122 @@ test("provider results cross actual MCP v2 and legacy tool contracts", async () 
     } finally {
       await client.close();
     }
+  }
+});
+
+// Official search documentation's Chipping Norton example verifies the JSON
+// contract only. It is not a captured Philadelphia response or city-boundary test.
+test("MusicBrainz official place contract retains coordinates, partial dates and record provenance", async () => {
+  const { readFileSync } = await import("node:fs");
+  const fixture = JSON.parse(
+    readFileSync(
+      new URL("./fixtures/musicbrainz-place-search.json", import.meta.url),
+      "utf8",
+    ),
+  );
+  let requests = 0;
+  const service = new DataService(async (url) => {
+    requests++;
+    assert.equal(new URL(url).searchParams.get("query"), 'area:"Philadelphia"');
+    return Response.json(fixture);
+  });
+  const datasetId = "musicbrainz:philadelphia_places";
+  const schema = await service.schema({ datasetId });
+  assert.match(
+    schema.fields.latitude.type,
+    /number or null.*coordinates.latitude/,
+  );
+  assert.match(schema.fields.ended.type, /boolean or null/);
+  const page = await service.query(querySchema.parse({ datasetId }));
+  assert.deepEqual(page.rows[0], {
+    id: fixture.places[0].id,
+    name: fixture.places[0].name,
+    type: "Studio",
+    address: fixture.places[0].address,
+    area: "Chipping Norton",
+    latitude: 51.9414,
+    longitude: -1.548,
+    begin_date: "1971",
+    end_date: "1999-10",
+    ended: true,
+    place_url: `https://musicbrainz.org/place/${fixture.places[0].id}`,
+  });
+  assert.equal(requests, 1);
+  assert.equal(page.sourceId, "musicbrainz");
+  assert.equal(page.nextOffset, null);
+  assert.equal(page.completeness, "complete");
+  outputSchemas.query_dataset.parse(page);
+});
+
+test("MusicBrainz absent/null optional fields stay null; zero and false remain meaningful", async () => {
+  const base = {
+    id: "d1ab65f8-d082-492a-bd70-ce375548dabf",
+    name: "Synthetic contract case",
+  };
+  for (const extra of [
+    {},
+    { coordinates: null, "life-span": null, area: null },
+    { coordinates: { latitude: "39.95" }, "life-span": { end: "1999-10" } },
+    {
+      coordinates: { latitude: null, longitude: null },
+      "life-span": { begin: null, end: null, ended: null },
+    },
+    {
+      coordinates: { latitude: "0", longitude: "0" },
+      "life-span": { begin: "2001-02-03", ended: false },
+    },
+  ]) {
+    const row = (
+      await new DataService(async () =>
+        Response.json({ count: 1, offset: 0, places: [{ ...base, ...extra }] }),
+      ).query(
+        querySchema.parse({ datasetId: "musicbrainz:philadelphia_places" }),
+      )
+    ).rows[0];
+    assert.equal(
+      row.latitude,
+      extra.coordinates?.latitude == null
+        ? null
+        : Number(extra.coordinates.latitude),
+    );
+    assert.equal(
+      row.longitude,
+      extra.coordinates?.longitude == null
+        ? null
+        : Number(extra.coordinates.longitude),
+    );
+    assert.equal(row.begin_date, extra["life-span"]?.begin ?? null);
+    assert.equal(row.end_date, extra["life-span"]?.end ?? null);
+    assert.equal(row.ended, extra["life-span"]?.ended ?? null);
+  }
+});
+
+test("MusicBrainz rejects malformed optional fields instead of inventing usable location data", async () => {
+  for (const extra of [
+    { coordinates: { latitude: "", longitude: "-75" } },
+    { coordinates: { latitude: "91", longitude: "-75" } },
+    { coordinates: { latitude: "40", longitude: "181" } },
+    { coordinates: { latitude: "NaN" } },
+    { coordinates: { latitude: 40 } },
+    { "life-span": { ended: "false" } },
+  ]) {
+    await assert.rejects(
+      new DataService(async () =>
+        Response.json({
+          count: 1,
+          offset: 0,
+          places: [
+            {
+              id: "d1ab65f8-d082-492a-bd70-ce375548dabf",
+              name: "Synthetic malformed case",
+              ...extra,
+            },
+          ],
+        }),
+      ).query(
+        querySchema.parse({ datasetId: "musicbrainz:philadelphia_places" }),
+      ),
+      /Invalid or oversized/,
+    );
   }
 });

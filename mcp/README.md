@@ -146,3 +146,5 @@ All four endpoints and scopes are fixed in the reviewed catalog. Provider respon
 Official API references: [LoC JSON requests](https://www.loc.gov/apis/json-and-yaml/requests/), [USGS OGC v1](https://api.waterdata.usgs.gov/docs/ogcapi/), [MusicBrainz place search](https://musicbrainz.org/doc/MusicBrainz_API/Search#Place), [NOAA CO-OPS](https://api.tidesandcurrents.noaa.gov/api/prod/).
 
 `npm run test:python` exercises the Python SDK and actual `phl remote` CLI through a local Worker MCP transport into a provider fixture. Run `uv sync --locked --group test` first. CI runs this cross-language check; `PHILLY_PYTHON` can select another interpreter. It does not query live providers.
+
+MusicBrainz places additionally expose nullable WGS84 coordinates, original partial founded/closed dates, the reported `ended` flag, and a canonical record URL. See [field provenance and an address/location join example](MUSICBRAINZ.md). These support candidate connections to local records without adding recordings lookups or city-boundary/coverage claims.

@@ -10,6 +10,12 @@ Python `RemotePhilly` and `phl remote` consume the same MCP tools with bounded r
 
 Independent bounded Luna review found stale backend/capability text in the usage resource and unsupported-resource error; both were corrected. The final review also requested waiting for child-process `close` rather than `exit` before parsing smoke stdout; this was corrected to avoid a pipe race. No other high-confidence regression/security issue was found. This is an engineering review, not a Codex Security scan.
 
-Local checks: 47 MCP tests, 516 Python tests, format/catalog/type/lint checks, Python distributions, Worker dry-run and offline workerd, local benchmarks, and actual Python SDK/CLI-to-Worker provider fixture smoke passed. The earlier full site build and 10 browser tests also passed; no site/exploration source edits were made.
+Local checks: 50 MCP tests, 516 Python tests, format/catalog/type/lint checks, Python distributions, Worker dry-run and offline workerd, local benchmarks, and actual Python SDK/CLI-to-Worker provider fixture smoke passed. The earlier full site build and 10 browser tests also passed; no site/exploration source edits were made.
 
 All four live provider probes were rejected by the environment CONNECT proxy with HTTP 403. No denial was bypassed; fixture success is not proof of live schema/availability or real data. Official API documentation was consulted (links in README). The public endpoint does not acquire these draft capabilities until a separately coordinated deployment. No merge/deploy, new credentials or paid resources were used.
+
+## MusicBrainz connection fields (2026-10-18)
+
+The existing place search now retains optional coordinates and lifespan fields documented by MusicBrainz, with a canonical citation URL. Decimal coordinate strings are validated/range-checked before numeric conversion; missing values become null rather than zero. Partial date precision and false/null status are retained, with source paths in schema type descriptions. Tests use the official Chipping Norton documentation example for contract shape plus explicitly synthetic null/malformed cases; neither establishes live Philadelphia coverage. The fixed area search and network permissions are unchanged, and no denied endpoint was retried. `MUSICBRAINZ.md` documents a bounded-page address candidate join with location/date context, not an automatic identity assertion or recordings relationship.
+
+Bounded independent Luna review of the MusicBrainz extension found no actionable defect. Updated current/legacy MCP contract tests and the actual Python SDK/CLI-to-Worker smoke verify coordinate/date/status values from the documented fixture; no live upstream request is substituted for fixture evidence.

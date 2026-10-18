@@ -44,7 +44,7 @@ export const providerCatalog: Dataset[] = [
     sourceId: "musicbrainz",
     title: "Philadelphia music places (MusicBrainz)",
     description:
-      "MusicBrainz place search where associated area matches Philadelphia; includes studios and closed venues, not only active music venues. Relevance order; paging only. One request per second per service instance; no retries.",
+      "MusicBrainz place search where associated area matches Philadelphia; includes studios and closed venues, not only active music venues. Coordinates and founded/closed dates are optional MusicBrainz assertions, not verified city boundaries or current operation. Relevance order; paging only. One request per second per service instance; no retries.",
     organization: "MetaBrainz Foundation",
     license:
       "MusicBrainz core data CC0; see https://musicbrainz.org/doc/About/Data_License",
