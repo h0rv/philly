@@ -93,7 +93,9 @@ function checkColumn(name: string, fields: Fields) {
 export class DataService {
   private active = 0;
   private fetcher: Fetcher;
-  constructor(fetcher: Fetcher = fetch) {
+  // Workers native fetch requires the global receiver. Never invoke a stored
+  // native function as this.fetcher(), which supplies the DataService receiver.
+  constructor(fetcher: Fetcher = (url, init) => globalThis.fetch(url, init)) {
     this.fetcher = fetcher;
   }
   private async run<T>(
@@ -125,7 +127,9 @@ export class DataService {
     url.searchParams.set("format", "json");
     const response = await this.fetcher(url, {
       signal,
-      redirect: "error",
+      // Workers supports manual/follow, not redirect:error. Reject the
+      // returned 3xx below before reading a body; never follow Location.
+      redirect: "manual",
       headers: { Accept: "application/json" },
     });
     if (

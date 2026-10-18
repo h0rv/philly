@@ -47,7 +47,7 @@ test("preview preserves year-specific source predicates, bounds and attribution"
   for (const call of calls) {
     assert.equal(call.url.origin, "https://phl.carto.com");
     assert.equal(call.url.pathname, "/api/v2/sql");
-    assert.equal(call.init?.redirect, "error");
+    assert.equal(call.init?.redirect, "manual");
   }
   const sql = calls[1].url.searchParams.get("q")!;
   assert.match(sql, /2026-01-01/);
@@ -395,4 +395,27 @@ test("year discovery, schema, latest preview and ranked counts preserve scope", 
     aggregateSchema.safeParse({ ...selection, orderBy: "COUNT(*)" }).success,
     false,
   );
+});
+
+test("default fetch retains the global receiver for Workers native APIs", async () => {
+  const original = globalThis.fetch;
+  let calls = 0;
+  globalThis.fetch = async function (this: typeof globalThis, url, init) {
+    assert.equal(
+      this,
+      globalThis,
+      "Native fetch must not receive DataService as this",
+    );
+    calls++;
+    assert.equal(new URL(String(url)).origin, "https://phl.carto.com");
+    assert.ok(init?.signal);
+    return Response.json({ ...fixture, rows: [] });
+  };
+  try {
+    const schema = await new DataService().schema({ datasetId });
+    assert.deepEqual(schema.fields, fixture.fields);
+    assert.equal(calls, 1);
+  } finally {
+    globalThis.fetch = original;
+  }
 });

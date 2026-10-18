@@ -96,7 +96,7 @@ Every successful data response identifies the dataset/resource, original source 
 - Tool structured result: 60 KiB, with room reserved for the matching JSON text fallback. HTTP output: 192 KiB including protocol envelope. Legacy SSE replies are buffered with the same cap; modern exchanges use JSON. No subscriptions, progress streams, sessions or HTTP batches. Send one MCP operation per request.
 - Query: 100 rows + one lookahead, 20 selected columns, 8 filters, offset ≤10,000. Default columns omit geometry and indicate omissions.
 - Operations: 8 seconds across schema + data calls, at most two sequential subrequests, no parallel fanout. Four admitted HTTP requests and four data operations per isolate; excess work gets HTTP 429 or an MCP busy error. Slow request reading/output has a 9-second deadline. Cancellation propagates to upstream fetch/stream reads.
-- Only the fixed approved origin/path is fetched; redirects use `redirect: error`. Query and columns are built from validated structured arguments and backend fields.
+- Only the fixed approved origin/path is fetched; redirects use Workers-compatible `redirect: manual` and every non-2xx response is rejected without following Location. Query and columns are built from validated structured arguments and backend fields.
 - Exact configured `PUBLIC_ORIGIN`, URL host and Host header required. An absent Origin is valid for native MCP clients; a present Origin must exactly match. Browser CORS is same-origin only. GET/DELETE session endpoints are not supported.
 - Pagination defaults to `cartodb_id` ordering where available; otherwise supply `orderBy` for offsets. Prefer a unique key; live changes/ties can cause skips or duplicates. A cap may prevent a next page even when `truncated` is true.
 
@@ -119,3 +119,7 @@ From the root also run `uv run pytest tests -n 4` and `uv run poe all` (which do
 SDK references: [2.3.0 release](https://github.com/modelcontextprotocol/typescript-sdk/releases/tag/v2.3.0), [v2 documentation](https://ts.sdk.modelcontextprotocol.io/v2/), [current protocol](https://modelcontextprotocol.io/specification/2026-07-28).
 
 See [workflow evidence](EFFECTIVENESS.md) for tested questions and limitations. Row queries accept `orderDirection`; grouped aggregates accept `orderBy: "value"` and `orderDirection: "desc"` for ranked totals. Defaults remain ascending.
+
+## Public client diagnosis
+
+The manual **Public MCP diagnosis** GitHub Actions workflow tests the fixed public endpoint with real SDK initialization, tools/list, crime discovery, schema, full-resource count, and one ID-only row. It has bounded requests/decoded response bytes/time and stops on denial or tool failure. It never requests upstream hosts directly, follows redirects, retries failures, or deploys. Once this workflow exists on main, dispatch it only from an authorized runner after deployment; a failed route is evidence to investigate, not a reason to bypass access controls. Offline Workerd tests now exercise real native fetch with outbound fixtures, including rejection of redirects. See [the dated runtime incident](DEPLOYMENT.md#runtime-incident-2026-10-18).
