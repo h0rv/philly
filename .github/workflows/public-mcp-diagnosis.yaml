@@ -1,7 +1,6 @@
 name: Public MCP diagnosis
 on:
-  push:
-    branches: ['feat/public-mcp-diagnosis']
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:

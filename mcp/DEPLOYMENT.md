@@ -42,3 +42,20 @@ The public service has isolate-local concurrency limits, not a distributed rate 
 Rollback uses a previously verified Worker version through the existing deployment connection. Check domain and asset behavior after rollback; the Python package is independent.
 
 References: [Workers limits](https://developers.cloudflare.com/workers/platform/limits/), [static asset billing](https://developers.cloudflare.com/workers/static-assets/billing-and-limitations/), [asset routing](https://developers.cloudflare.com/workers/static-assets/routing/advanced/).
+
+## Runtime incident (2026-10-18)
+
+An authorized independent public-client check from the existing GitHub Actions runner reached `https://philly.horv.co/mcp` at 16:39:35–16:39:36 UTC. The local execution environment's prior CONNECT 403 remains a separate proxy restriction; it was not retried or rerouted. [Diagnostic run](https://github.com/h0rv/philly/actions/runs/39145986082/job/117729808185), diagnostic commit `faf15c418612dec6eb5f32fb913133aa1b7b84a9`, exercised production with the official SDK 2.3.0 legacy Streamable HTTP client.
+
+Public initialization returned server `philly` version `0.1.0`; tools/list returned all six tools; `search_datasets({query:"crime",limit:10})` and `describe_dataset({datasetId:"Crime_Incidents",limit:10})` succeeded. `get_schema({datasetId:"Crime_Incidents",resourceId:"a8ff3f73800114fc"})` then returned `isError:true` with `Illegal invocation: function called with incorrect this reference`. The check stopped after seven HTTP requests. No count or row query ran and no person/address data was retrieved. GET 405 during optional SSE establishment is expected for this stateless endpoint, not this failure's cause.
+
+Read-only control-plane inspection confirmed the enabled custom domain, `PUBLIC_ORIGIN=https://philly.horv.co`, and 100% deployment of version `937f71c3-a782-417b-acef-4df0ed41cbf4` created 2026-10-15 16:09:51 UTC. These settings and green prior CI did not establish data-tool runtime health.
+
+Two runtime compatibility defects were reproduced with the built Worker under Workerd:
+
+1. `DataService` stored native global fetch and invoked it as an instance method, giving it the wrong receiver. The default now wraps `globalThis.fetch(url, init)` while injected fetchers remain unchanged.
+2. After fixing that receiver, Workerd rejected `redirect:"error"` before any upstream request. The request now uses `manual`, while the existing non-2xx/redirected-response checks reject every redirect without following Location. [Workers request documentation](https://developers.cloudflare.com/workers/runtime-apis/request/#parameters) confirms this supported mode.
+
+The strengthened Workerd smoke fails on the original receiver bug, exposes the unsupported redirect mode after the first fix alone, and passes schema/count/ID-only-query under both protocol modes after both fixes. Only outbound responses are fixtures; native Worker fetch and the production default service are exercised. A 302 to an unapproved host is rejected with exactly one outbound call. A separate unit regression enforces the global receiver. Independent Luna review found no boundary regression.
+
+The production fix is separate from PRs #7/#8 and introduces no credentials, dependency changes, services or security-permission changes. It does not deploy by itself. After the targeted fix is merged and the existing authorized main build deploys it, dispatch the manual public-client diagnostic to verify real upstream behavior. Until that succeeds, public schema/count/query remediation remains unverified. The workflow must exist on the default branch before manual dispatch is available. No automatic retries or new logging storage are enabled.
