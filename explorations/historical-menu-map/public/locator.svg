@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="1200" viewBox="0 0 1100 1200" fill="none">
+<defs><pattern id="grid" width="22" height="30" patternTransform="rotate(9)" patternUnits="userSpaceOnUse"><rect width="22" height="30" fill="#e9e7d7"/><path d="M0 0H22V30" stroke="#f9f4e5" stroke-width="3"/></pattern><pattern id="west" width="27" height="31" patternTransform="rotate(-20)" patternUnits="userSpaceOnUse"><rect width="27" height="31" fill="#e8e5d4"/><path d="M0 0H27V31" stroke="#f8f1df" stroke-width="3"/></pattern></defs>
+<rect width="1100" height="1200" fill="url(#grid)"/><path d="M0 0H310L365 200 390 375 310 560 295 710 450 1050 390 1200H0Z" fill="url(#west)"/>
+<g fill="#d5ddc7"><path d="M125 0h365l-30 155-95 100-40-110-160 20z"/><path d="M245 360l100-100 29 116-65 158-72-50z"/><path d="M408 450h55v55h-55zM675 455h50v50h-50zM725 585h42v45h-42zM472 585h40v35h-40zM340 1065h410v135H340z"/></g>
+<path d="M338-10L366 80 376 160 397 220 402 300 418 365 400 421 376 470 346 539 333 617 338 711 391 832 466 954 473 1003 430 1085 420 1200" stroke="#a8beb8" stroke-width="24" fill="none"/>
+<path d="M1030-30L1020 138 1010 282 980 400 947 476 928 580 906 691 876 790 831 906 786 1040 761 1200H1100V0Z" fill="#a8beb8"/>
+<g fill="none" stroke="#faf6e7" stroke-width="9"><path d="M0 512L943 512"/><path d="M0 541L938 541"/><path d="M564 140L564 1150"/><path d="M564 512L453 403 404 365"/><path d="M138 1200L500 512"/><path d="M408 130L679 418 949 475"/></g>
+<g fill="none" stroke="#cdbf98" stroke-width="2"><path d="M0 512H943M0 541H938M564 140V1150"/><path d="M564 512L453 403 404 365"/></g>
+<g fill="#637b71" font-family="Georgia,serif" font-size="16" letter-spacing="3" text-anchor="middle"><text x="175" y="600">WEST PHILADELPHIA</text><text x="667" y="452">CENTER CITY</text><text x="818" y="500" font-size="13">OLD CITY</text><text x="698" y="740">SOUTH PHILADELPHIA</text><text x="843" y="320">NORTHERN LIBERTIES</text><text x="630" y="195">NORTH PHILADELPHIA</text></g>
+<g fill="#7b785e" font-family="sans-serif" font-size="12" letter-spacing="2"><text x="610" y="535">MARKET ST</text><text x="572" y="405" transform="rotate(-90 572 405)">BROAD ST</text><text x="956" y="835" transform="rotate(-74 956 835)">DELAWARE RIVER</text><text x="324" y="698" transform="rotate(-93 324 698)">SCHUYLKILL</text></g>
+<g stroke="#7d856f" fill="none" stroke-width="2"><path d="M1010 1000v-60m-7 13l7-13 7 13"/></g><text x="1010" y="1023" fill="#637b71" font-family="serif" font-size="17" text-anchor="middle">N</text>
+</svg>

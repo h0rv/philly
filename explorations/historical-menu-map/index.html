@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f3edda" />
+    <meta
+      name="description"
+      content="A small, source-linked atlas of Philadelphia's historical menus. Browse the map, dishes and library records; keep uncertain dates and places in view."
+    />
+    <title>Philly, à la carte — a historical menu map</title>
+    <link rel="icon" type="image/svg+xml" href="storefront.svg" />
+    <link rel="stylesheet" href="styles.css" />
+    <script type="module" src="main.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#results">Skip to menu list</a>
+    <header class="masthead">
+      <a class="wordmark" href="./" aria-label="Philly à la carte home"
+        >PHILLY <span>à la carte</span></a
+      >
+      <span class="edition"
+        >An unfinished food atlas <span aria-hidden="true">*</span> Library menus, city
+        stories</span
+      >
+      <a href="#about">About the collection ></a>
+    </header>
+    <main>
+      <section class="intro" aria-labelledby="title">
+        <div>
+          <p class="eyebrow">From the dining rooms, counters &amp; corners of Philadelphia</p>
+          <h1 id="title">The city has<br /><em>good taste.</em></h1>
+        </div>
+        <div class="intro-note">
+          <img
+            src="storefront.svg"
+            width="252"
+            height="117"
+            alt="Original line drawing of Philadelphia rowhouses with a corner restaurant"
+          />
+          <p>
+            A table for the curious. Explore old menus, find a familiar corner, and see what Philly
+            was serving.
+          </p>
+          <p class="small">A selected archive, with gaps. Every menu leads back to its library.</p>
+        </div>
+      </section>
+      <section class="browse" aria-label="Historical menu explorer">
+        <form id="filters" class="filters" role="search" aria-label="Filter historical menus">
+          <label class="search-label"
+            >On the menu<input
+              id="search"
+              type="search"
+              placeholder="Restaurant, dish or address…"
+              autocomplete="off"
+          /></label>
+          <label
+            >Decade<select id="decade">
+              <option value="all">Every decade</option>
+              <option value="undated">Undated only</option>
+            </select></label
+          >
+          <label
+            >Neighborhood / area<select id="area">
+              <option value="all">Every area</option>
+              <option value="unlocated">Location unresolved</option>
+            </select></label
+          >
+          <label
+            >Cuisine<select id="cuisine">
+              <option value="all">Every cuisine</option>
+              <option value="unspecified">Unspecified</option>
+            </select></label
+          >
+          <label
+            >Collection<select id="collection">
+              <option value="all">Both libraries</option>
+              <option value="NYPL">New York Public Library</option>
+              <option value="CIA">Culinary Institute of America</option>
+            </select></label
+          >
+          <details class="date-options">
+            <summary>Dates &amp; unknowns</summary>
+            <div>
+              <label
+                >From year<input
+                  id="from"
+                  type="number"
+                  min="1600"
+                  max="2100"
+                  placeholder="Any" /></label
+              ><label
+                >To year<input
+                  id="to"
+                  type="number"
+                  min="1600"
+                  max="2100"
+                  placeholder="Any" /></label
+              ><label class="checkbox"
+                ><input id="undated" type="checkbox" checked /> Include undated menus</label
+              ><button id="reset" type="reset">Reset all filters</button>
+            </div>
+          </details>
+        </form>
+        <div class="explorer">
+          <section class="map-shell" aria-label="Map of located menu records">
+            <div class="map-heading">
+              <span>THE PHILADELPHIA TABLE</span><span id="pin-count">Locating menus…</span>
+            </div>
+            <div
+              id="map"
+              aria-label="Interactive Philadelphia menu map. Use the adjacent menu list for all records."
+              tabindex="0"
+            ></div>
+            <div class="map-foot">
+              <span
+                ><i aria-hidden="true"></i> Located menus
+                <span class="separator">/</span> Unresolved places stay in the list</span
+              ><button id="map-reset" type="button">Recenter ></button>
+            </div>
+            <div class="map-caption">
+              <span>Original locator drawing · approximate modern streets</span
+              ><button id="street-tiles" type="button" aria-pressed="false">Load street map</button>
+            </div>
+            <p id="tile-status" class="small" role="status"></p>
+          </section>
+          <section id="results" class="results" aria-label="Menus" tabindex="-1">
+            <div id="list-view">
+              <div class="list-heading">
+                <h2>The menu file</h2>
+                <span id="result-count" role="status" aria-live="polite">Opening the archive…</span>
+              </div>
+              <p class="list-note">Source records, not unique restaurants. Select one to read.</p>
+              <div id="menu-list"></div>
+            </div>
+            <article id="detail-view" hidden aria-label="Selected menu"></article>
+          </section>
+        </div>
+      </section>
+      <section class="afterword" id="about" aria-labelledby="about-title">
+        <div>
+          <p class="eyebrow">A city of appetites</p>
+          <h2 id="about-title">More than one<br /><em>Philly sandwich.</em></h2>
+          <p>
+            Steak sandwiches, roast pork, oyster houses, banquet rooms. There is more than one way
+            to read a city's food history.
+          </p>
+          <p class="small">
+            Steak-sandwich origins are usually credited to the Olivieri family in the 1930s; the
+            date cheese joined the sandwich is less certain. Roast pork belongs to a wider Italian
+            American tradition, rather than one proven inventor.
+          </p>
+          <p class="small">
+            Read the
+            <a href="https://www.inquirer.com/philly-tips/philly-cheesesteak-guide-20180705.html"
+              >Inquirer's history</a
+            >
+            and
+            <a
+              href="https://www.visitphilly.com/media-center/press-releases/phillys-signature-sandwiches-cheesesteaks-hoagies-roast-pork/"
+              >Visit Philadelphia's sandwich guide</a
+            >. These are context, not extra menu records.
+          </p>
+        </div>
+        <div>
+          <p class="eyebrow">How to read this atlas</p>
+          <h3>An archive has edges.</h3>
+          <p>
+            These library collections are a starting point. They do not represent complete or
+            balanced coverage of Philadelphia. Records from different libraries have not been
+            deduplicated.
+          </p>
+          <p>
+            Undated menus remain undated. Unresolved venues remain in the list. Pins represent
+            reviewed locator points, not historical building outlines. Some catalog dates have more
+            precision than the printed menu supports; each record explains its dating basis.
+          </p>
+          <p>
+            Prices are transcribed historical amounts. Missing prices stay missing; there is no
+            inflation conversion without a verified CPI series. Scans open at the holding library,
+            where image rights can be checked.
+          </p>
+          <details>
+            <summary>Sources, snapshots &amp; reuse</summary>
+            <div id="provenance"></div>
+            <p class="small">
+              No scan or historical photograph is rehosted. Original illustration by this project.
+              <a href="https://github.com/h0rv/oldphilly">OldPhilly</a> offers a related photograph
+              archive; a nearby photo alone does not verify a restaurant match.
+            </p>
+          </details>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <strong>PHILLY <em>à la carte</em></strong
+      ><span>A little paper trail through a very good food city.</span
+      ><a href="#title">Back to the top ↑</a>
+    </footer>
+    <noscript
+      ><p class="notice">
+        JavaScript is needed for the map and filters. The
+        <a href="menus.json">full menu dataset with source links</a> remains available.
+      </p></noscript
+    >
+  </body>
+</html>
