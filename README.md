@@ -15,7 +15,10 @@ not relicense datasets. Upstream notices are in [THIRD_PARTY_NOTICES](THIRD_PART
 ## Installation
 
 ```bash
-uv add philly
+uv add "philly>=1.2.0"
+
+# Standalone CLI
+uv tool install "philly>=1.2.0"
 ```
 
 ## MCP and website
@@ -23,8 +26,9 @@ uv add philly
 The [MCP service](mcp/README.md) adds bounded, read-only discovery, schema,
 preview, structured filtering and aggregation using the official TypeScript SDK
 2.3.0. It runs locally over stdio or Streamable HTTP and is prepared for
-Cloudflare Workers with static assets. **No public MCP endpoint is deployed yet.**
-See [deployment readiness and approval gates](mcp/DEPLOYMENT.md).
+Cloudflare Workers with static assets. The public endpoint is `https://philly.horv.co/mcp`.
+New server capabilities require deployment of the matching Worker version; installing
+the Python package alone does not upgrade that endpoint. See [deployment history](mcp/DEPLOYMENT.md).
 
 The website now starts with install/connect instructions and a five-row SVG
 wordmark adapted from [sprts](https://github.com/h0rv/sprts) with
@@ -141,3 +145,32 @@ These use standard MCP; no separate Philly plugin or skill is required. Keep the
 agent's normal permission prompts.
 CLI syntax/configuration and local MCP plumbing were checked without an authenticated
 model call. See [MCP workflow evidence and limits](mcp/EFFECTIVENESS.md).
+
+### Typed remote MCP queries from Python or the CLI
+
+`RemotePhilly` uses the same bounded catalog-ID operations as MCP clients. It keeps the complete provenance, filters, completeness reasons and next offset instead of returning rows alone. Existing local `Philly` loaders are unchanged. New adapters become available only after the target server runs that version; an undeployed branch does not change the public endpoint.
+
+```python
+import asyncio
+from philly import RemotePhilly
+
+async def main():
+    remote = RemotePhilly("http://127.0.0.1:8787/mcp")  # local branch server
+    found = await remote.search("rivers")
+    print(found)
+    schema = await remote.schema("usgs:schuylkill_latest")
+    page = await remote.query("usgs:schuylkill_latest", limit=5)
+    print(schema, page)
+
+asyncio.run(main())
+```
+
+```sh
+phl remote search rivers --endpoint http://127.0.0.1:8787/mcp
+phl remote schema usgs:schuylkill_latest --endpoint http://127.0.0.1:8787/mcp
+phl remote query usgs:schuylkill_latest --limit 5 --endpoint http://127.0.0.1:8787/mcp
+```
+
+The default endpoint is `https://philly.horv.co/mcp`. `remote describe`, `remote schema`, `remote query` and `remote aggregate` share stable dataset/resource IDs with MCP. SDK query arguments use MCP names such as `resourceId` and `orderBy`; CLI options use `--resource-id` and `--order-by`. Inspect capabilities before querying: the four scoped LoC/USGS/MusicBrainz/NOAA resources support native paging and selected columns, with explicit errors for filters, custom ordering and aggregation. See the [MCP provider scopes](mcp/README.md#scoped-provider-catalog-requires-this-server-version).
+
+The client supports the Philly server's stateless legacy JSON/finite-SSE tool calls. It accepts HTTPS endpoints or loopback HTTP, follows no redirects, uses no credentials or retries, caps request/decoded response bytes, and enforces a total deadline. `RemoteToolError.code` preserves structured tool codes; no alternative upstream fetch is attempted on error.

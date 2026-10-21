@@ -1,0 +1,15 @@
+{
+  "created": "2017-03-12T16:59:39.959Z",
+  "count": 1,
+  "offset": 0,
+  "places": [{
+    "id": "d1ab65f8-d082-492a-bd70-ce375548dabf",
+    "type": "Studio",
+    "score": "100",
+    "name": "Chipping Norton Recording Studios",
+    "address": "28–30 New Street, Chipping Norton",
+    "coordinates": { "latitude": "51.9414", "longitude": "-1.548" },
+    "area": { "id": "716234d3-b8ed-45ac-8983-e7219eb85956", "name": "Chipping Norton", "sort-name": "Chipping Norton" },
+    "life-span": { "begin": "1971", "end": "1999-10", "ended": true }
+  }]
+}
