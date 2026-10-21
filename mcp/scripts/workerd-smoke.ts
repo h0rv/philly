@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { setTimeout } from "node:timers/promises";
 import { readFileSync } from "node:fs";
 const musicbrainzFixture = JSON.parse(
   readFileSync(
@@ -45,7 +46,7 @@ const mf = new Miniflare(
       if (url.hostname === "services.arcgis.com") {
         assert.match(
           url.pathname,
-          /\/fLeGjb7u4uXqeF9q\/ArcGIS\/rest\/services\/GeotechnicalTest\/FeatureServer\/0(?:\/query)?$/,
+          /\/fLeGjb7u4uXqeF9q\/ArcGIS\/rest\/services\/GeotechnicalTest\/FeatureServer\/0(?:\/query)?$/i,
         );
         return Response.json(
           url.pathname.endsWith("/query")
@@ -157,18 +158,32 @@ try {
       "musicbrainz:philadelphia_places",
       "noaa:philadelphia_tides_today",
     ]) {
+      // Observe the real instance-local admission cooldown between fixture calls.
+      if (datasetId.startsWith("musicbrainz:")) await setTimeout(1100);
       const args = { datasetId, limit: 1 };
       const projected = await client.callTool({
         name: "query_dataset",
         arguments: args,
       });
-      assert.ok(!projected.isError, JSON.stringify(projected));
+      assert.ok(
+        !projected.isError,
+        `${datasetId}: ${JSON.stringify(projected)}`,
+      );
       assert.equal(
         (projected.structuredContent as { rows: unknown[] }).rows.length,
         1,
       );
-      // MusicBrainz's second immediate query must be locally rate limited.
-      if (datasetId.startsWith("musicbrainz:")) continue;
+      if (datasetId.startsWith("musicbrainz:")) {
+        const beforeBusy = upstreamCalls;
+        const busy = await client.callTool({
+          name: "query_dataset",
+          arguments: args,
+        });
+        assert.equal(busy.isError, true);
+        assert.match(JSON.stringify(busy), /BUSY/);
+        assert.equal(upstreamCalls, beforeBusy);
+        await setTimeout(1100);
+      }
       returnRedirect = true;
       const before = upstreamCalls;
       const denied = await client.callTool({
