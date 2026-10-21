@@ -1,4 +1,11 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+const musicbrainzFixture = JSON.parse(
+  readFileSync(
+    new URL("../test/fixtures/musicbrainz-place-search.json", import.meta.url),
+    "utf8",
+  ),
+);
 import { Miniflare, convertV4MiniflareOptions } from "miniflare";
 import {
   Client,
@@ -19,13 +26,71 @@ const mf = new Miniflare(
     outboundService: async (request) => {
       upstreamCalls++;
       const url = new URL(request.url);
-      assert.equal(url.origin, "https://phl.carto.com");
-      assert.equal(url.pathname, "/api/v2/sql");
+      assert.ok(
+        [
+          "https://phl.carto.com",
+          "https://services.arcgis.com",
+          "https://www.loc.gov",
+          "https://api.waterdata.usgs.gov",
+          "https://musicbrainz.org",
+          "https://api.tidesandcurrents.noaa.gov",
+        ].includes(url.origin),
+        `Unexpected outbound origin: ${url.origin}`,
+      );
       if (returnRedirect)
         return new Response(null, {
           status: 302,
           headers: { Location: "https://unapproved.invalid/" },
         });
+      if (url.hostname === "services.arcgis.com") {
+        assert.match(
+          url.pathname,
+          /\/fLeGjb7u4uXqeF9q\/ArcGIS\/rest\/services\/GeotechnicalTest\/FeatureServer\/0(?:\/query)?$/,
+        );
+        return Response.json(
+          url.pathname.endsWith("/query")
+            ? {
+                features: [{ attributes: { OBJECTID: 1 } }],
+                exceededTransferLimit: false,
+              }
+            : {
+                fields: [{ name: "OBJECTID", type: "esriFieldTypeOID" }],
+                objectIdField: "OBJECTID",
+                maxRecordCount: 1000,
+                advancedQueryCapabilities: {
+                  supportsPagination: true,
+                  supportsOrderBy: true,
+                },
+              },
+        );
+      }
+      if (url.hostname === "www.loc.gov")
+        return Response.json({
+          results: [{ id: "fixture", title: "Bridge" }],
+          pagination: { total: 1 },
+        });
+      if (url.hostname === "api.waterdata.usgs.gov")
+        return Response.json({
+          features: [
+            {
+              id: "fixture",
+              properties: {
+                monitoring_location_id: "USGS-01474500",
+                parameter_code: "00060",
+                time: "2026-10-21T00:00:00Z",
+                value: "1",
+              },
+            },
+          ],
+          links: [],
+        });
+      if (url.hostname === "musicbrainz.org")
+        return Response.json(musicbrainzFixture);
+      if (url.hostname === "api.tidesandcurrents.noaa.gov")
+        return Response.json({
+          predictions: [{ t: "2026-10-21 00:00", v: "1" }],
+        });
+      assert.equal(url.pathname, "/api/v2/sql");
       const sql = url.searchParams.get("q")!;
       return Response.json({
         fields: { cartodb_id: { type: "number" } },
@@ -85,6 +150,40 @@ try {
       (page.structuredContent as { rows: Record<string, unknown>[] }).rows,
       [{ cartodb_id: 1 }],
     );
+    for (const datasetId of [
+      "PWD_Geotechnical_Tests",
+      "loc:philadelphia_engineering",
+      "usgs:schuylkill_latest",
+      "musicbrainz:philadelphia_places",
+      "noaa:philadelphia_tides_today",
+    ]) {
+      const args = { datasetId, limit: 1 };
+      const projected = await client.callTool({
+        name: "query_dataset",
+        arguments: args,
+      });
+      assert.ok(!projected.isError, JSON.stringify(projected));
+      assert.equal(
+        (projected.structuredContent as { rows: unknown[] }).rows.length,
+        1,
+      );
+      // MusicBrainz's second immediate query must be locally rate limited.
+      if (datasetId.startsWith("musicbrainz:")) continue;
+      returnRedirect = true;
+      const before = upstreamCalls;
+      const denied = await client.callTool({
+        name: "query_dataset",
+        arguments: args,
+      });
+      assert.equal(denied.isError, true);
+      assert.match(JSON.stringify(denied), /Upstream unavailable/);
+      assert.equal(
+        upstreamCalls,
+        before + 1,
+        "Adapter redirect must not be followed",
+      );
+      returnRedirect = false;
+    }
     returnRedirect = true;
     const beforeRedirect = upstreamCalls;
     const rejected = await client.callTool({
@@ -103,7 +202,7 @@ try {
   }
   assert.equal((await fetch("http://127.0.0.1:8788/mcp/health")).status, 200);
   console.log(
-    "workerd: current + legacy MCP clients, search, schema, count, id-only query, no-redirect policy and health passed (offline outbound fixture).",
+    "workerd: current + legacy MCP clients, search, schema, count, ArcGIS + four provider queries, id-only query, no-redirect policy and health passed (offline outbound fixture).",
   );
 } finally {
   await mf.dispose();

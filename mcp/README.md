@@ -125,8 +125,30 @@ See [workflow evidence](EFFECTIVENESS.md) for tested questions and limitations. 
 ## Public client diagnosis
 
 The manual **Public MCP diagnosis** GitHub Actions workflow tests the fixed public endpoint with real SDK initialization, tools/list, crime discovery, schema, full-resource count, and one ID-only row. It has bounded requests/decoded response bytes/time and stops on denial or tool failure. It never requests upstream hosts directly, follows redirects, retries failures, or deploys. Once this workflow exists on main, dispatch it only from an authorized runner after deployment; a failed route is evidence to investigate, not a reason to bypass access controls. Offline Workerd tests now exercise real native fetch with outbound fixtures, including rejection of redirects. See [the dated runtime incident](DEPLOYMENT.md#runtime-incident-2026-10-18).
+
 ## Client code composition
 
 The six bounded tools remain composable from client code. Discover and describe IDs, read schema, then query selected columns and reduce rows in the client. Return only the final projection to the model; preserve attribution and completeness metadata. No server-side eval or extra execution tool is introduced. [Cloudflare Code Mode patterns](https://developers.cloudflare.com/agents/model-context-protocol/codemode/) describe server-side wrappers for clients needing their own execution host; clients already providing code composition can call these typed tools directly.
 
 For example, query `PWD_Geotechnical_Tests` with `columns: ["OBJECTID"]` after confirming its live schema. Field names must be discovered, not assumed. Live ArcGIS checks on 2026-10-17 were blocked by the execution environment proxy (CONNECT HTTP 403); fixture tests do not establish current upstream availability or data correctness.
+
+## Scoped provider catalog (requires this server version)
+
+Additional sources are defined separately from the generated OpenDataPhilly snapshot in `src/provider-catalog.ts`. They use distinct source/dataset IDs and the same six tools. They are not installed into the Python local static-file loaders.
+
+| Dataset ID | Source scope | Paging |
+| --- | --- | --- |
+| `loc:philadelphia_engineering` | LoC historic buildings/landscapes/engineering collection search for Philadelphia engineering | Native search pages; keep `limit` fixed and `offset` divisible by it |
+| `usgs:schuylkill_latest` | USGS v1 latest-continuous, monitoring location `USGS-01474500` | Bounded native pages; source units, timestamps, parameter and approval codes retained |
+| `musicbrainz:philadelphia_places` | MusicBrainz places whose associated area matches Philadelphia | Native relevance pages; includes studios and closed places |
+| `noaa:philadelphia_tides_today` | Station `8545240`, today's UTC hourly predictions | Bounded 24-hour window; heights in meters relative to MLLW |
+
+These providers support schema, selected columns, preview/query and native paging. Filters, custom ordering and aggregation fail explicitly rather than applying approximate semantics. Provider schemas describe versioned normalized projections, identified by `schemaSource`; they are not live upstream metadata. `complete` means the entire specified resource scope was returned, not all Philadelphia records across all time. NOAA predictions are not observations; USGS latest values are not historical series or flood forecasts. Null licenses mean no universal license is asserted; check item/source rights. MusicBrainz only returns core-data fields, not supplementary tags/ratings.
+
+All four endpoints and scopes are fixed in the reviewed catalog. Provider response links are never followed. The MusicBrainz admission cooldown allows one request per second per service instance and returns `BUSY` otherwise; this is not a cross-isolate/IP-wide limiter. Upstream throttling fails without retries. All providers share operation/byte/row/output limits. Live probes on 2026-10-17 were blocked by the environment CONNECT proxy (HTTP 403), so these adapters remain fixture-verified draft work pending live checks from an authorized environment.
+
+Official API references: [LoC JSON requests](https://www.loc.gov/apis/json-and-yaml/requests/), [USGS OGC v1](https://api.waterdata.usgs.gov/docs/ogcapi/), [MusicBrainz place search](https://musicbrainz.org/doc/MusicBrainz_API/Search#Place), [NOAA CO-OPS](https://api.tidesandcurrents.noaa.gov/api/prod/).
+
+`npm run test:python` exercises the Python SDK and actual `phl remote` CLI through a local Worker MCP transport into a provider fixture. Run `uv sync --locked --group test` first. CI runs this cross-language check; `PHILLY_PYTHON` can select another interpreter. It does not query live providers.
+
+MusicBrainz places additionally expose nullable WGS84 coordinates, original partial founded/closed dates, the reported `ended` flag, and a canonical record URL. See [field provenance and an address/location join example](MUSICBRAINZ.md). These support candidate connections to local records without adding recordings lookups or city-boundary/coverage claims.

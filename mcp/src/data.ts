@@ -1,3 +1,5 @@
+import { ProviderAdapter } from "./providers.ts";
+import { providerByDataset } from "./provider-catalog.ts";
 import { z } from "zod";
 import { ArcgisAdapter } from "./arcgis.ts";
 import { arcgisLayer, SOURCE_ID } from "./sources.ts";
@@ -29,11 +31,13 @@ export type Fetcher = (
 const quote = (s: string) => `"${identifier.parse(s)}"`;
 export class DataService {
   private active = 0;
+  private providers: ProviderAdapter;
   private fetcher: Fetcher;
   // Workers native fetch requires the global receiver. Never invoke a stored
   // native function as this.fetcher(), which supplies the DataService receiver.
   constructor(fetcher: Fetcher = (url, init) => globalThis.fetch(url, init)) {
     this.fetcher = fetcher;
+    this.providers = new ProviderAdapter(fetcher);
   }
   private async run<T>(
     fn: (signal: AbortSignal) => Promise<T>,
@@ -128,6 +132,8 @@ export class DataService {
   ) {
     const { dataset, resource } = lookup(input.datasetId, input.resourceId);
     return this.run(async (signal) => {
+      if (providerByDataset.has(dataset.id))
+        return this.providers.schema(dataset, resource);
       if (arcgisLayer(resource.url))
         return new ArcgisAdapter(this.fetcher).schema(
           dataset,
@@ -157,6 +163,8 @@ export class DataService {
   async query(input: z.infer<typeof querySchema>, cancellation?: AbortSignal) {
     const { dataset, resource } = lookup(input.datasetId, input.resourceId);
     return this.run(async (signal) => {
+      if (providerByDataset.has(dataset.id))
+        return this.providers.query(dataset, resource, input, signal);
       if (arcgisLayer(resource.url))
         return new ArcgisAdapter(this.fetcher).query(
           dataset,
@@ -234,6 +242,10 @@ export class DataService {
   ) {
     const { dataset, resource } = lookup(input.datasetId, input.resourceId);
     return this.run(async (signal) => {
+      if (providerByDataset.has(dataset.id))
+        throw new Error(
+          "Unsupported operation: provider aggregation is not supported.",
+        );
       if (arcgisLayer(resource.url))
         throw new Error(
           "Unsupported operation: ArcGIS aggregation is not supported.",

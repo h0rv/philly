@@ -27,7 +27,7 @@ function fixture(meta = arcMetadata, page: unknown = { features }) {
     const u = new URL(url);
     calls.push(u);
     assert.equal(u.origin, "https://services.arcgis.com");
-    assert.equal(init?.redirect, "error");
+    assert.equal(init?.redirect, "manual");
     assert.ok(init?.signal);
     return Response.json(u.pathname.endsWith("/query") ? page : meta);
   });

@@ -13,6 +13,113 @@ from philly.philly import Philly
 from phl.cli import OutputFormatter, ProgressTracker
 
 
+class RemoteCommands:
+    """Bounded MCP operations with stable catalog IDs; JSON output preserves scope.
+
+    Examples:
+        phl remote search rivers
+        phl remote query usgs:schuylkill_latest --limit 5
+    """
+
+    def _run(self, tool: str, endpoint: str, arguments: dict) -> None:
+        import json
+        from philly.remote import RemotePhilly, RemoteToolError
+
+        try:
+            value = asyncio.run(RemotePhilly(endpoint).call(tool, arguments))
+        except RemoteToolError as error:
+            print(json.dumps({"error": {"code": error.code, "message": str(error)}}))
+            raise SystemExit(1) from error
+        print(json.dumps(value, ensure_ascii=False))
+
+    def search(
+        self,
+        query: str = "",
+        endpoint: str = "https://philly.horv.co/mcp",
+        offset: int = 0,
+        limit: int = 10,
+    ) -> None:
+        self._run(
+            "search_datasets",
+            endpoint,
+            {"query": query, "offset": offset, "limit": limit},
+        )
+
+    def describe(
+        self,
+        dataset_id: str,
+        endpoint: str = "https://philly.horv.co/mcp",
+        offset: int = 0,
+        limit: int = 10,
+    ) -> None:
+        self._run(
+            "describe_dataset",
+            endpoint,
+            {"datasetId": dataset_id, "offset": offset, "limit": limit},
+        )
+
+    def schema(
+        self,
+        dataset_id: str,
+        endpoint: str = "https://philly.horv.co/mcp",
+        resource_id: str | None = None,
+    ) -> None:
+        arguments = {"datasetId": dataset_id}
+        if resource_id:
+            arguments["resourceId"] = resource_id
+        self._run("get_schema", endpoint, arguments)
+
+    def query(
+        self,
+        dataset_id: str,
+        endpoint: str = "https://philly.horv.co/mcp",
+        columns: list | None = None,
+        filters: list | None = None,
+        limit: int = 20,
+        offset: int = 0,
+        resource_id: str | None = None,
+        order_by: str | None = None,
+        order_direction: str = "asc",
+    ) -> None:
+        arguments = {
+            "datasetId": dataset_id,
+            "limit": limit,
+            "offset": offset,
+            "orderDirection": order_direction,
+        }
+        for key, value in {
+            "columns": columns,
+            "filters": filters,
+            "resourceId": resource_id,
+            "orderBy": order_by,
+        }.items():
+            if value is not None:
+                arguments[key] = value
+        self._run("query_dataset", endpoint, arguments)
+
+    def aggregate(
+        self,
+        dataset_id: str,
+        endpoint: str = "https://philly.horv.co/mcp",
+        operation: str = "count",
+        column: str | None = None,
+        group_by: str | None = None,
+        filters: list | None = None,
+        limit: int = 20,
+        resource_id: str | None = None,
+    ) -> None:
+        arguments = {"datasetId": dataset_id, "operation": operation, "limit": limit}
+        for key, value in {
+            "column": column,
+            "groupBy": group_by,
+            "filters": filters,
+            "resourceId": resource_id,
+        }.items():
+            if value is not None:
+                arguments[key] = value
+        self._run("aggregate_dataset", endpoint, arguments)
+
+
 class ConfigCommands:
     """Configuration management commands."""
 
@@ -145,6 +252,7 @@ class PhillyCLI:
         self._progress = ProgressTracker(show_progress=not quiet, quiet=quiet)
         self._verbose = verbose
         self.config = ConfigCommands()
+        self.remote = RemoteCommands()
 
     def version(self) -> None:
         """Show version.
