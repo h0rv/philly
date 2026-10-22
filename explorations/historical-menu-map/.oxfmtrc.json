@@ -1,0 +1,10 @@
+{
+  "ignorePatterns": [
+    "dist/**",
+    "raw/**",
+    "public/menus.json",
+    "snapshots/**",
+    "review/**",
+    "package-lock.json"
+  ]
+}

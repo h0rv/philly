@@ -1,0 +1,16 @@
+!package.json
+!package-lock.json
+!tsconfig.json
+!.oxlintrc.json
+!.oxfmtrc.json
+!public/
+!public/*.json
+!snapshots/
+!snapshots/*.json
+!review/
+!review/*.png
+!review/*.json
+dist/
+raw/
+test-results/
+playwright-report/

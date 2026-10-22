@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 252 117" fill="none" stroke="#243c35" stroke-width="1.35" stroke-linejoin="round">
+  <path d="M3 111h246M13 105V29h48v76M9 29h56v-6H9zm10-6V17h36v6M22 104V74h15v30m7-9h10V73H44zm-23-53h12v18H21zm23 0h11v18H44zM61 105V15h54v90M58 15h61V8H58zm11 20h15v19H69zm25 0h14v19H94zM69 67h15v27H69zm25 0h14v27H94zM115 105V31h46v74m-50-74h53v-7h-53zm12 12h12v16h-12zm21 0h11v16h-11zM125 105V78h13v27m8-22h11v17h-11zM161 105V41h69v64m-72-64h74v-8h-74zM168 50h55v14h-55zM167 70h58l8 13h-73zM171 83v22m44-22v22m-19-22v22m-30-37h63M8 108h55m7-6h15m-17 5h19m34 1h18M235 105V30m-4 0h8M233 30v-7h5v7M237 22V12m-4 0h8"/>
+  <path d="M171 71l-5 12m17-12l-2 12m14-12v12m12-12l3 12m8-12l8 12" stroke="#af7d20" stroke-width="3"/>
+  <text x="195" y="60" text-anchor="middle" fill="#243c35" stroke="none" font-family="Georgia,serif" font-size="9" font-weight="bold">GOOD EATS</text>
+  <path d="M38 111v-7m-5 7v-7m116 7v-6m-5 6v-6M5 115h240"/>
+</svg>

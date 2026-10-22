@@ -1,0 +1,27 @@
+{
+  "receivedAt": "2026-10-18T17:48:06.475Z",
+  "kind": "parent-research-notes",
+  "description": "Research notes compiled from the delegating parent into this snapshot at the timestamp shown. This is not a downloaded CONTENTdm response. Source HTTP requests were denied with 403 in the executor.",
+  "records": [
+    {
+      "provider": "CIA",
+      "collection": "p16940coll1",
+      "recordId": "8063",
+      "name": "Old Original Bookbinder's",
+      "year": 1977,
+      "address": "125 Walnut Street",
+      "datePrecision": "year",
+      "url": "https://cdm16940.contentdm.oclc.org/digital/collection/p16940coll1/id/8063"
+    },
+    {
+      "provider": "CIA",
+      "collection": "p16940coll1",
+      "recordId": "17865",
+      "name": "Middle East Restaurant",
+      "year": null,
+      "address": "935 Ellsworth Street",
+      "datePrecision": "unknown",
+      "url": "https://cdm16940.contentdm.oclc.org/digital/collection/p16940coll1/id/17865"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "name": "philly-historical-menu-map",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/build.ts --serve",
+    "build": "node scripts/build.ts",
+    "import": "node scripts/import.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint --type-aware --type-check --deny-warnings",
+    "format": "oxfmt --write .",
+    "format:check": "oxfmt --check .",
+    "test": "node --test test/*.test.ts",
+    "test:browser": "playwright test",
+    "check": "npm run typecheck && npm run lint && npm run format:check && npm test && npm run build"
+  },
+  "dependencies": {
+    "leaflet": "1.9.4",
+    "simpledotcss": "2.3.7",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1",
+    "@types/leaflet": "1.9.22",
+    "@types/node": "26.6.5",
+    "csv-parse": "7.0.3",
+    "esbuild": "0.28.2",
+    "oxfmt": "0.73.0",
+    "oxlint": "1.88.0",
+    "oxlint-tsgolint": "7.0.2004",
+    "typescript": "7.0.2"
+  },
+  "engines": {
+    "node": ">=24.19.0"
+  },
+  "packageManager": "npm@11.9.0"
+}
